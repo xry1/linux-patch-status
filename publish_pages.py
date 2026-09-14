@@ -13,6 +13,7 @@ FILES = [
     ".gitignore", "README.md", "build_pages.py", "publish_pages.py",
     "patch_status_dashboard.py", "patch_dashboard_template.html", "patch_analysis.py", "test_analysis.py",
     "applied_evidence.py", "applied_verifications.json", "Verify-Applied.ps1", "audit_applied.py", "docs/applied-audit.json",
+    "patch_series.py", "test_series.py",
     "生成网站.cmd", "发布网站.cmd", "docs/index.html", "docs/update.html", "docs/.nojekyll", "docs/sync-status.json",
 ]
 

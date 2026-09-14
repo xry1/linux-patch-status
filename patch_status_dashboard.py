@@ -25,6 +25,7 @@ from pathlib import Path
 from urllib.parse import quote, unquote, urlparse
 from patch_analysis import analyze, clean_title, commit_references, regroup, submission
 from applied_evidence import apply_verifications, load_verifications
+from patch_series import build_series
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -151,6 +152,10 @@ def upgrade_payload(payload):
     """Re-analyze saved mail without pretending a network check happened."""
     payload = dict(payload)
     payload['records'] = enrich_records(payload.get('records', []), payload.get('author_email', DEFAULT_EMAIL))
+    payload['series'] = build_series(payload['records'], payload.get('author_email', DEFAULT_EMAIL))
+    payload['series_counts'] = {'total': len(payload['series']),
+        'mainline': sum(s['state'] == 'mainline' for s in payload['series']),
+        'grouped_topics': sum(bool(r['series_ids']) for r in payload['records'])}
     payload['schema_version'] = 3
     payload['status_counts'] = dict(Counter(r['status'] for r in payload['records']))
     payload['kind_counts'] = dict(Counter(r['kind'] for r in payload['records']))
@@ -163,6 +168,7 @@ def upgrade_payload(payload):
         'reverted_topics': sum(r['signals']['reverted'] for r in payload['records']),
         'reverts_verified_at': verification.get('reverts_checked_at'),
         'mail_only_topics': sum(r['acceptance_basis'] == 'mail_confirmation' for r in payload['records']),
+        'mail_only_patch_topics': sum(r['acceptance_basis'] == 'mail_confirmation' and r['kind'] == 'patch' for r in payload['records']),
         'applied_patch_topics': sum(r['signals']['applied'] and r['kind'] == 'patch' for r in payload['records']),
         'applied_cover_topics': sum(r['signals']['applied'] and r['kind'] == 'cover' for r in payload['records']),
         'head_sha': verification.get('head_sha'),
