@@ -181,8 +181,35 @@ def match_headers(headers, seed, state, config):
     return matched
 
 
+def custom_ca_configured():
+    return any(os.environ.get(name) for name in (
+        'PATCH_MONITOR_CA_FILE', 'SSL_CERT_FILE', 'SSL_CERT_DIR'))
+
+
 def tls_context():
-    return ssl.create_default_context(cafile=os.environ.get('PATCH_MONITOR_CA_FILE') or None)
+    context = ssl.create_default_context(cafile=os.environ.get('PATCH_MONITOR_CA_FILE') or None)
+    # Some bundled Windows Pythons lack both Windows store integration and an
+    # OpenSSL CA bundle. A capath may load certificates lazily, so keep it intact.
+    if (custom_ca_configured() or context.cert_store_stats()['x509_ca']
+            or ssl.get_default_verify_paths().capath):
+        return context
+    try:
+        import certifi
+    except ImportError:
+        raise RuntimeError('当前 Python 没有可用的根证书库。请用运行本脚本的 Python 安装 certifi，'
+                           '或设置 PATCH_MONITOR_CA_FILE 为可信 CA 文件路径。') from None
+    context.load_verify_locations(cafile=certifi.where())
+    return context
+
+
+def mailbox_error(exc):
+    if isinstance(exc, ssl.SSLCertVerificationError):
+        return ('邮箱 TLS 证书校验失败（SSLCertVerificationError）；尚未验证授权码。'
+                '请检查可信 CA 证书、服务器名称与系统时间。')
+    # IMAP server responses can contain credentials; do not print them.
+    if type(exc) in (RuntimeError, ServiceFailure):
+        return str(exc)
+    return '邮箱检查失败（' + type(exc).__name__ + '）；请检查服务器、授权码、网络和证书。'
 
 
 def open_mailbox(config, password):
@@ -361,7 +388,7 @@ def post_json(url, value, service, token=None):
         # TLS verification fails before any HTTP payload is sent. Windows can
         # build chains (including intermediate certificates) Python cannot.
         if (os.name == 'nt' and isinstance(exc.reason, ssl.SSLCertVerificationError)
-                and not os.environ.get('PATCH_MONITOR_CA_FILE')):
+                and not custom_ca_configured()):
             try:
                 return windows_json(url, value, token)
             except NativeHTTPError as native:
@@ -573,8 +600,7 @@ def main():
                     run_once(directory, config, state, seed)
                     code = 0
                 except Exception as exc:
-                    # IMAP server responses can contain credentials; do not print them.
-                    message = str(exc) if type(exc) in (RuntimeError, ServiceFailure) else '邮箱检查失败（' + type(exc).__name__ + '）；请检查服务器、授权码、网络和证书。'
+                    message = mailbox_error(exc)
                     state['last_error'] = message
                     save_json(directory / 'state.json', state)
                     render_private(directory, config, seed, state)

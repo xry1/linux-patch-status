@@ -2,6 +2,7 @@ import copy
 import json
 import os
 import ssl
+import sys
 import urllib.error
 import tempfile
 import unittest
@@ -63,6 +64,82 @@ class FakeIMAP:
 
     def logout(self):
         pass
+
+
+class TLSTrustTests(unittest.TestCase):
+    def test_empty_default_store_loads_bundle_and_keeps_verification_enabled(self):
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        bundle = Mock()
+        bundle.where.return_value = 'trusted-bundle.pem'
+        with patch.dict(os.environ, {}, clear=True), \
+                patch.dict(sys.modules, {'certifi': bundle}), \
+                patch.object(ssl, 'create_default_context', return_value=context), \
+                patch.object(ssl, 'get_default_verify_paths', return_value=Mock(capath=None)), \
+                patch.object(context, 'load_verify_locations') as load:
+            self.assertIs(monitor.tls_context(), context)
+        load.assert_called_once_with(cafile='trusted-bundle.pem')
+        self.assertEqual(context.verify_mode, ssl.CERT_REQUIRED)
+        self.assertTrue(context.check_hostname)
+
+    def test_existing_roots_and_lazy_ca_directory_remain_authoritative(self):
+        for roots, capath in ((10, None), (0, 'system-ca-directory')):
+            with self.subTest(roots=roots, capath=capath):
+                context = Mock()
+                context.cert_store_stats.return_value = {'x509_ca': roots}
+                with patch.dict(os.environ, {}, clear=True), \
+                        patch.dict(sys.modules, {'certifi': None}), \
+                        patch.object(ssl, 'create_default_context', return_value=context), \
+                        patch.object(ssl, 'get_default_verify_paths', return_value=Mock(capath=capath)):
+                    self.assertIs(monitor.tls_context(), context)
+                context.load_verify_locations.assert_not_called()
+
+    def test_explicit_ca_settings_never_add_extra_trusted_roots(self):
+        for name in ('PATCH_MONITOR_CA_FILE', 'SSL_CERT_FILE', 'SSL_CERT_DIR'):
+            with self.subTest(name=name):
+                context = Mock()
+                context.cert_store_stats.return_value = {'x509_ca': 0}
+                with patch.dict(os.environ, {name: 'selected-ca'}, clear=True), \
+                        patch.dict(sys.modules, {'certifi': None}), \
+                        patch.object(ssl, 'create_default_context', return_value=context) as create:
+                    self.assertIs(monitor.tls_context(), context)
+                    create.assert_called_once_with(cafile='selected-ca' if name == 'PATCH_MONITOR_CA_FILE' else None)
+                context.load_verify_locations.assert_not_called()
+
+    def test_invalid_explicit_ca_file_fails_closed(self):
+        with tempfile.TemporaryDirectory() as folder, \
+                patch.dict(os.environ, {'PATCH_MONITOR_CA_FILE': str(Path(folder) / 'missing.pem')}, clear=True):
+            with self.assertRaises(OSError):
+                monitor.tls_context()
+
+    def test_missing_bundle_explains_fix_without_disabling_validation(self):
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        with patch.dict(os.environ, {}, clear=True), \
+                patch.dict(sys.modules, {'certifi': None}), \
+                patch.object(ssl, 'create_default_context', return_value=context), \
+                patch.object(ssl, 'get_default_verify_paths', return_value=Mock(capath=None)):
+            with self.assertRaisesRegex(RuntimeError, 'certifi'):
+                monitor.tls_context()
+        self.assertTrue(context.check_hostname)
+        self.assertEqual(context.verify_mode, ssl.CERT_REQUIRED)
+
+    def test_certificate_error_explains_pre_login_failure_without_raw_details(self):
+        text = monitor.mailbox_error(ssl.SSLCertVerificationError('synthetic-private-server-text'))
+        self.assertIn('尚未验证授权码', text)
+        self.assertNotIn('synthetic-private-server-text', text)
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows HTTPS fallback')
+    def test_explicit_trust_policy_prevents_native_https_fallback(self):
+        for name in ('PATCH_MONITOR_CA_FILE', 'SSL_CERT_FILE', 'SSL_CERT_DIR'):
+            with self.subTest(name=name):
+                opener = Mock()
+                opener.open.side_effect = urllib.error.URLError(ssl.SSLCertVerificationError('chain'))
+                with patch.dict(os.environ, {name: 'selected-ca'}, clear=True), \
+                        patch.object(monitor, 'tls_context', return_value=ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)), \
+                        patch.object(monitor.urllib.request, 'build_opener', return_value=opener), \
+                        patch.object(monitor, 'windows_json') as native:
+                    with self.assertRaises(monitor.ServiceFailure):
+                        monitor.post_json('https://example.org/api', {}, 'GLM', 'synthetic-key')
+                    native.assert_not_called()
 
 
 class MailMonitorTests(unittest.TestCase):

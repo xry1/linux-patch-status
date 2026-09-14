@@ -58,8 +58,9 @@
 - GLM 失败时仍发基本的新邮件提醒；后续最多再尝试两次补齐本地摘要，不重复发送已成功的飞书提醒。
 - 飞书明确拒绝的请求最多自动尝试三次。网络超时、服务器错误、响应格式异常或进程在发送期间中断时，标记“发送结果未确认”，不会自动重发。先检查飞书是否已收到，再决定重试，以避免重复。
 - 在没有持续监测进程运行时，可执行 `python -X utf8 mail_monitor.py --retry-uncertain`，重试未确认 / 已失败的批次；该操作可能重复发送此前已收到但未确认的提醒。
-- 证书验证始终启用。Windows 上若 Python 无法构建 API 服务的证书链，程序使用 Windows 原生 HTTPS 进行正常证书校验；仅在 TLS 握手验证失败、请求尚未发出时使用此后备方式。普通网络超时不会自动换通道重发。凭据与请求正文通过标准输入传给固定的 HTTPS 调用程序，不出现在命令行参数中，禁止自动跟随重定向。
-- 如单位网络需要自有 CA，可在运行前设置 `PATCH_MONITOR_CA_FILE` 为可信 CA 文件路径；不要关闭证书验证。IMAP 仍使用 Python 的 SSL 连接。
+- 证书验证和服务器名称校验始终启用。IMAP 与 API 请求优先使用 Python 默认信任库；若 Python 没有默认 CA 证书及证书目录，自动加载 `certifi` 提供的根证书。本机 Inkscape 自带 Python 已附带 `certifi`，但默认 SSL 信任库为空，因此需要此后备加载。其他精简 Python 若提示缺少根证书库，可用运行脚本的同一 Python 执行 `python -m pip install certifi`，然后重新启动监测。
+- Windows 上若 Python 仍无法构建 API 服务的证书链，程序使用 Windows 原生 HTTPS 进行正常证书校验；仅在 TLS 握手验证失败、请求尚未发出时使用此后备方式。普通网络超时不会自动换通道重发。凭据与请求正文通过标准输入传给固定的 HTTPS 调用程序，不出现在命令行参数中，禁止自动跟随重定向。
+- 如单位网络需要自有 CA，可在运行前设置 `PATCH_MONITOR_CA_FILE` 为可信 CA 文件路径。显式设置此项、`SSL_CERT_FILE` 或 `SSL_CERT_DIR` 后，程序尊重指定的信任配置，不额外加入 `certifi` 或切换到 Windows HTTPS。IMAP 的 `SSLCertVerificationError` 发生在登录之前，应检查 CA、服务器名称与系统时间，无需因此重新填写授权码。
 - 程序使用进程锁，防止重复启动同时推进游标或发送提醒。关掉监测窗口即可停止；本地阅读页仍可浏览已保存邮件。
 
 开发验证：`python -X utf8 -m unittest test_mail_monitor -v`。测试使用本地假邮箱和替身接口，不发送真实提醒、不调用计费 API。
