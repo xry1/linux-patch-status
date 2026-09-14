@@ -3,7 +3,9 @@ param(
     [string]$AuthorName = 'Runyu Xiao',
     [string]$Proxy,
     [string]$Output = (Join-Path $PSScriptRoot 'applied_verifications.json'),
-    [string[]]$AdditionalCommit = @()
+    [string[]]$AdditionalCommit = @(),
+    [string[]]$RevertCommit = @(),
+    [switch]$RevertsOnly
 )
 $ErrorActionPreference = 'Stop'
 
@@ -13,19 +15,34 @@ function Read-GitHubJson([string]$Url) {
     Invoke-RestMethod @request
 }
 
-$head = (Read-GitHubJson 'https://api.github.com/repos/torvalds/linux/branches/master').commit.sha
-if ($head -notmatch '^[0-9a-f]{40}$') { throw 'Invalid mainline head' }
-$query = 'repo:torvalds/linux "Signed-off-by: ' + $AuthorName + ' <' + $AuthorEmail + '>"'
-$queryUrl = 'https://api.github.com/search/commits?q=' + [Uri]::EscapeDataString($query) + '&per_page=100'
-$search = Read-GitHubJson $queryUrl
-if ($search.incomplete_results -or $search.total_count -gt 1000) { throw 'Incomplete commit search; previous evidence preserved' }
-$candidates = @($search.items.sha)
-for ($page = 2; $candidates.Count -lt $search.total_count; $page++) {
-    $more = Read-GitHubJson ($queryUrl + '&page=' + $page)
-    if ($more.incomplete_results -or !$more.items.Count) { throw 'Incomplete commit search page' }
-    $candidates += @($more.items.sha)
+$previous = $null
+if (Test-Path -LiteralPath $Output) {
+    $previous = Get-Content -Raw -LiteralPath $Output | ConvertFrom-Json
+    if ($previous.schema_version -ne 1 -or $previous.repository -ne 'torvalds/linux' -or $previous.author_email -ine $AuthorEmail) {
+        throw 'Existing evidence belongs to a different repository or author'
+    }
 }
-$candidates = @(@($candidates) + $AdditionalCommit | Sort-Object -Unique)
+if ($RevertsOnly) {
+    if (!$previous -or !$RevertCommit.Count) { throw 'RevertsOnly requires an existing snapshot and RevertCommit' }
+    $head = $previous.head_sha
+    $candidates = @($RevertCommit | Sort-Object -Unique)
+} else {
+    $head = (Read-GitHubJson 'https://api.github.com/repos/torvalds/linux/branches/master').commit.sha
+    $query = 'repo:torvalds/linux "Signed-off-by: ' + $AuthorName + ' <' + $AuthorEmail + '>"'
+    $queryUrl = 'https://api.github.com/search/commits?q=' + [Uri]::EscapeDataString($query) + '&per_page=100'
+    $search = Read-GitHubJson $queryUrl
+    if ($search.incomplete_results -or $search.total_count -gt 1000) { throw 'Incomplete commit search; previous evidence preserved' }
+    $candidates = @($search.items.sha)
+    for ($page = 2; $candidates.Count -lt $search.total_count; $page++) {
+        $more = Read-GitHubJson ($queryUrl + '&page=' + $page)
+        if ($more.incomplete_results -or !$more.items.Count) { throw 'Incomplete commit search page' }
+        $candidates += @($more.items.sha)
+    }
+    # Previously verified reversals must survive a normal refresh of the snapshot.
+    $candidates = @(@($candidates) + $AdditionalCommit + $RevertCommit + @($previous.commits.sha) + @($previous.reverts.sha) |
+        Where-Object { $_ } | Sort-Object -Unique)
+}
+if ($head -notmatch '^[0-9a-f]{40}$') { throw 'Invalid mainline head' }
 $signature = '(?im)^Signed-off-by:\s*' + [regex]::Escape($AuthorName) + '\s*<' + [regex]::Escape($AuthorEmail) + '>\s*$'
 $verified = @()
 foreach ($sha in $candidates) {
@@ -36,6 +53,13 @@ foreach ($sha in $candidates) {
     $ancestor = $comparison.status -in @('ahead','identical') -and $comparison.behind_by -eq 0 -and $comparison.merge_base_commit.sha -eq $sha -and $commit.sha -eq $sha
     $signed = $commit.commit.message -match $signature
     $authored = $commit.commit.author.email -ieq $AuthorEmail
+    $revertMatch = [regex]::Match($commit.commit.message, '(?im)^This reverts commit\s+([0-9a-f]{40})\.')
+    $revertsCommit = if ($revertMatch.Success) { $revertMatch.Groups[1].Value.ToLowerInvariant() } else { $null }
+    if ($RevertsOnly -or $sha -in $RevertCommit) {
+        if (!$ancestor -or !$revertsCommit -or $revertsCommit -notin (@($previous.commits.sha) + @($previous.reverts.sha) + $candidates)) {
+            throw ('No verified reversal of a known commit: ' + $sha)
+        }
+    }
     $verified += [ordered]@{
         sha = $sha
         title = ($commit.commit.message -split "`n")[0]
@@ -52,9 +76,16 @@ foreach ($sha in $candidates) {
         comparison_url = $url
         checked_at = [DateTimeOffset]::Now.ToString('o')
         message = $commit.commit.message
+        reverts_commit = $revertsCommit
     }
     Write-Host ($verified.Count.ToString() + '/' + $candidates.Count + ' ' + $sha.Substring(0,12) + ' mainline=' + $ancestor + ' attribution=' + ($signed -or $authored))
 }
+if ($RevertsOnly) {
+    $snapshot = $previous
+    $combined = @(@($previous.reverts | Where-Object { $_ -and $_.sha -notin $candidates }) + $verified)
+    $snapshot | Add-Member -NotePropertyName reverts -NotePropertyValue $combined -Force
+    $snapshot | Add-Member -NotePropertyName reverts_checked_at -NotePropertyValue ([DateTimeOffset]::Now.ToString('o')) -Force
+} else {
 $snapshot = [ordered]@{
     schema_version = 1
     author_email = $AuthorEmail
@@ -65,6 +96,9 @@ $snapshot = [ordered]@{
     search_total = $search.total_count
     search_complete = $true
     commits = $verified
+    reverts = @($verified | Where-Object { $_.reverts_commit })
+    reverts_checked_at = [DateTimeOffset]::Now.ToString('o')
+}
 }
 $absoluteOutput = [IO.Path]::GetFullPath($Output)
 $temporaryOutput = $absoluteOutput + '.tmp'

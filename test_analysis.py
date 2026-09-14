@@ -134,6 +134,75 @@ class AnalysisTests(unittest.TestCase):
         self.assertTrue(row['signals']['mainline'])
         self.assertEqual(row['attention_items'][0]['scope'], 'stable:6.1')
 
+    def reversal(self, sha='d' * 40, target='b' * 40, **changes):
+        proof = self.proof(sha=sha, merge_base=sha, title='Revert "net: example"',
+            authored_by_user=False, signed_off_by_user=False, author_email='reviewer@example.org',
+            source='https://github.com/torvalds/linux/commit/' + sha,
+            committed_at='2026-09-04T10:00:00Z')['commits'][0]
+        proof.update(reverts_commit=target, message='This reverts commit ' + target + '.')
+        proof.update(changes)
+        return proof
+
+    def test_verified_revert_overrides_historical_acceptance_and_keeps_evidence(self):
+        accepted = message('a', 'Re: [PATCH] net: example', 'Applied to net-next.', 2)
+        row = {**record([self.original, accepted]), **self.analyze(accepted)}
+        snapshot = {**self.proof(), 'reverts': [self.reversal()]}
+        apply_verifications([row], snapshot, dashboard.DEFAULT_EMAIL)
+        self.assertEqual(row['status'], 'Reverted')
+        self.assertFalse(row['signals']['applied'])
+        self.assertFalse(row['signals']['mainline'])
+        self.assertTrue(row['signals']['mainline_history'])
+        self.assertTrue(row['signals']['reverted'])
+        self.assertEqual(row['acceptance_basis'], 'reverted_verified')
+        self.assertEqual({e['kind'] for e in row['events']}, {'submitted', 'applied', 'mainline_verified', 'mainline_revert'})
+        self.assertEqual(next(e for e in row['branch_states'] if e['scope'] == 'mainline')['kind'], 'reverted')
+
+    def test_revert_request_or_submission_does_not_confirm_reversal(self):
+        for body in ('Could either of you please share a formal revert?',
+                     '- [PATCH net-next] Revert "net: example"', 'I will revert this patch.'):
+            request = message('r', 'Re: [PATCH] net: example', body, 4)
+            row = {**record([self.original, request]), **self.analyze(request)}
+            apply_verifications([row], self.proof(), dashboard.DEFAULT_EMAIL)
+            self.assertEqual(row['status'], 'Applied')
+            self.assertFalse(row['signals']['reverted'])
+
+    def test_unverified_unrelated_or_inconsistent_reversal_is_ignored(self):
+        for changes in ({'mainline_ancestor': False}, {'head_sha': 'e' * 40}, {'behind_by': 1},
+                        {'merge_base': 'e' * 40}, {'reverts_commit': 'e' * 40},
+                        {'message': 'Please revert commit ' + 'b' * 40}):
+            with self.subTest(changes=changes):
+                row = self.verified_record({**self.proof(), 'reverts': [self.reversal(**changes)]})
+                self.assertEqual(row['status'], 'Applied')
+                self.assertFalse(row['revert_commits'])
+
+    def test_revert_of_revert_restores_original_and_retains_both_reversals(self):
+        snapshot = {**self.proof(), 'reverts': [self.reversal(), self.reversal('e' * 40, 'd' * 40,
+                    committed_at='2026-09-05T10:00:00Z')]}
+        row = self.verified_record(snapshot)
+        self.assertEqual(row['status'], 'Applied')
+        self.assertTrue(row['signals']['mainline'])
+        self.assertEqual(len(row['revert_commits']), 2)
+        self.assertFalse(row['revert_commits'][0]['effective'])
+
+    def test_new_verified_replacement_is_not_erased_by_revert_of_old_sha(self):
+        snapshot = self.proof()
+        snapshot['commits'].extend(self.proof(sha='f' * 40, merge_base='f' * 40,
+                                            committed_at='2026-09-06T10:00:00Z')['commits'])
+        snapshot['reverts'] = [self.reversal()]
+        row = self.verified_record(snapshot)
+        self.assertEqual(row['status'], 'Applied')
+        self.assertEqual([p['reverted'] for p in row['mainline_commits']], [True, False])
+
+    def test_reanalysis_preserves_reverted_status_without_duplicate_events(self):
+        payload = {'author_email': dashboard.DEFAULT_EMAIL, 'records': [record([self.original])]}
+        with patch.object(dashboard, 'load_verifications', return_value={**self.proof(), 'reverts': [self.reversal()]}):
+            first = dashboard.upgrade_payload(payload)
+            second = dashboard.upgrade_payload(copy.deepcopy(first))
+        self.assertEqual(first['records'], second['records'])
+        self.assertEqual(second['signal_counts']['applied'], 0)
+        self.assertEqual(second['applied_audit']['reverted_topics'], 1)
+        self.assertEqual(second['applied_audit']['mainline_history_topics'], 1)
+
     def test_stable_submission_has_its_own_scope_and_is_not_mainline(self):
         result = self.analyze(message('s', '[PATCH 6.1 1/1] net: example', 'Stable review patch.', 2))
         self.assertEqual(result['kind'], 'patch')

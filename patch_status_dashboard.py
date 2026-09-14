@@ -154,11 +154,14 @@ def upgrade_payload(payload):
     payload['schema_version'] = 3
     payload['status_counts'] = dict(Counter(r['status'] for r in payload['records']))
     payload['kind_counts'] = dict(Counter(r['kind'] for r in payload['records']))
-    payload['signal_counts'] = {k: sum(r['signals'][k] for r in payload['records']) for k in ('applied', 'reviewed', 'acked', 'tested', 'mainline')}
+    payload['signal_counts'] = {k: sum(r['signals'][k] for r in payload['records']) for k in ('applied', 'reviewed', 'acked', 'tested', 'mainline', 'mainline_history', 'reverted')}
     verification = load_verifications()
     payload['applied_audit'] = {
         'verified_at': verification.get('checked_at'),
         'mainline_topics': sum(r['acceptance_basis'] == 'mainline_verified' for r in payload['records']),
+        'mainline_history_topics': sum(bool(r['mainline_commits']) for r in payload['records']),
+        'reverted_topics': sum(r['signals']['reverted'] for r in payload['records']),
+        'reverts_verified_at': verification.get('reverts_checked_at'),
         'mail_only_topics': sum(r['acceptance_basis'] == 'mail_confirmation' for r in payload['records']),
         'applied_patch_topics': sum(r['signals']['applied'] and r['kind'] == 'patch' for r in payload['records']),
         'applied_cover_topics': sum(r['signals']['applied'] and r['kind'] == 'cover' for r in payload['records']),

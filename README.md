@@ -24,13 +24,15 @@ Pages 发布地址：<https://xry1.github.io/linux-patch-status/>（首次启用
 
 ## Applied 校准与核实
 
-Applied 分成两类依据：主线历史已核实，或归档中有明确的接收回复。
+Applied 分成两类依据：主线历史已核实，或归档中有明确的接收回复；已核实回退的主题显示 Reverted，不再计入当前 Applied。
 `queued before finish_queued` 等代码描述、条件语句及“其他实现已经合入”的讨论不构成接收证据。
 
-2026-09-14 校准结果：56 个收录主题 = 52 个补丁 + 4 个系列封面。
-其中 44 个主题的提交已验证为主线历史的祖先，12 个主题有明确接收邮件但尚未验证主线归属。
+2026-09-14 回退校正后：55 个当前收录主题 = 51 个补丁 + 4 个系列封面，另有 1 个 Reverted。
+其中 43 个当前收录主题有主线证据，12 个主题有明确接收邮件但尚未验证主线归属。
+主线历史共有 44 个主题；`gtp: annotate PDP lookups under RTNL` 的原始提交 `0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9` 被 `860b693bca593c10e8294b79648799d96f6953d1` 明确回退，因此移出当前 Applied。
 44 个主线提交中，43 个由 Runyu Xiao 署名作者，1 个是其 Signed-off-by 参与的提交。
-每条依据可以在阅读器中查看。主线验证是指定日期、指定 HEAD 的历史归属核实，不保证代码此后没有被修改或回退。
+每条依据可以在阅读器中查看。主线验证是指定日期、指定 HEAD 的历史归属核实；回退核实仅限已收集的提交，并未全面扫描所有后续回退，不保证代码此后没有被修改。
+原始接收邮件、主线提交和回退提交均保留在时间线。只有验证了主线祖先关系、且 `This reverts commit` 精确指向原 SHA 的证据才撤销 Applied；建议或投递 revert 的邮件本身不会确认回退。回退提交自身被已核实提交再次回退时，可以恢复 Applied；同标题的新提交按各自 SHA 判断。
 
 主线核实同时检查题目和作者 / Signed-off-by 归属。标题相同但不属于用户的提交仅作为参考展示，不能增加 Applied 计数。
 `applied_verifications.json` 保存核对时的主线 HEAD、提交、祖先关系和归属；导入 mbox 时自动沿用这些证据，不会退回仅靠关键词判断。
@@ -44,6 +46,15 @@ Applied 分成两类依据：主线历史已核实，或归档中有明确的接
 ./Verify-Applied.ps1 -Proxy 'http://127.0.0.1:7897'
 python build_pages.py
 ```
+
+补充已知回退证据（沿用快照中的主线 HEAD，不重新请求所有原始提交）：
+
+```powershell
+./Verify-Applied.ps1 -RevertsOnly -RevertCommit '860b693bca593c10e8294b79648799d96f6953d1'
+python build_pages.py
+```
+
+正常运行 `Verify-Applied.ps1` 时会重新核实并保留已有回退证据，不会因只搜索用户 Signed-off-by 而丢掉其他作者的回退提交。
 
 核实程序不更改系统证书或全局代理。搜索或比较失败时保留此前证据。
 只更新证据时应同步本地工作台使用的 `applied_verifications.json`，并在没有导入任务运行时重新启动本地服务。

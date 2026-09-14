@@ -3,7 +3,7 @@
   "author_email": "runyu.xiao@seu.edu.cn",
   "repository": "torvalds/linux",
   "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
-  "checked_at": "2026-09-14T19:50:33.8150020+08:00",
+  "checked_at": "2026-09-14T19:50:33.815002+08:00",
   "search_url": "https://api.github.com/search/commits?q=repo%3Atorvalds%2Flinux%20%22Signed-off-by%3A%20Runyu%20Xiao%20%3Crunyu.xiao%40seu.edu.cn%3E%22&per_page=100",
   "search_total": 44,
   "search_complete": true,
@@ -73,7 +73,7 @@
       "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
       "source": "https://github.com/torvalds/linux/commit/0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9",
       "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-      "checked_at": "2026-09-14T19:48:51.0264630+08:00",
+      "checked_at": "2026-09-14T19:48:51.026463+08:00",
       "message": "gtp: annotate PDP lookups under RTNL\n\nThe GTP PDP lookup helpers are shared by RCU-protected data and report\npaths and RTNL-protected control paths such as gtp_genl_new_pdp(). The\nhelpers walk RCU hlists, but they do not currently pass the RTNL\ncondition for the control-path lookups.\n\nPass lockdep_rtnl_is_held() to the PDP hlist iterators. Existing\nRCU-reader callers remain valid because the RCU-list macros also accept\nan active RCU read-side section; the added condition only documents the\nnon-RCU protection already used by RTNL control paths.\n\nThis was found by our static analysis tool and then manually reviewed\nagainst the current tree. The dynamic triage evidence is a\ntarget-matched CONFIG_PROVE_RCU_LIST warning; the change is limited\nto documenting the existing protection contract.\n\nThis is a lockdep annotation cleanup. It does not change PDP lifetime or\nhash updates.\n\nSigned-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>\nReviewed-by: Simon Horman <horms@kernel.org>\nLink: https://patch.msgid.link/20260701123925.3193089-1-runyu.xiao@seu.edu.cn\nSigned-off-by: Paolo Abeni <pabeni@redhat.com>"
     },
     {
@@ -141,7 +141,7 @@
       "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
       "source": "https://github.com/torvalds/linux/commit/1947229f5f2a8d4ecf8c971aca68a1242bb7b37c",
       "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/1947229f5f2a8d4ecf8c971aca68a1242bb7b37c...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-      "checked_at": "2026-09-14T19:49:01.8419360+08:00",
+      "checked_at": "2026-09-14T19:49:01.841936+08:00",
       "message": "amba: use generic driver_override infrastructure\n\nWhen a driver is probed through __driver_attach(), the bus' match()\ncallback is called without the device lock held, thus accessing the\ndriver_override field without a lock, which can cause a UAF.\n\nFix this by using the driver-core driver_override infrastructure taking\ncare of proper locking internally.\n\nNote that calling match() from __driver_attach() without the device lock\nheld is intentional. [1]\n\nLink: https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@kernel.org/ [1]\nReported-by: Gui-Dong Han <hanguidong02@gmail.com>\nCloses: https://bugzilla.kernel.org/show_bug.cgi?id=220789\nFixes: 3cf385713460 (\"ARM: 8256/1: driver coamba: add device binding path 'driver_override'\")\nReviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>\nLink: https://patch.msgid.link/20260505133935.3772495-2-dakr@kernel.org\nSigned-off-by: Danilo Krummrich <dakr@kernel.org>"
     },
     {
@@ -362,7 +362,7 @@
       "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
       "source": "https://github.com/torvalds/linux/commit/536fb3d739d75a03cb318c0c6fe799425cfea501",
       "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/536fb3d739d75a03cb318c0c6fe799425cfea501...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-      "checked_at": "2026-09-14T19:49:31.0426920+08:00",
+      "checked_at": "2026-09-14T19:49:31.042692+08:00",
       "message": "wifi: rt2x00: avoid full teardown before work setup in probe\n\nrt2x00lib_probe_dev() uses the full rt2x00lib_remove_dev() teardown for\nall probe failures. However, drv_data allocation and workqueue allocation\ncan fail before intf_work, autowakeup_work and sleep_work have been\ninitialized.\n\nDo not enter the full remove path until the probe has reached the point\nwhere those work items are set up. Return directly for drv_data allocation\nfailure, and use a small early cleanup path for workqueue allocation\nfailure.\n\nThis issue was found by our static analysis tool and then confirmed by\nmanual review of rt2x00lib_probe_dev() and rt2x00lib_remove_dev(). The\nearly probe exits should not call a common teardown path that assumes the\nlater work setup has already completed.\n\nA QEMU PoC forced alloc_ordered_workqueue() to fail before the work\ninitializers are reached. The resulting fail path entered\nrt2x00lib_remove_dev(), and DEBUG_OBJECTS reported invalid work drains with\nrt2x00lib_probe_dev() and rt2x00lib_remove_dev() in the stack.\n\nFixes: 1ebbc48520a0 (\"rt2x00: Introduce concept of driver data in struct rt2x00_dev.\")\nFixes: 0439f5367c8d (\"rt2x00: Move TX/RX work into dedicated workqueue\")\nCc: stable@vger.kernel.org\nSigned-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>\nLink: https://patch.msgid.link/20260619073104.1809161-1-runyu.xiao@seu.edu.cn\nSigned-off-by: Johannes Berg <johannes.berg@intel.com>"
     },
     {
@@ -515,7 +515,7 @@
       "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
       "source": "https://github.com/torvalds/linux/commit/9cc47acc2f6ec74869e4be3ab59fe662cec887c3",
       "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9cc47acc2f6ec74869e4be3ab59fe662cec887c3...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-      "checked_at": "2026-09-14T19:49:53.8059450+08:00",
+      "checked_at": "2026-09-14T19:49:53.805945+08:00",
       "message": "drm/i915/display: Fix intel_lpe_audio_irq_handler for PREEMPT-RT\n\nThe LPE audio interrupt comes from the i915 interrupt handler. It\nshould be in irq disabled context.\n\nWith PREEMPT_RT enabled, the IRQ handler is threaded.\nBecause intel_lpe_audio_irq_handler() may be called in threaded IRQ context,\ngeneric_handle_irq_safe API disables the interrupts before calling LPE's\ninterrupt top half handler.\n\nThis fixes braswell audio issues with RT enabled.\n\nReviewed-by: Matthew Brost <matthew.brost@intel.com>\nReviewed-by: Uma Shankar <uma.shankar@intel.com>\nSigned-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>\nReviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>\nLink: https://patch.msgid.link/20260602004515.1907422-1-runyu.xiao@seu.edu.cn\nSigned-off-by: Maarten Lankhorst <dev@lankhorst.se>"
     },
     {
@@ -532,7 +532,7 @@
       "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
       "source": "https://github.com/torvalds/linux/commit/bda8324270b1ac91bfba1df8928e0570e29759e8",
       "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/bda8324270b1ac91bfba1df8928e0570e29759e8...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-      "checked_at": "2026-09-14T19:49:55.7416210+08:00",
+      "checked_at": "2026-09-14T19:49:55.741621+08:00",
       "message": "wifi: mt76: mt7615: avoid waiting for mac work under the mt76 mutex\n\nmt7615_suspend() acquired the mt76 mutex and then called\ncancel_delayed_work_sync() on mac_work.  mt7615_mac_work() acquires the\nsame mutex via mt7615_mutex_acquire() at the top of the worker, so if\nmac_work is already running and blocked on the mutex, the suspend path\ndeadlocks waiting for the work it holds the mutex against.\n\nFlush scan_work and mac_work before taking the mutex, matching the\nsuspend paths in mt7921 and mt7925.  scan_work only takes the mt76\nspinlock, but moving it keeps the sequence consistent.  This also keeps\nmac_work from running over an already suspended HIF, which the previous\nsplit (async cancel under the lock, sync cancel after release) would\nhave allowed.\n\nFixes: c6bf20109a3f (\"mt76: mt7615: add WoW support\")\nCc: stable@vger.kernel.org\nSigned-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>\nLink: https://patch.msgid.link/20260612041331.2596331-1-runyu.xiao@seu.edu.cn\nSigned-off-by: Felix Fietkau <nbd@nbd.name>"
     },
     {
@@ -583,7 +583,7 @@
       "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
       "source": "https://github.com/torvalds/linux/commit/ce1fed11d18e163baf7f875152a33bf80f625c1a",
       "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ce1fed11d18e163baf7f875152a33bf80f625c1a...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-      "checked_at": "2026-09-14T19:50:02.5721680+08:00",
+      "checked_at": "2026-09-14T19:50:02.572168+08:00",
       "message": "misc: nsm: only unlock nsm_dev on post-lock error paths\n\nnsm_dev_ioctl() jumps to the common out label even when the initial\ncopy_from_user() fails before nsm->lock has been taken.  The error path\nthen blindly unlocks a mutex that was never acquired.\n\nThis issue was found by our static analysis tool and then manually\nreviewed against the current tree.\n\nThe grounded PoC kept the miscdevice ioctl entry and the pre-lock\ncopy_from_user(&raw, argp, _IOC_SIZE(cmd)) failure path by issuing\nNSM_IOCTL_RAW with an invalid user pointer.  That failure reaches the\nshared out label before mutex_lock(&nsm->lock).  Lockdep reported:\n\n  WARNING: bad unlock balance detected!\n  exploit/193 is trying to release lock (&global_nsm.lock) at:\n  nsm_dev_ioctl+0x5f/0xcf [vuln_msv]\n  but there are no more locks to release!\n  no locks held by exploit/193.\n\nReturn immediately on the pre-lock copy_from_user() failure and keep the\ncommon unlock label for the post-lock paths only.\n\nFixes: b9873755a6c8 (\"misc: Add Nitro Secure Module driver\")\nCc: stable <stable@kernel.org>\nSigned-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>\nReviewed-by: Alexander Graf <graf@amazon.com>\nLink: https://patch.msgid.link/20260617145350.513875-1-runyu.xiao@seu.edu.cn\nSigned-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>"
     },
     {
@@ -702,7 +702,7 @@
       "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
       "source": "https://github.com/torvalds/linux/commit/ee5fb641c4ccac8406c668d3e947eb20ce44f233",
       "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ee5fb641c4ccac8406c668d3e947eb20ce44f233...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-      "checked_at": "2026-09-14T19:50:20.7641310+08:00",
+      "checked_at": "2026-09-14T19:50:20.764131+08:00",
       "message": "mmc: vub300: defer reset until cmd_mutex is unlocked\n\nvub300_cmndwork_thread() holds cmd_mutex while it sends a command and\nwaits for the command response.  If the response wait times out,\n__vub300_command_response() kills the command URBs and then synchronously\nresets the USB device through usb_reset_device().\n\nThat reset path re-enters the driver through vub300_pre_reset(), which\nalso takes cmd_mutex.  The worker therefore tries to acquire the same\nmutex recursively while it is still holding it from the command path.\n\nThis issue was found by our static analysis tool and then manually\nreviewed against the current tree.\n\nThe grounded PoC kept the real worker and timeout/reset carrier:\n\n  vub300_cmndwork_thread()\n  __vub300_command_response()\n  usb_lock_device_for_reset()\n  usb_reset_device()\n  vub300_pre_reset()\n\nLockdep reported the same-task recursive acquisition on cmd_mutex:\n\n  WARNING: possible recursive locking detected\n  ... (&test_vub300.cmd_mutex) ... at: usb_reset_device... [vuln_msv]\n  ... (&test_vub300.cmd_mutex) ... at: vub300_cmndwork_thread+0x12/0x20 [vuln_msv]\n  Workqueue: vub300_cmd_wq vub300_cmndwork_thread [vuln_msv]\n  *** DEADLOCK ***\n\nReturn a flag from __vub300_command_response() when the timeout path needs\na device reset, then perform the reset after vub300_cmndwork_thread() has\ncleared the in-flight command state and dropped cmd_mutex.  The reset is\nstill attempted before mmc_request_done(), preserving the existing request\ncompletion ordering while avoiding the recursive lock.\n\nFixes: 88095e7b473a (\"mmc: Add new VUB300 USB-to-SD/SDIO/MMC driver\")\nCc: stable@vger.kernel.org\nSigned-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>\nSigned-off-by: Ulf Hansson <ulfh@kernel.org>"
     },
     {
@@ -790,5 +790,26 @@
       "checked_at": "2026-09-14T19:50:33.8148035+08:00",
       "message": "coresight: etb10: restore atomic_t for shared reading state\n\nThe etb10 miscdevice uses drvdata->reading as a shared exclusivity gate\nfor userspace buffer access. etb_open() claims that gate with\nlocal_cmpxchg(), and etb_release() clears it with local_set().\n\nThat gate is shared per-device state rather than CPU-local state. A\nrunning system can reach it whenever /dev/<etb> is opened, closed, and\nreopened by different tasks while the device remains registered, so the\nsame drvdata->reading variable may be claimed on one CPU and later\ncleared on another.\n\nThis code used to use atomic_t for the same gate, but commit\n27b10da8fff2 (\"coresight: etb10: moving to local atomic operations\")\nchanged it to local_t even though the access pattern remained cross-task\nand cross-CPU. Restore atomic_t together with atomic_cmpxchg() and\natomic_set() so the exclusivity gate again uses a primitive intended\nfor shared state.\n\nThe issue was found on Linux v6.18.21 by our static analysis tool while\nscanning surviving local_t-on-shared-state sites, and then manually\nreviewed against the live etb10 file-op path.\n\nIt was runtime-validated with a reproducible QEMU no-device KCSAN PoC\nthat kept the same report-local contract:\n\n  1. use one shared struct etb_drvdata carrier and its\n     drvdata->reading gate;\n  2. call etb_open() and etb_release() sequentially on that gate to\n     confirm the original claim/clear path;\n  3. bind the open side to CPU0 and the release side to CPU1 for the\n     same gate to show cross-CPU ownership;\n  4. run bound workers that repeatedly race etb_open() and\n     etb_release() on the same gate until KCSAN reports a target hit.\n\nThe harness recorded:\n\n  L1 passed open=1 release=1\n  reading_after_open=1 reading_after_release=0\n  L2 passed open_cpu=0 release_cpu=1\n  cross_cpu_release=1 reading_after=0 open_ret=0\n\nRepresentative KCSAN excerpt from the no-device validation run:\n\n  BUG: KCSAN: data-race in etb_open.constprop.0.isra.0 [vuln_msv]\n\n  write to 0xffffffffc0003810 of 4 bytes by task 216 on cpu 1:\n   etb_open.constprop.0.isra.0+0x38/0x80 [vuln_msv]\n   l3_worker_thread_fn+0x4f/0xf0 [vuln_msv]\n   kthread+0x17e/0x1c0\n   ret_from_fork+0x22/0x30\n\n  read to 0xffffffffc0003810 of 4 bytes by task 215 on cpu 0:\n   etb_open.constprop.0.isra.0+0x18/0x80 [vuln_msv]\n   l3_worker_thread_fn+0x4f/0xf0 [vuln_msv]\n   kthread+0x17e/0x1c0\n   ret_from_fork+0x22/0x30\n\n  value changed: 0x00000000 -> 0x00000001\n\n  Reported by Kernel Concurrency Sanitizer on:\n  CPU: 0 PID: 215 Comm: etb10_l3_a Tainted: G           O       6.1.66 #2\n\nThis no-device harness is not a real ETB10 hardware end-to-end run, but\nit preserves the same shared drvdata->reading gate and the same\netb_open()/etb_release() claim/clear contract. No real ETB10 hardware\nwas available for runtime testing.\n\nBuild-tested with:\n  make olddefconfig\n  make -j\"$(nproc)\" drivers/hwtracing/coresight/coresight-etb10.o\n\nFixes: 27b10da8fff2 (\"coresight: etb10: moving to local atomic operations\")\nCc: stable@vger.kernel.org\nSigned-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>\nReviewed-by: James Clark <james.clark@linaro.org>\nSigned-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>\nLink: https://lore.kernel.org/r/20260528165201.319452-1-runyu.xiao@seu.edu.cn"
     }
-  ]
+  ],
+  "reverts": [
+    {
+      "sha": "860b693bca593c10e8294b79648799d96f6953d1",
+      "title": "Revert \"gtp: annotate PDP lookups under RTNL\"",
+      "author": "Simon Horman",
+      "author_email": "horms@kernel.org",
+      "authored_by_user": false,
+      "signed_off_by_user": false,
+      "committed_at": "2026-07-21T15:15:09Z",
+      "mainline_ancestor": true,
+      "merge_base": "860b693bca593c10e8294b79648799d96f6953d1",
+      "behind_by": 0,
+      "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+      "source": "https://github.com/torvalds/linux/commit/860b693bca593c10e8294b79648799d96f6953d1",
+      "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/860b693bca593c10e8294b79648799d96f6953d1...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
+      "checked_at": "2026-09-14T20:17:31.7360288+08:00",
+      "message": "Revert \"gtp: annotate PDP lookups under RTNL\"\n\nThis reverts commit 0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9.\n\nCommit 0be5c3f0fbef (\"gtp: annotate PDP lookups under RTNL\") added a\nlockdep_rtnl_is_held condition to hlist_for_each_rcu() loops to help\ninsure that RTNL is held.\n\nUnfortunately, as pointed out by Pablo Neira Ayuso, the PDP context list\nis actually protected by the genetlink mutex. And so the condition\nis incorrect.\n\nCompile tested only.\n\nLink: https://lore.kernel.org/ak4NgOrro-4OZjz3@chamomile\nSigned-off-by: Simon Horman <horms@kernel.org>\nLink: https://patch.msgid.link/20260708-gtp-rtnl-v1-1-218091f171bc@kernel.org\nSigned-off-by: Jakub Kicinski <kuba@kernel.org>",
+      "reverts_commit": "0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9"
+    }
+  ],
+  "reverts_checked_at": "2026-09-14T20:17:31.7552507+08:00"
 }

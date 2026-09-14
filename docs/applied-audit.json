@@ -1,35 +1,20 @@
 {
-  "calibrated_at": "2026-09-14T19:56:24+08:00",
-  "before_applied": 40,
-  "after_applied": 56,
-  "added": [
-    "7c44203887fb9e2a",
-    "637076efe88171af",
-    "ccb8cefe827bcef5",
-    "159c234ff129dcdb",
-    "f9056af03581aa8f",
-    "10a60bd7f8430cb9",
-    "157e7b44d4271a6e",
-    "5502fe92a40b961a",
-    "7e2f0e098b8e04f7",
-    "3fabe868f4974737",
-    "bf432d53d8359aa5",
-    "e8b92080485195e1",
-    "79c27c91cb60dfd0",
-    "dfd6c624d28ff7bb",
-    "03f1c13f64c578cf",
-    "a1eca66950e06f2b",
-    "4353bb3bc339a390"
-  ],
+  "calibrated_at": "2026-09-14T20:23:55+08:00",
+  "before_applied": 56,
+  "after_applied": 55,
+  "added": [],
   "removed": [
-    "db9a6baf5ef150f9"
+    "b5234fc0f905590f"
   ],
   "scope": "All archived topics; cover letters are counted separately from patch topics in applied_audit.",
   "applied_audit": {
-    "verified_at": "2026-09-14T19:50:33.8150020+08:00",
-    "mainline_topics": 44,
+    "verified_at": "2026-09-14T19:50:33.815002+08:00",
+    "mainline_topics": 43,
+    "mainline_history_topics": 44,
+    "reverted_topics": 1,
+    "reverts_verified_at": "2026-09-14T20:17:31.7552507+08:00",
     "mail_only_topics": 12,
-    "applied_patch_topics": 52,
+    "applied_patch_topics": 51,
     "applied_cover_topics": 4,
     "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf"
   },
@@ -42,6 +27,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c295249d24dd748f"
@@ -54,6 +41,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -78,6 +67,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -98,7 +89,7 @@
       "id": "7c44203887fb9e2a",
       "title": "wifi: mt76: mt7615: avoid waiting for mac work under the mt76 mutex",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -111,10 +102,13 @@
           "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
           "source": "https://github.com/torvalds/linux/commit/bda8324270b1ac91bfba1df8928e0570e29759e8",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/bda8324270b1ac91bfba1df8928e0570e29759e8...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:55.7416210+08:00",
-          "attribution": "author"
+          "checked_at": "2026-09-14T19:49:55.741621+08:00",
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7c44203887fb9e2a"
@@ -123,10 +117,12 @@
       "id": "db9a6baf5ef150f9",
       "title": "wifi: ath12k: convert scan timeout to wiphy delayed work",
       "kind": "patch",
-      "before_applied": true,
+      "before_applied": false,
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=db9a6baf5ef150f9"
@@ -135,7 +131,7 @@
       "id": "637076efe88171af",
       "title": "sunrpc: xprtsock: annotate shared socket callbacks with READ_ONCE/WRITE_ONCE",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -149,9 +145,12 @@
           "source": "https://github.com/torvalds/linux/commit/33930840b5f0a79f826e7c69dc6cd78f72a67481",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/33930840b5f0a79f826e7c69dc6cd78f72a67481...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:13.1356951+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=637076efe88171af"
@@ -174,9 +173,12 @@
           "source": "https://github.com/torvalds/linux/commit/3f92a64545165bdbb36dee8fa35626b295463313",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/3f92a64545165bdbb36dee8fa35626b295463313...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:18.8209218+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -222,9 +224,12 @@
           "source": "https://github.com/torvalds/linux/commit/f8e43fe0f22b7137ce456e6fe3581d3098174f74",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f8e43fe0f22b7137ce456e6fe3581d3098174f74...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:27.4434125+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -259,9 +264,12 @@
           "source": "https://github.com/torvalds/linux/commit/612ccf42acd14bb2685fa60c3495ca13e63e8989",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/612ccf42acd14bb2685fa60c3495ca13e63e8989...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:36.2297264+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -282,7 +290,7 @@
       "id": "ccb8cefe827bcef5",
       "title": "ASoC: cs35l34: drain threaded IRQ before runtime suspend",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -296,9 +304,12 @@
           "source": "https://github.com/torvalds/linux/commit/4105a4c0678b2808fc8046b60321b4f1cc7dae75",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/4105a4c0678b2808fc8046b60321b4f1cc7dae75...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:21.4221071+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ccb8cefe827bcef5"
@@ -307,7 +318,7 @@
       "id": "159c234ff129dcdb",
       "title": "ASoC: cs35l33: drain threaded IRQ before runtime suspend",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -321,9 +332,12 @@
           "source": "https://github.com/torvalds/linux/commit/e074c12c428c633e079154301207a6079a208583",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e074c12c428c633e079154301207a6079a208583...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:11.6666946+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=159c234ff129dcdb"
@@ -346,9 +360,12 @@
           "source": "https://github.com/torvalds/linux/commit/6c97817e20598e5473094e0e38d1f51f1cf4dfff",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/6c97817e20598e5473094e0e38d1f51f1cf4dfff...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:40.9166292+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -383,9 +400,12 @@
           "source": "https://github.com/torvalds/linux/commit/c73cb5b7c159246dd572277c668851a56e516019",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/c73cb5b7c159246dd572277c668851a56e516019...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:57.9570789+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -420,9 +440,12 @@
           "source": "https://github.com/torvalds/linux/commit/33abb7491e89285a41565670945293dda841afc4",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/33abb7491e89285a41565670945293dda841afc4...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:14.8582891+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -447,6 +470,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -471,6 +496,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -495,6 +522,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=66b5a89e7a35d4f9"
@@ -507,6 +536,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -531,6 +562,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6f0c9b881d2224db"
@@ -543,6 +576,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6bac3e13252e619d"
@@ -555,6 +590,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c76e0867605955f9"
@@ -567,6 +604,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=54d679627c21673d"
@@ -589,9 +628,12 @@
           "source": "https://github.com/torvalds/linux/commit/e1406330d70e56dd44fa6fbafc86e77e5c80c122",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e1406330d70e56dd44fa6fbafc86e77e5c80c122...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:13.5129858+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -616,6 +658,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=5e1c2009b9142ba0"
@@ -628,6 +672,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2ccde0f41483f033"
@@ -640,6 +686,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f0305e69507d0b4b"
@@ -652,6 +700,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=9b7c8349416aa21d"
@@ -664,6 +714,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -688,6 +740,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=71a9982d1cfee487"
@@ -700,6 +754,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6161a812be489b7d"
@@ -712,6 +768,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8f2af80ef9db9f23"
@@ -724,6 +782,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=fbadf0f192c613ff"
@@ -736,6 +796,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1ec6da72e5054b0d"
@@ -758,9 +820,12 @@
           "source": "https://github.com/torvalds/linux/commit/ed4f05d9f2f42fd866f55108db8123eefcc5fb33",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ed4f05d9f2f42fd866f55108db8123eefcc5fb33...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:18.5604179+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -785,6 +850,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=970361238f72c1b4"
@@ -807,9 +874,12 @@
           "source": "https://github.com/torvalds/linux/commit/43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:23.7870875+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -834,6 +904,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -858,6 +930,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e25a38a53ad6b63d"
@@ -870,6 +944,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e793a6fa2cd306e0"
@@ -892,9 +968,12 @@
           "source": "https://github.com/torvalds/linux/commit/8a53f9102a0d3eeb8784999f925028acf339c276",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/8a53f9102a0d3eeb8784999f925028acf339c276...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:48.5824479+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -929,9 +1008,12 @@
           "source": "https://github.com/torvalds/linux/commit/3e5d1bf4bd687beb2cb4e32a07af695455925588",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/3e5d1bf4bd687beb2cb4e32a07af695455925588...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:16.6135013+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -956,6 +1038,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f7e3bc10bdffe9c8"
@@ -968,6 +1052,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=716fb60f7c9c6fc1"
@@ -980,6 +1066,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=fbf61e3981b8577c"
@@ -992,6 +1080,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b42aca124cb915a3"
@@ -1004,6 +1094,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=56df94c831e4ad3c"
@@ -1016,6 +1108,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=27474def782aeccc"
@@ -1028,6 +1122,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=11488511c8d738f4"
@@ -1040,6 +1136,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=68c1d9adf4aae56e"
@@ -1062,9 +1160,12 @@
           "source": "https://github.com/torvalds/linux/commit/f48763beab4eea41fc480c9702ec6eebe8d75e4f",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f48763beab4eea41fc480c9702ec6eebe8d75e4f...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:25.3398636+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1089,6 +1190,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=d2b1f34e01824bea"
@@ -1111,9 +1214,12 @@
           "source": "https://github.com/torvalds/linux/commit/7a20eb54224ab7481c1f5a1619a6a5677be93eed",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/7a20eb54224ab7481c1f5a1619a6a5677be93eed...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:46.1808014+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1148,9 +1254,12 @@
           "source": "https://github.com/torvalds/linux/commit/04405aeef4f8d7bcac6dcb1947acafdb4420c2c3",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/04405aeef4f8d7bcac6dcb1947acafdb4420c2c3...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:48:46.0913581+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1175,6 +1284,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=842993b057bd028b"
@@ -1187,6 +1298,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=eedc8d06bb828394"
@@ -1199,6 +1312,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ea010489a66f8eaf"
@@ -1211,6 +1326,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8d114bcc9c10e554"
@@ -1223,6 +1340,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8ffe5b6639c74521"
@@ -1235,6 +1354,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6324e15318d94a2e"
@@ -1247,6 +1368,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=9f611786061e8f4d"
@@ -1259,6 +1382,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=5d7f3272c81ca532"
@@ -1271,6 +1396,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8e97e37c993d8291"
@@ -1283,6 +1410,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=efa7725f749368d2"
@@ -1295,6 +1424,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b0111d324fabbc55"
@@ -1307,6 +1438,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=864d5af343a62cee"
@@ -1319,6 +1452,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7ea39f245f5d9530"
@@ -1331,6 +1466,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c57855b0caeca700"
@@ -1343,6 +1480,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a13384f83db18b1b"
@@ -1355,6 +1494,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1379,6 +1520,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=424be8359cb16a32"
@@ -1391,6 +1534,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=bb58a8b4081270e7"
@@ -1403,6 +1548,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=df8eed0bd59213b2"
@@ -1415,6 +1562,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f4eb088cdbbc89c4"
@@ -1423,7 +1572,7 @@
       "id": "f9056af03581aa8f",
       "title": "octeontx2-vf: clear stale mailbox IRQ state before request_irq()",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -1437,9 +1586,12 @@
           "source": "https://github.com/torvalds/linux/commit/0b352f04b9be2c83c0240aa6dae7257fefa90464",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0b352f04b9be2c83c0240aa6dae7257fefa90464...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:48:48.6810174+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f9056af03581aa8f"
@@ -1448,7 +1600,7 @@
       "id": "10a60bd7f8430cb9",
       "title": "octeontx2-pf: clear stale mailbox IRQ state before request_irq()",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -1462,9 +1614,12 @@
           "source": "https://github.com/torvalds/linux/commit/f918554fb7246e89b98ef90abe80801f038258b3",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f918554fb7246e89b98ef90abe80801f038258b3...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:30.2811075+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=10a60bd7f8430cb9"
@@ -1487,9 +1642,12 @@
           "source": "https://github.com/torvalds/linux/commit/d3e91a95b2b0fc6336dbf3ec90d831a1654d2720",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/d3e91a95b2b0fc6336dbf3ec90d831a1654d2720...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:05.4207158+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1514,6 +1672,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Needs attention",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f0459e354bd540c5"
@@ -1526,6 +1686,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ecc9e50eb9e8babb"
@@ -1538,6 +1700,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=83037afd3643ec12"
@@ -1550,6 +1714,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a293816639d52498"
@@ -1562,6 +1728,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=51f09afacfe746a2"
@@ -1574,6 +1742,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a808372398ddbb4f"
@@ -1582,7 +1752,7 @@
       "id": "157e7b44d4271a6e",
       "title": "wifi: brcmfmac: initialize SDIO data work before cleanup",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -1596,9 +1766,12 @@
           "source": "https://github.com/torvalds/linux/commit/2a665946e0407a05a3f81bd56a08553c446498e0",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/2a665946e0407a05a3f81bd56a08553c446498e0...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:11.9589673+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=157e7b44d4271a6e"
@@ -1611,6 +1784,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=d5a6c02636b979e2"
@@ -1623,6 +1798,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=704e974dbc23ecef"
@@ -1635,6 +1812,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=5a9c0cd7cf61f538"
@@ -1647,6 +1826,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ea32f91615019df6"
@@ -1659,6 +1840,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4426b7f671bddc79"
@@ -1671,6 +1854,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=dd56dee12e54cc53"
@@ -1683,6 +1868,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a519278e72a3074e"
@@ -1695,6 +1882,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b9fe8a90bf063c16"
@@ -1707,6 +1896,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ebe257c1c0eebc98"
@@ -1719,6 +1910,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ba5c8c7008abdcef"
@@ -1741,9 +1934,12 @@
           "source": "https://github.com/torvalds/linux/commit/18f116931f52e3c3303ad4b15ff41eb89b0e4239",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/18f116931f52e3c3303ad4b15ff41eb89b0e4239...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:48:59.1177003+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1764,7 +1960,7 @@
       "id": "5502fe92a40b961a",
       "title": "misc: nsm: only unlock nsm_dev on post-lock error paths",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -1777,10 +1973,13 @@
           "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
           "source": "https://github.com/torvalds/linux/commit/ce1fed11d18e163baf7f875152a33bf80f625c1a",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ce1fed11d18e163baf7f875152a33bf80f625c1a...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:02.5721680+08:00",
-          "attribution": "author"
+          "checked_at": "2026-09-14T19:50:02.572168+08:00",
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=5502fe92a40b961a"
@@ -1789,7 +1988,7 @@
       "id": "7e2f0e098b8e04f7",
       "title": "wifi: rt2x00: avoid full teardown before work setup in probe",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -1802,10 +2001,13 @@
           "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
           "source": "https://github.com/torvalds/linux/commit/536fb3d739d75a03cb318c0c6fe799425cfea501",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/536fb3d739d75a03cb318c0c6fe799425cfea501...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:31.0426920+08:00",
-          "attribution": "author"
+          "checked_at": "2026-09-14T19:49:31.042692+08:00",
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7e2f0e098b8e04f7"
@@ -1814,7 +2016,7 @@
       "id": "3fabe868f4974737",
       "title": "usb: dwc3: run gadget disconnect from sleepable suspend context",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -1828,9 +2030,12 @@
           "source": "https://github.com/torvalds/linux/commit/010382937fb69892b3469ac4d30af072262f59e8",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/010382937fb69892b3469ac4d30af072262f59e8...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:48:44.4014538+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3fabe868f4974737"
@@ -1843,6 +2048,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=23d93a5acaf53cd4"
@@ -1851,7 +2058,7 @@
       "id": "bf432d53d8359aa5",
       "title": "netfilter: nft_synproxy: stop bypassing the priv->info snapshot",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -1865,9 +2072,12 @@
           "source": "https://github.com/torvalds/linux/commit/11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:48:56.6885491+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=bf432d53d8359aa5"
@@ -1889,10 +2099,13 @@
           "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
           "source": "https://github.com/torvalds/linux/commit/ee5fb641c4ccac8406c668d3e947eb20ce44f233",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ee5fb641c4ccac8406c668d3e947eb20ce44f233...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:20.7641310+08:00",
-          "attribution": "author"
+          "checked_at": "2026-09-14T19:50:20.764131+08:00",
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1927,9 +2140,12 @@
           "source": "https://github.com/torvalds/linux/commit/47186409c092cd7dd70350999186c700233e854d",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/47186409c092cd7dd70350999186c700233e854d...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:26.4812093+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1964,9 +2180,12 @@
           "source": "https://github.com/torvalds/linux/commit/29bef9934b2521f787bb15dd1985d4c0d12ae02a",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/29bef9934b2521f787bb15dd1985d4c0d12ae02a...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:09.6850128+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -1987,7 +2206,7 @@
       "id": "e8b92080485195e1",
       "title": "iio: imu: bmi160: add IRQF_NO_THREAD to data-ready trigger IRQ",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -2001,9 +2220,12 @@
           "source": "https://github.com/torvalds/linux/commit/cd5a6a5096b246e10600da3ac47a1274ce9573c8",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/cd5a6a5096b246e10600da3ac47a1274ce9573c8...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:00.2057414+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e8b92080485195e1"
@@ -2012,7 +2234,7 @@
       "id": "79c27c91cb60dfd0",
       "title": "iio: imu: adis: add IRQF_NO_THREAD to non-FIFO trigger IRQ",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -2026,9 +2248,12 @@
           "source": "https://github.com/torvalds/linux/commit/6e1b9bff1202da55c464e36bd34a2b6863d7fe30",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/6e1b9bff1202da55c464e36bd34a2b6863d7fe30...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:43.4391166+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=79c27c91cb60dfd0"
@@ -2051,9 +2276,12 @@
           "source": "https://github.com/torvalds/linux/commit/e31408734332b8cc611342cdaaab6ba492180156",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e31408734332b8cc611342cdaaab6ba492180156...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:16.2508028+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2074,7 +2302,7 @@
       "id": "dfd6c624d28ff7bb",
       "title": "gpio: sch: use raw_spinlock_t in the irq startup path",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -2088,9 +2316,12 @@
           "source": "https://github.com/torvalds/linux/commit/286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:06.9912814+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=dfd6c624d28ff7bb"
@@ -2099,7 +2330,7 @@
       "id": "03f1c13f64c578cf",
       "title": "gpio: eic-sprd: use raw_spinlock_t in the irq startup path",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -2113,9 +2344,12 @@
           "source": "https://github.com/torvalds/linux/commit/90f0109019e6817eb40a486671b7722d1544ae29",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/90f0109019e6817eb40a486671b7722d1544ae29...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:51.1623432+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=03f1c13f64c578cf"
@@ -2138,9 +2372,12 @@
           "source": "https://github.com/torvalds/linux/commit/fa09f08ede3db3050ae16ae1ed92c902d0cada23",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/fa09f08ede3db3050ae16ae1ed92c902d0cada23...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:33.8148035+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2165,6 +2402,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [
         {
@@ -2190,6 +2429,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [
         {
@@ -2201,7 +2442,7 @@
           "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
           "source": "https://github.com/torvalds/linux/commit/1947229f5f2a8d4ecf8c971aca68a1242bb7b37c",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/1947229f5f2a8d4ecf8c971aca68a1242bb7b37c...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:01.8419360+08:00",
+          "checked_at": "2026-09-14T19:49:01.841936+08:00",
           "attribution": "other_author"
         }
       ],
@@ -2225,9 +2466,12 @@
           "source": "https://github.com/torvalds/linux/commit/2641a9e0a1dd4af2e21995470a21d55dd35e5203",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/2641a9e0a1dd4af2e21995470a21d55dd35e5203...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:04.3814622+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2252,6 +2496,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=fb5235c315cda688"
@@ -2264,6 +2510,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2967f3d16d7ffa67"
@@ -2276,6 +2524,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f397062272619b7d"
@@ -2288,6 +2538,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=dba0ea93855a13d3"
@@ -2300,6 +2552,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=54e1c4252cec9508"
@@ -2312,6 +2566,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=dcdd89f4965cd807"
@@ -2321,8 +2577,8 @@
       "title": "gtp: annotate PDP lookups under RTNL",
       "kind": "patch",
       "before_applied": true,
-      "after_applied": true,
-      "basis": "mainline_verified",
+      "after_applied": false,
+      "basis": "reverted_verified",
       "mainline_commits": [
         {
           "sha": "0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9",
@@ -2333,10 +2589,26 @@
           "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
           "source": "https://github.com/torvalds/linux/commit/0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:51.0264630+08:00",
-          "attribution": "author"
+          "checked_at": "2026-09-14T19:48:51.026463+08:00",
+          "attribution": "author",
+          "reverted": true
         }
       ],
+      "revert_commits": [
+        {
+          "sha": "860b693bca593c10e8294b79648799d96f6953d1",
+          "title": "Revert \"gtp: annotate PDP lookups under RTNL\"",
+          "author": "Simon Horman",
+          "committed_at": "2026-07-21T15:15:09Z",
+          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "source": "https://github.com/torvalds/linux/commit/860b693bca593c10e8294b79648799d96f6953d1",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/860b693bca593c10e8294b79648799d96f6953d1...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
+          "checked_at": "2026-09-14T20:17:31.7360288+08:00",
+          "reverts_commit": "0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9",
+          "effective": true
+        }
+      ],
+      "current_status": "Reverted",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2371,9 +2643,12 @@
           "source": "https://github.com/torvalds/linux/commit/4fa0619d039f561dd2207055cf21a10abaeebe0e",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/4fa0619d039f561dd2207055cf21a10abaeebe0e...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:28.6811368+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2398,6 +2673,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2422,6 +2699,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=9dd56696056a60df"
@@ -2434,6 +2713,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Needs attention",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=9a73e89607207374"
@@ -2446,6 +2727,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2d2ddbb525d369e2"
@@ -2458,6 +2741,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f8767981cfa8f446"
@@ -2470,6 +2755,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=58bec5435929f934"
@@ -2482,6 +2769,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=601051f77623e6cb"
@@ -2494,6 +2783,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ee2aa8662ca06e4e"
@@ -2506,6 +2797,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=0e8584a64fef2235"
@@ -2518,6 +2811,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Needs attention",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e0f3ebced0005eae"
@@ -2530,6 +2825,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=321df49d82a55c57"
@@ -2542,6 +2839,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=77b77088a060d8f4"
@@ -2554,6 +2853,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e83dd50eefa88748"
@@ -2566,6 +2867,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=387bae3bd9b0eb36"
@@ -2578,6 +2881,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=bc8b689433ffaaab"
@@ -2590,6 +2895,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f42a0965a3fcd30d"
@@ -2602,6 +2909,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ef8a617dd5ca74e5"
@@ -2614,6 +2923,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=49661a9eeb87ba61"
@@ -2626,6 +2937,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4a5d5cc709bf4ac3"
@@ -2638,6 +2951,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8600f405c12054d0"
@@ -2660,9 +2975,12 @@
           "source": "https://github.com/torvalds/linux/commit/684a00c291fbde2d42b6692c75855df7ff8894ee",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/684a00c291fbde2d42b6692c75855df7ff8894ee...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:38.5476053+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2687,6 +3005,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=34de66ff7ccec39b"
@@ -2709,9 +3029,12 @@
           "source": "https://github.com/torvalds/linux/commit/0e901ee5c6f9e1a382099cd7dbee1360c80c441c",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0e901ee5c6f9e1a382099cd7dbee1360c80c441c...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:48:53.7809512+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2736,6 +3059,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e92ff428a75c493f"
@@ -2748,6 +3073,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8f9b09ba1141c799"
@@ -2760,6 +3087,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8b985bd51fb2fa05"
@@ -2772,6 +3101,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2a44afaa283b9f62"
@@ -2784,6 +3115,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=d1b19caa77e8f946"
@@ -2796,6 +3129,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4a4b78f4e24c96e1"
@@ -2808,6 +3143,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1bed4fa59c644a25"
@@ -2820,6 +3157,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4e233682e37680a7"
@@ -2832,6 +3171,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a0cd2687d8994299"
@@ -2844,6 +3185,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=300611ff45b17b21"
@@ -2856,6 +3199,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3b2b514d00a0a9a9"
@@ -2868,6 +3213,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2892,6 +3239,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7fb8280b32eedd4c"
@@ -2904,6 +3253,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=685308c6bf34c372"
@@ -2916,6 +3267,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3a75eca2413c40b7"
@@ -2928,6 +3281,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2952,6 +3307,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b0a8da98781accea"
@@ -2964,6 +3321,8 @@
       "after_applied": true,
       "basis": "mail_confirmation",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -2988,6 +3347,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Needs attention",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=18a99f45b28d6491"
@@ -3000,6 +3361,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1f15b471507be5ac"
@@ -3012,6 +3375,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c3e97d850b7cc4f8"
@@ -3024,6 +3389,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=dc6c78f865d4301b"
@@ -3036,6 +3403,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c359445f34eba6b5"
@@ -3058,9 +3427,12 @@
           "source": "https://github.com/torvalds/linux/commit/f425c55cb60e116a53f2c196100dc09c5a828383",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f425c55cb60e116a53f2c196100dc09c5a828383...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:50:23.0318601+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [
         {
           "kind": "applied",
@@ -3085,6 +3457,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=559e7b20b984255f"
@@ -3093,7 +3467,7 @@
       "id": "a1eca66950e06f2b",
       "title": "drm/i915/display: Fix intel_lpe_audio_irq_handler for PREEMPT-RT",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -3106,10 +3480,13 @@
           "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
           "source": "https://github.com/torvalds/linux/commit/9cc47acc2f6ec74869e4be3ab59fe662cec887c3",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9cc47acc2f6ec74869e4be3ab59fe662cec887c3...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:53.8059450+08:00",
-          "attribution": "signed_off"
+          "checked_at": "2026-09-14T19:49:53.805945+08:00",
+          "attribution": "signed_off",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a1eca66950e06f2b"
@@ -3122,6 +3499,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f015609de522fa7a"
@@ -3134,6 +3513,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=609aff941534916a"
@@ -3146,6 +3527,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ea44a0f08c072b6f"
@@ -3158,6 +3541,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b85ed619038e64c4"
@@ -3170,6 +3555,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=d93e06cca9edd92b"
@@ -3182,6 +3569,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=622c3dc1c46d56fe"
@@ -3194,6 +3583,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=52149afe9415b28f"
@@ -3206,6 +3597,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b96a4db0e54f147a"
@@ -3214,7 +3607,7 @@
       "id": "4353bb3bc339a390",
       "title": "wifi: qtnfmac: topaz: defer IRQ enabling until IPC init",
       "kind": "patch",
-      "before_applied": false,
+      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
@@ -3228,9 +3621,12 @@
           "source": "https://github.com/torvalds/linux/commit/5a9c554ff86d7f3750d95ce72ad0666e02e37b92",
           "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/5a9c554ff86d7f3750d95ce72ad0666e02e37b92...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
           "checked_at": "2026-09-14T19:49:33.5134707+08:00",
-          "attribution": "author"
+          "attribution": "author",
+          "reverted": false
         }
       ],
+      "revert_commits": [],
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4353bb3bc339a390"
@@ -3243,6 +3639,8 @@
       "after_applied": false,
       "basis": "unconfirmed",
       "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7d060715b1b7fa55"

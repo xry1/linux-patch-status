@@ -19,6 +19,8 @@ def audit(source, output):
             'before_applied': bool(old.get('signals', {}).get('applied')),
             'after_applied': r['signals']['applied'], 'basis': r['acceptance_basis'],
             'mainline_commits': r['mainline_commits'],
+            'revert_commits': r['revert_commits'],
+            'current_status': r['status'],
             'mail_confirmations': [e for e in r['events'] if e['kind'] == 'applied'],
             'excluded_other_authors': r['related_mainline_commits'],
             'thread_url': 'https://xry1.github.io/linux-patch-status/#patch=' + r['id'],
