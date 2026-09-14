@@ -23,6 +23,7 @@ from email.utils import parsedate_to_datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import quote, unquote, urlparse
+from patch_analysis import analyze, clean_title, commit_references, regroup, submission
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -77,12 +78,7 @@ def parse_date(value):
 
 
 def clean_subject(subject):
-    value = subject.strip()
-    for _ in range(6):
-        value = re.sub(r"^\s*(?:re|fwd?)\s*:\s*", "", value, flags=re.I)
-        value = re.sub(r"^\s*failed:\s*patch\s*[\"']?", "", value, flags=re.I)
-        value = re.sub(r"^\s*\[[^\]]*patch[^\]]*\]\s*", "", value, flags=re.I)
-    return re.sub(r"\s+", " ", value).strip(" \"'") or "(no subject)"
+    return clean_title(subject)
 
 
 def subject_key(subject):
@@ -115,18 +111,56 @@ def evidence_lines(text):
 
 
 def infer_status(messages):
-    text = "\n".join(m["subject"] + "\n" + unquoted_text(m.get("body", "")) for m in messages)
-    if re.search(r"failed to apply|not applied|rejected|\bnack\b|won't apply", text, re.I):
-        status = "Needs attention"
-    elif re.search(r"\bapplied\b|queued for|picked|cherry[- ]picked|merged", text, re.I):
-        status = "Applied"
-    elif re.search(r"reviewed-by:|acked-by:|tested-by:|\baccepted\b", text, re.I):
-        status = "Reviewed"
-    else:
-        status = "Submitted"
-    evidence = [f'{m["date"] or "unknown date"}: {line}' for m in messages
-                for line in evidence_lines(unquoted_text(m.get("body", "")))]
-    return status, list(dict.fromkeys(evidence))[:12]
+    result = analyze(messages, DEFAULT_EMAIL)
+    return result['status'], [e['date'] + ': ' + e['evidence'] for e in result['events']]
+
+
+def enrich_records(records, author_email=DEFAULT_EMAIL):
+    records = regroup(records)
+    for record in records:
+        record.update(analyze(record['messages'], author_email))
+        items = record['messages']
+        dates = [m.get('date_iso') or m.get('date', '') for m in items]
+        dates = [d[:10] for d in dates if re.match(r'\d{4}-\d{2}-\d{2}', d)]
+        record['first_date'] = min(dates, default='')
+        record['last_date'] = max(dates, default='')
+        record['message_count'] = len(items)
+        record.setdefault('osv_query', {})
+        # Re-importing truncated stable notices must not manufacture new alias metadata.
+        record['aliases'] = sorted(set(record.get('aliases', [])) | {
+            hashlib.sha256(subject_key(m['subject']).encode('utf-8')).hexdigest()[:16]
+            for m in items if re.search(r'failed to apply', m['subject'], re.I)
+            and subject_key(m['subject']) != subject_key(record['title'])})
+        record['branches'] = sorted({e['scope'] for e in record['branch_states']})
+        record['commit_ids_in_mail'] = sorted({x['sha'] for x in record['commit_refs']})
+        record['evidence'] = [e['date'] + ': ' + e['evidence'] for e in record['events']]
+        record['cve_mentions'] = [{'id': c, 'message_id': m['message_id'], 'source': m.get('link', '')}
+                                  for m in items for c in extract_cves(unquoted_text(m.get('body', '')))]
+        record['cves_in_mail'] = sorted({x['id'] for x in record['cve_mentions']})
+        # A mail mention or OSV affected-commit response is never a verified fix mapping.
+        record['cve_state'] = 'candidate' if record['cves_in_mail'] or record.get('osv_candidates') else 'unqueried'
+        if record.get('osv_query'):
+            record['cve_state'] = 'candidate' if record['cve_state'] == 'candidate' else record['osv_query']['state']
+    return sorted(records, key=lambda r: (r['last_date'], r['title']), reverse=True)
+
+
+def upgrade_payload(payload):
+    """Re-analyze saved mail without pretending a network check happened."""
+    payload = dict(payload)
+    payload['records'] = enrich_records(payload.get('records', []), payload.get('author_email', DEFAULT_EMAIL))
+    payload['schema_version'] = 3
+    payload['status_counts'] = dict(Counter(r['status'] for r in payload['records']))
+    payload['kind_counts'] = dict(Counter(r['kind'] for r in payload['records']))
+    payload['signal_counts'] = {k: sum(r['signals'][k] for r in payload['records']) for k in ('applied', 'reviewed', 'acked', 'tested', 'mainline')}
+    payload['attention_count'] = sum(r['has_attention'] for r in payload['records'])
+    payload['stored_messages'] = len({m['message_id'] for r in payload['records'] for m in r['messages']})
+    payload['months'] = dict(Counter(r['last_date'][:7] for r in payload['records'] if r['last_date']))
+    payload.setdefault('last_checked_at', payload.get('last_import', {}).get('at', payload.get('generated_at', '')))
+    last = payload.get('last_import', {})
+    payload.setdefault('check_result', 'updated' if last.get('added_messages') or last.get('updated_messages') or last.get('changed_statuses') else 'unchanged')
+    changed_imports = [x['at'] for x in payload.get('imports', []) if x.get('added_messages') or x.get('updated_messages')]
+    payload.setdefault('content_updated_at', max(changed_imports, default=payload.get('generated_at', '')))
+    return payload
 
 
 def message_identity(item):
@@ -207,7 +241,7 @@ def parse_archive(source, author_email, previous_records=None, progress=None):
                 direct = re.search(rf"(?im)^Signed-off-by:.*<{re.escape(author_email)}>\s*$",
                                    unquoted_text(body))
                 signal = author_email.casefold() in sender.casefold() or bool(direct)
-                if signal and ("patch" in subject.casefold() or key in known_groups):
+                if signal and ("patch" in subject.casefold() or submission(item) or key in known_groups):
                     known_groups.setdefault(key, clean_subject(subject))
         finally:
             archive.close()
@@ -252,7 +286,7 @@ def parse_archive(source, author_email, previous_records=None, progress=None):
         dates = [m.get("date_iso") or m.get("date", "") for m in items]
         dates = [d[:10] for d in dates if re.match(r"\d{4}-\d{2}-\d{2}", d)]
         all_text = "\n".join(m["subject"] + "\n" + unquoted_text(m.get("body", "")) for m in items)
-        commits = extract_commit_ids(all_text)
+        commits = sorted({x['sha'] for x in commit_references(items)})
         prior = prior_by_key.get(key, {})
         same_commits = set(commits) == set(prior.get("commit_ids_in_mail", []))
         records.append({
@@ -264,11 +298,13 @@ def parse_archive(source, author_email, previous_records=None, progress=None):
             "cves_in_mail": extract_cves(all_text), "commit_ids_in_mail": commits,
             "evidence": evidence, "messages": items,
             "osv_candidates": prior.get("osv_candidates", []) if same_commits else [],
+            "osv_query": prior.get("osv_query", {}) if same_commits else {},
+            "aliases": prior.get("aliases", []),
         })
     records.sort(key=lambda r: (r["last_date"], r["title"]), reverse=True)
     if not records:
         raise ValueError(f"没有找到 {author_email} 的 patch。请确认邮箱和搜索归档。")
-    return records, total
+    return enrich_records(records, author_email), total
 
 
 def osv_candidates(commit_ids):
@@ -279,30 +315,56 @@ def osv_candidates(commit_ids):
             headers={"Content-Type": "application/json", "User-Agent": "linux-patch-status-dashboard"})
         try:
             with urllib.request.urlopen(request, timeout=15) as response:
-                results[commit_id] = [{"id": x.get("id", ""), "summary": x.get("summary", "")}
-                                     for x in json.load(response).get("vulns", [])]
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
-            results[commit_id] = []
+                results[commit_id] = {"state": "checked", "candidates": [
+                    {"id": x.get("id", ""), "summary": x.get("summary", ""),
+                     "commit": commit_id, "source": "https://osv.dev/vulnerability/" + quote(x.get("id", ""), safe="")}
+                    for x in json.load(response).get("vulns", [])]}
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            results[commit_id] = {"state": "error", "candidates": [], "error": str(exc)}
     return results
 
 
 def build_payload(source_name, records, total, author_email=DEFAULT_EMAIL, previous=None, online_cves=False):
+    records = enrich_records(records, author_email)
+    now = datetime.now().astimezone().isoformat(timespec="seconds")
     if online_cves:
-        osv = osv_candidates(sorted({c for r in records for c in r["commit_ids_in_mail"]}))
+        osv = osv_candidates(sorted({x['sha'] for r in records for x in r['commit_refs'] if x['role'] not in {'introduced_by', 'referenced_commit'}}))
         for record in records:
+            shas = {x['sha'] for x in record['commit_refs'] if x['role'] not in {'introduced_by', 'referenced_commit'}}
             record["osv_candidates"] = sorted(
-                {x["id"]: x for c in record["commit_ids_in_mail"] for x in osv.get(c, [])}.values(),
+                {x["id"]: x for c in shas for x in osv[c]['candidates']}.values(),
                 key=lambda x: x["id"])
-    previous = previous or {}
+            record['osv_query'] = {'at': now, 'state': 'error' if any(osv[c]['state'] == 'error' for c in shas)
+                                   else 'checked' if shas else 'unqueried', 'commits': sorted(shas),
+                                   'errors': [osv[c]['error'] for c in shas if osv[c].get('error')]}
+    previous = upgrade_payload(previous) if previous else {}
     prior_messages = {message_identity(m) for r in previous.get("records", []) for m in r["messages"]}
     current_messages = {m["message_id"] for r in records for m in r["messages"]}
     old_status = {subject_key(r["title"]): r["status"] for r in previous.get("records", [])}
     prior_imports = previous.get("imports", [])
-    now = datetime.now().astimezone().isoformat(timespec="seconds")
+    old_records = {r['id']: r for r in previous.get('records', [])}
+    old_mail = {m['message_id']: m for r in previous.get('records', []) for m in r['messages']}
+    changes = []
+    for record in records:
+        old = old_records.get(record['id'])
+        added = [m['message_id'] for m in record['messages'] if m['message_id'] not in prior_messages]
+        updated = [m['message_id'] for m in record['messages'] if m['message_id'] in old_mail and
+                   any(m.get(k) != old_mail[m['message_id']].get(k) for k in ('body', 'subject', 'sender', 'date_iso'))]
+        state_changed = bool(old and any(old.get(k) != record.get(k) for k in ('signals', 'attention_items', 'status')))
+        if added or updated or state_changed:
+            changes.append({'record_id': record['id'], 'title': record['title'], 'new_topic': old is None,
+                            'added_message_ids': added, 'updated_message_ids': updated,
+                            'before': old.get('status') if old else None, 'after': record['status'],
+                            'status_changed': state_changed})
     imported = {"source": source_name, "at": now, "archive_messages": total,
-                "added_messages": len(current_messages - prior_messages)}
-    return {
-        "schema_version": 2, "source": source_name, "generated_at": now,
+                "added_messages": len(current_messages - prior_messages),
+                "updated_messages": sum(len(c['updated_message_ids']) for c in changes)}
+    payload = {
+        "schema_version": 3, "source": source_name, "generated_at": now,
+        "last_checked_at": now, "check_result": 'updated' if changes else 'unchanged',
+        "content_updated_at": now if changes else previous.get('content_updated_at', now),
+        "last_changes": {'at': now, 'items': changes} if changes else previous.get('last_changes', {}),
+        "change_history": (previous.get('change_history', []) + ([{'at': now, 'items': changes}] if changes else []))[-20:],
         "revision": os.urandom(8).hex(), "author_email": author_email,
         "total_messages": total, "stored_messages": len(current_messages),
         "records": records, "status_counts": dict(Counter(r["status"] for r in records)),
@@ -315,6 +377,7 @@ def build_payload(source_name, records, total, author_email=DEFAULT_EMAIL, previ
             "changed_statuses": sum(subject_key(r["title"]) in old_status and
                                     old_status[subject_key(r["title"])] != r["status"] for r in records)}
     }
+    return upgrade_payload(payload)
 
 
 def render_report(payload):
@@ -489,7 +552,9 @@ def main():
     args = parser.parse_args()
     output = (args.output or Path(__file__).with_name("runyu-patch-status-cve.html")).resolve()
     previous = load_payload(output)
-    payload = previous
+    payload = upgrade_payload(previous) if previous else None
+    if previous and (previous.get('schema_version') != 3 or previous.get('records') != payload['records']):
+        save_report(output, payload)
     if args.mbox_gz:
         source = args.mbox_gz.expanduser().resolve()
         if not source.is_file():

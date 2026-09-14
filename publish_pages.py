@@ -11,8 +11,8 @@ from build_pages import ROOT, build
 
 FILES = [
     ".gitignore", "README.md", "build_pages.py", "publish_pages.py",
-    "patch_status_dashboard.py", "patch_dashboard_template.html",
-    "生成网站.cmd", "发布网站.cmd", "docs/index.html", "docs/update.html", "docs/.nojekyll",
+    "patch_status_dashboard.py", "patch_dashboard_template.html", "patch_analysis.py", "test_analysis.py",
+    "生成网站.cmd", "发布网站.cmd", "docs/index.html", "docs/update.html", "docs/.nojekyll", "docs/sync-status.json",
 ]
 
 
@@ -74,12 +74,13 @@ def main():
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--report", type=Path)
     source.add_argument("--archive", type=Path)
+    parser.add_argument('--sync-error', help='Publish a failed check result without changing archived mail')
     parser.add_argument("--repository", help="Existing GitHub repository: OWNER/REPO")
     args = parser.parse_args()
     try:
         if args.repository:
             github_repository(args.repository)
-        build(args.report, args.archive)
+        build(args.report, args.archive, args.sync_error)
         publish(args.repository)
     except (OSError, ValueError, RuntimeError) as exc:
         print(f"Publish failed: {exc}", file=sys.stderr)
