@@ -37,7 +37,7 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
   <div class="notice" id="importNotice" role="status" aria-live="polite"><span id="importMessage"></span><small id="importDetail"></small></div>
   <section class="summary" aria-label="投稿统计">
     <div class="stat"><button data-kind="patch"><span>补丁主题 · 按同标题归组</span><strong id="total">0</strong><div class="sub" id="mailCount"></div></button></div>
-    <div class="stat"><button data-signal="Applied"><span>Applied · 当前收录主题</span><strong id="applied">0</strong><div class="sub" id="appliedDetail"></div></button></div>
+    <div class="stat"><button data-signal="Applied"><span>Applied · 按投稿去重</span><strong id="applied">0</strong><div class="sub" id="appliedDetail"></div></button></div>
     <div class="stat"><button data-signal="Reviewed"><span>Reviewed · 审阅信号</span><strong id="reviewed">0</strong><div class="sub" id="reviewDetail"></div></button></div>
     <div class="stat"><button data-focus="waiting"><span>等待反馈 · 非失败状态</span><strong id="submitted">0</strong><div class="sub">最新版本尚无外部回复</div></button></div>
     <div class="stat"><button data-focus="attention"><span>Needs attention · 待确认</span><strong id="attention">0</strong><div class="sub">含分支回移问题，可与接收重合</div></button></div>
@@ -102,7 +102,7 @@ let data=JSON.parse(document.getElementById('report-data').textContent);
 let records=data.records||[], activeRecord=null, selectedId=null, visibleMessages=[];
 let sending=false, polling=false, serverOnline=false, lastNotice='';
 let focusView='all', page=1, searchIndex=new Map();
-let series=[], seriesById=new Map(), recordById=new Map();
+let series=[], seriesById=new Map(), recordById=new Map(), appliedUnits=[], appliedEvidence=new Set();
 const expandedSeries=new Map();
 const pageSize=25;
 const $=id=>document.getElementById(id);
@@ -127,7 +127,7 @@ const unreadCount=r=>r.messages.filter(m=>isReply(m)&&!readIds[idOf(m)]).length;
 const latestSubmission=r=>(r.versions||[]).find(v=>v.latest)?.submitted_at||r.first_date;
 const waiting=r=>r.kind==='patch'&&!r.signals?.applied&&!r.signals?.reverted&&!r.has_attention&&!r.messages.some(m=>isReply(m)&&m.patch_version===r.latest_version);
 const waitDays=r=>Math.max(0,Math.floor((Date.now()-new Date(latestSubmission(r)||Date.now()))/86400000));
-function signalMatch(r,s){if(!s)return true;if(s==='Needs attention')return r.has_attention;if(s==='Submitted')return r.status==='Submitted';if(s==='Mail')return r.kind==='patch'&&r.acceptance_basis==='mail_confirmation';if(s==='Mainline')return r.acceptance_basis==='mainline_verified';return !!r.signals?.[s.toLowerCase()];}
+function signalMatch(r,s){if(!s)return true;if(s==='Applied')return appliedEvidence.has(r.id);if(s==='Needs attention')return r.has_attention;if(s==='Submitted')return r.status==='Submitted';if(s==='Mail')return r.kind==='patch'&&r.acceptance_basis==='mail_confirmation';if(s==='Mainline')return r.acceptance_basis==='mainline_verified';return !!r.signals?.[s.toLowerCase()];}
 function safeLink(url,label){try{const u=new URL(url);if(u.protocol==='https:'&&['lore.kernel.org','git.kernel.org','github.com','osv.dev','www.cve.org'].includes(u.hostname))return '<a href="'+esc(u.href)+'" target="_blank" rel="noreferrer">'+esc(label)+'</a>';}catch{}return esc(label);}
 function mailButton(r,mid,label,extra=''){return '<button class="evidence-link" data-record="'+esc(r.id)+'" data-mid="'+esc(mid)+'" '+extra+'>'+esc(label)+'</button>';}
 const eventVersion=e=>e.version?'v'+e.version:'提交证据';
@@ -145,18 +145,20 @@ async function loadPublicationStatus(){
 function notify(message,detail='',kind=''){ $('importMessage').textContent=message;$('importDetail').textContent=detail;$('importNotice').className='notice '+kind; }
 function saveBlob(text,name,type='text/plain;charset=utf-8'){const u=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);}
 function renderSummary(){
+  appliedUnits=data.applied_submissions?.units||[];appliedEvidence=new Set(appliedUnits.flatMap(u=>u.evidence_record_ids));
   const signals=data.signal_counts||{}, kinds=data.kind_counts||{}, counts={Applied:signals.applied||0,Reverted:signals.reverted||0,Reviewed:signals.reviewed||0,Submitted:records.filter(r=>r.status==='Submitted').length,'Needs attention':data.attention_count||0};
   $('total').textContent=kinds.patch||0;$('applied').textContent=counts.Applied;$('reviewed').textContent=counts.Reviewed;$('submitted').textContent=records.filter(waiting).length;$('attention').textContent=counts['Needs attention'];
   $('mailCount').textContent=records.length+' 个归档主题 · '+(data.stored_messages||0).toLocaleString()+' 封邮件';
-  $('topicLegend').textContent='归档范围：'+Object.entries(kindNames).map(([k,label])=>(kinds[k]||0)+' 个'+label).join(' · ')+'。接收、审阅和待办按全部归档主题计数，封面信单独保留；计数不等于独立主线 commit 数。';
+  $('topicLegend').textContent='归档范围：'+Object.entries(kindNames).map(([k,label])=>(kinds[k]||0)+' 个'+label).join(' · ')+'。Applied 按投稿去重（独立补丁 1 个、同一系列 1 个）；其余统计按主题计数，信号可重合，不能相加。';
   $('reviewDetail').textContent='另有 Acked '+(signals.acked||0)+' · Tested '+(signals.tested||0)+'（可重合）';
   const audit=data.applied_audit||{};
-  $('appliedDetail').textContent='主线补丁 '+(audit.mainline_topics||0)+' · 邮件补丁 '+(audit.mail_only_patch_topics||0)+' · 封面 '+(audit.applied_cover_topics||0);
-  $('calibrationNotice').textContent='Applied 包含 '+(audit.applied_patch_topics||0)+' 个补丁主题和 '+(audit.applied_cover_topics||0)+' 个系列封面；另有 '+(audit.reverted_topics||0)+' 个 Reverted，不计入当前 Applied。主线历史共 '+(audit.mainline_history_topics||0)+' 个主题，核对于 '+timeText(audit.verified_at)+(audit.reverts_verified_at?'；回退证据核对于 '+timeText(audit.reverts_verified_at):'')+'。';
-  $('seriesNotice').textContent='已关联 '+series.length+' 组 patch series，其中 '+(data.series_counts?.mainline||0)+' 组的最新成员均已核实进入主线。系列可展开查看封面、编号补丁和版本组成；上方统计仍按原始主题计数，分组不重复增加接收数量。';
+  const accepted=data.applied_submissions||{};
+  $('appliedDetail').textContent='独立补丁 '+(accepted.standalone||0)+' · 系列 '+(accepted.series||0)+'（含 '+(accepted.partial_series||0)+' 组部分接收 / 待核实）';
+  $('calibrationNotice').textContent='同一系列的封面、子补丁和历史版本合计最多计 1 个 Applied；部分子补丁已接收也计 1 个，并保留进度，未表示整组全部接收。另有 '+(audit.reverted_topics||0)+' 个 Reverted 主题。主线历史共 '+(audit.mainline_history_topics||0)+' 个主题，核对于 '+timeText(audit.verified_at)+(audit.reverts_verified_at?'；回退证据核对于 '+timeText(audit.reverts_verified_at):'')+'。';
+  $('seriesNotice').textContent='已关联 '+series.length+' 组 patch series，其中 '+(data.series_counts?.mainline||0)+' 组的最新成员均已核实进入主线。展开可查看封面、子补丁接收进度和版本组成；切换展示方式不会改变 Applied 去重总数。';
   $('source').textContent=data.source?'最近归档：'+data.source:'尚未导入归档';renderSync();
   const max=Math.max(1,...Object.values(counts));
-  $('bars').innerHTML=Object.keys(colors).map(s=>'<div class="bar-row"><button data-status="'+s+'">'+s+'</button><div class="track"><div class="bar" style="background:'+colors[s]+';width:'+((counts[s]||0)/max*100)+'%"></div></div><output>'+(counts[s]||0)+'</output></div>').join('');
+  $('bars').innerHTML=Object.keys(colors).map(s=>'<div class="bar-row"><button data-status="'+s+'">'+s+(s==='Applied'?' · 投稿':' · 主题')+'</button><div class="track"><div class="bar" style="background:'+colors[s]+';width:'+((counts[s]||0)/max*100)+'%"></div></div><output>'+(counts[s]||0)+'</output></div>').join('');
   const months=data.months||{}, keys=Object.keys(months).sort(), mmax=Math.max(1,...Object.values(months));
   $('timeline').innerHTML=keys.length?keys.map(k=>'<div class="month"><span>'+months[k]+'</span><div class="month-bar" style="height:'+Math.max(2,months[k]/mmax*93)+'px" title="'+esc(k)+'：'+months[k]+' 个主题"></div><span class="month-label">'+esc(k)+'</span></div>').join(''):'<p class="empty">导入归档后显示活动记录</p>';
 }
@@ -172,7 +174,8 @@ function renderRows(){
   items.sort((a,b)=>$('sortFilter').value==='waiting'?b.days-a.days:$('sortFilter').value==='oldest'?a.last_date.localeCompare(b.last_date):b.last_date.localeCompare(a.last_date));
   const pages=Math.max(1,Math.ceil(items.length/pageSize));page=Math.min(page,pages);
   const shownMatches=$('grouping').value==='onlySeries'?matches.filter(r=>r.series_ids?.length).length:matches.length;
-  $('resultCount').textContent=shownMatches+' / '+records.length+' 个主题'+(grouped?' · '+items.length+' 项（'+groups.length+' 组系列）':'');
+  const acceptedMatches=appliedUnits.filter(u=>($('grouping').value!=='onlySeries'||u.kind==='series')&&u.evidence_record_ids.some(id=>matched.has(id)));
+  $('resultCount').textContent=status==='Applied'?acceptedMatches.length+' / '+appliedUnits.length+' 个 Applied 投稿 · '+shownMatches+' 个依据主题'+(grouped?' · '+groups.length+' 组系列':' · 逐条展示，系列仍计 1 个'):shownMatches+' / '+records.length+' 个主题'+(grouped?' · '+items.length+' 项（'+groups.length+' 组系列）':'');
   $('expandSeries').disabled=$('collapseSeries').disabled=!grouped||!groups.length;
   $('pageCount').textContent=page+' / '+pages+' 页';$('prevPage').disabled=page===1;$('nextPage').disabled=page===pages;
   document.querySelectorAll('#focusTabs [data-focus]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.focus===focusView)));
@@ -180,7 +183,8 @@ function renderRows(){
   const filtered=!!(q||status||$('kindFilter').value||$('subsystemFilter').value||$('dateFrom').value||$('dateTo').value||focusView!=='all');
   $('rows').innerHTML=items.length?items.slice((page-1)*pageSize,page*pageSize).map(item=>item.series?seriesRow(item.series,matched,filtered,q,changed):recordRow(item.record,q,changed)).join(''):'<tr><td colspan="4" class="empty">没有匹配的主题</td></tr>';
 }
-function seriesState(s){return {mainline:'全部子补丁已入主线',applied:'全部子补丁已接收',reverted:'全部子补丁已回退',partial:'子补丁状态不一致',attention:'有子补丁需要处理',pending:'子补丁待确认'}[s.state]||'待确认';}
+function seriesState(s){return {mainline:'全部子补丁已入主线',applied:'全部子补丁已接收',reverted:'全部子补丁已回退',partial:s.counts.applied?'部分接收 / 其余待核实':'部分子补丁已回退',attention:'有子补丁需要处理',pending:'子补丁待确认'}[s.state]||'待确认';}
+function seriesAppliedLabel(s){return appliedUnits.some(u=>u.id===s.id)?'本组 Applied 计 1':'本组尚未计入 Applied';}
 function seriesMemberLabel(s,id){
   const latest=s.revisions.at(-1);
   if(id===latest.cover_record_id)return '系列封面';
@@ -200,7 +204,7 @@ function seriesRow(s,matched,filtered,q,changed){
   const messages=[...new Map(all.flatMap(r=>r.messages).map(m=>[idOf(m),m])).values()];
   const unread=messages.filter(m=>isReply(m)&&!readIds[idOf(m)]).length;
   const hits=all.filter(r=>matched.has(r.id)).length;
-  const progress='<strong>'+esc(seriesState(s))+'</strong><div class="series-progress">子补丁当前进度：Applied '+c.applied+'/'+c.total+' · 主线 '+c.mainline+'/'+c.total+(c.reverted?' · 回退 '+c.reverted:'')+(c.attention?'<br>待确认 '+c.attention+' 个（含分支回移）':'')+'</div>';
+  const progress='<strong>'+esc(seriesState(s))+'</strong><div class="series-progress">'+seriesAppliedLabel(s)+'<br>子补丁接收 '+c.applied+'/'+c.total+' · 主线 '+c.mainline+'/'+c.total+(c.reverted?' · 回退 '+c.reverted:'')+(c.attention?'<br>待确认 '+c.attention+' 个（含分支回移）':'')+'</div>';
   const missing=latest.missing_numbers.length?' · 缺少 '+latest.missing_numbers.map(n=>n+'/'+latest.total).join('、'):'';
   const uncertain=latest.ambiguous_numbers.length?' · 编号重复，需确认':'';
   const versions='<details class="series-versions"><summary>版本组成 · '+s.revisions.length+' 次投递</summary><ul>'+s.revisions.slice().reverse().map(v=>'<li>v'+v.version+' · '+v.members.length+'/'+v.total+' 个子补丁'+(v.missing_numbers.length?' · 归档不完整':'')+(v.cover_record_id?'<br>'+mailButton(recordById.get(v.cover_record_id),v.root_message_id,recordById.get(v.cover_record_id).title):' · 未收录封面')+'</li>').join('')+'</ul></details>';
@@ -226,7 +230,7 @@ function renderContext(){
   $('seriesNav').hidden=!groups.length;
   $('seriesMember').innerHTML=groups.map(s=>'<optgroup label="'+esc(s.title)+'">'+s.record_ids.map(id=>'<option value="'+esc(id)+'">'+esc(seriesMemberLabel(s,id)+' · '+recordById.get(id).title)+'</option>').join('')+'</optgroup>').join('');
   $('seriesMember').value=r.id;
-  $('seriesReaderProgress').textContent=groups.map(s=>s.title+' · '+seriesState(s)+' · Applied '+s.counts.applied+'/'+s.counts.total+' · 主线 '+s.counts.mainline+'/'+s.counts.total).join('；');
+  $('seriesReaderProgress').textContent=groups.map(s=>s.title+' · '+seriesAppliedLabel(s)+' · '+seriesState(s)+' · 子补丁接收 '+s.counts.applied+'/'+s.counts.total+' · 主线 '+s.counts.mainline+'/'+s.counts.total).join('；');
   $('versionFilter').innerHTML='<option value="">所有版本</option>'+r.versions.map(v=>'<option value="'+v.version+'">v'+v.version+(v.latest?' · 最新':'')+'</option>').join('');
   const branches=r.branch_states.map(e=>'<span class="badge">'+esc(scopeName(e.scope))+'：'+esc(eventNames[e.kind])+'</span>').join('');
   const events=r.events.slice().reverse().map(e=>'<div class="event"><small>'+eventVersion(e)+' · '+esc(timeText(e.date))+' · '+esc(scopeName(e.scope))+' · '+esc(e.sender)+'</small><b>'+esc(eventNames[e.kind])+'</b> '+eventLink(r,e,e.evidence)+'</div>').join('');

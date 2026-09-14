@@ -2,7 +2,7 @@ import copy
 import unittest
 
 import patch_status_dashboard as dashboard
-from patch_series import build_series
+from patch_series import applied_submissions, build_series
 from test_analysis import message
 
 
@@ -129,6 +129,76 @@ class SeriesTests(unittest.TestCase):
         self.assertEqual(series[0]['counts']['reverted'], 1)
         self.assertEqual(series[0]['state'], 'partial')
         self.assertEqual(build_series(records, dashboard.DEFAULT_EMAIL), series)
+
+    def test_applied_cover_and_children_count_once_with_standalone_patch(self):
+        records = rows(numbered('c', '0/2', 'net: series'),
+            numbered('a', '1/2', 'net: one', parent='c'), numbered('b', '2/2', 'net: two', parent='c'),
+            message('solo', '[PATCH] net: independent', 'Rationale', author=True))
+        for r in records:
+            r['signals']['applied'] = True
+        series = build_series(records, dashboard.DEFAULT_EMAIL)
+        before = copy.deepcopy(records)
+        result = applied_submissions(records, series)
+        self.assertEqual((result['total'], result['standalone'], result['series'], result['partial_series']),
+                         (2, 1, 1, 0))
+        self.assertEqual(records, before)
+
+    def test_partial_series_counts_once_without_claiming_complete_acceptance(self):
+        records = rows(numbered('c', '0/2', 'net: series'),
+            numbered('a', '1/2', 'net: one', parent='c'), numbered('b', '2/2', 'net: two', parent='c'))
+        next(r for r in records if r['title'] == 'net: one')['signals']['applied'] = True
+        series = build_series(records, dashboard.DEFAULT_EMAIL)
+        result = applied_submissions(records, series)
+        self.assertEqual((result['total'], result['partial_series']), (1, 1))
+        self.assertEqual(series[0]['counts']['applied'], 1)
+        self.assertEqual(len(result['units'][0]['evidence_record_ids']), 1)
+
+    def test_cover_confirmation_does_not_invent_child_acceptance(self):
+        records = rows(numbered('c', '0/2', 'net: series'), numbered('a', '1/2', 'net: one', parent='c'))
+        next(r for r in records if r['kind'] == 'cover')['signals']['applied'] = True
+        series = build_series(records, dashboard.DEFAULT_EMAIL)
+        result = applied_submissions(records, series)
+        self.assertEqual((result['total'], result['partial_series']), (1, 1))
+        self.assertEqual(series[0]['counts']['applied'], 0)
+
+    def test_stale_cover_cannot_count_fully_reverted_series(self):
+        records = rows(numbered('c', '0/2', 'net: series'),
+            numbered('a', '1/2', 'net: one', parent='c'), numbered('b', '2/2', 'net: two', parent='c'))
+        for r in records:
+            r['signals']['applied'] = r['kind'] == 'cover'
+            r['signals']['reverted'] = r['kind'] == 'patch'
+        series = build_series(records, dashboard.DEFAULT_EMAIL)
+        self.assertEqual(series[0]['state'], 'reverted')
+        self.assertEqual(applied_submissions(records, series)['total'], 0)
+
+    def test_historical_members_do_not_count_again_or_resurrect_current_series(self):
+        records = rows(numbered('c1', '0/3', 'net: old heading'),
+            numbered('a1', '1/3', 'net: one', parent='c1'), numbered('b1', '2/3', 'net: two', parent='c1'),
+            numbered('old', '3/3', 'net: removed', parent='c1'),
+            numbered('c2', '0/2', 'net: new heading', 2, 2, 'c1'),
+            numbered('a2', '1/2', 'net: one', 2, 2, 'c2'), numbered('b2', '2/2', 'net: two', 2, 2, 'c2'))
+        for r in records:
+            r['signals']['applied'] = r['title'] in ('net: removed', 'net: old heading')
+        series = build_series(records, dashboard.DEFAULT_EMAIL)
+        self.assertEqual(len(series), 1)
+        self.assertEqual(applied_submissions(records, series)['total'], 0)
+        next(r for r in records if r['title'] == 'net: one')['signals']['applied'] = True
+        result = applied_submissions(records, build_series(records, dashboard.DEFAULT_EMAIL))
+        self.assertEqual((result['total'], result['partial_series']), (1, 1))
+
+    def test_repeated_analysis_preserves_submission_and_topic_counts(self):
+        records = rows(numbered('c', '0/2', 'net: series'),
+            numbered('a', '1/2', 'net: one', parent='c'), numbered('b', '2/2', 'net: two', parent='c'),
+            message('ca', 'Re: [PATCH v1 0/2] net: series', 'Applied to net.', 2, False, 'c'),
+            message('aa', 'Re: [PATCH v1 1/2] net: one', 'Applied to net.', 2, False, 'a'),
+            message('ba', 'Re: [PATCH v1 2/2] net: two', 'Applied to net.', 2, False, 'b'))
+        result = dashboard.upgrade_payload({'records': records, 'last_checked_at': 'original check'})
+        self.assertEqual(result['signal_counts']['applied'], 1)
+        self.assertEqual(result['topic_signal_counts']['applied'], 3)
+        self.assertEqual(result['signal_count_units']['applied'], 'submission')
+        self.assertEqual(result['stored_messages'], 6)
+        self.assertEqual(dashboard.upgrade_payload(result), result)
+        self.assertEqual(result['last_checked_at'], 'original check')
 
 
 if __name__ == '__main__':

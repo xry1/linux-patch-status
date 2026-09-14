@@ -25,7 +25,7 @@ from pathlib import Path
 from urllib.parse import quote, unquote, urlparse
 from patch_analysis import analyze, clean_title, commit_references, regroup, submission
 from applied_evidence import apply_verifications, load_verifications
-from patch_series import build_series
+from patch_series import applied_submissions, build_series
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -159,7 +159,10 @@ def upgrade_payload(payload):
     payload['schema_version'] = 3
     payload['status_counts'] = dict(Counter(r['status'] for r in payload['records']))
     payload['kind_counts'] = dict(Counter(r['kind'] for r in payload['records']))
-    payload['signal_counts'] = {k: sum(r['signals'][k] for r in payload['records']) for k in ('applied', 'reviewed', 'acked', 'tested', 'mainline', 'mainline_history', 'reverted')}
+    payload['topic_signal_counts'] = {k: sum(r['signals'][k] for r in payload['records']) for k in ('applied', 'reviewed', 'acked', 'tested', 'mainline', 'mainline_history', 'reverted')}
+    payload['applied_submissions'] = applied_submissions(payload['records'], payload['series'])
+    payload['signal_counts'] = {**payload['topic_signal_counts'], 'applied': payload['applied_submissions']['total']}
+    payload['signal_count_units'] = {k: 'submission' if k == 'applied' else 'topic' for k in payload['signal_counts']}
     verification = load_verifications()
     payload['applied_audit'] = {
         'verified_at': verification.get('checked_at'),
@@ -574,7 +577,7 @@ def main():
     output = (args.output or Path(__file__).with_name("runyu-patch-status-cve.html")).resolve()
     previous = load_payload(output)
     payload = upgrade_payload(previous) if previous else None
-    if previous and (previous.get('schema_version') != 3 or previous.get('records') != payload['records']):
+    if previous and previous != payload:
         save_report(output, payload)
     if args.mbox_gz:
         source = args.mbox_gz.expanduser().resolve()

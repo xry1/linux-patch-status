@@ -129,3 +129,34 @@ def build_series(records, author_email):
         for mid in record_ids:
             by_id[mid]['series_ids'].append(series_id)
     return sorted(result, key=lambda s: (s['last_date'], s['title']), reverse=True)
+
+
+def applied_submissions(records, series):
+    """Count standalone patches and series once, retaining child-level evidence."""
+    by_id = {r['id']: r for r in records}
+    grouped = {rid for s in series for rid in s['record_ids']}
+    units = []
+
+    def accepted(r):
+        return r['signals']['applied'] and not r['signals'].get('reverted', False)
+
+    for s in series:
+        evidence = [rid for rid in s['current_member_ids'] if accepted(by_id[rid])]
+        latest = s['revisions'][-1]
+        cover = by_id.get(latest['cover_record_id'])
+        # A current cover confirmation can count the submission, but cannot
+        # establish each child's status or override known child reverts.
+        if (cover and accepted(cover) and not s['counts']['reverted']
+                and cover['latest_version'] == latest['version']):
+            evidence.append(cover['id'])
+        if evidence:
+            units.append({'id': s['id'], 'kind': 'series', 'record_ids': s['record_ids'],
+                          'evidence_record_ids': evidence,
+                          'partial': s['state'] not in ('mainline', 'applied')})
+    for r in records:
+        if r['id'] not in grouped and r['kind'] == 'patch' and accepted(r):
+            units.append({'id': r['id'], 'kind': 'patch', 'record_ids': [r['id']],
+                          'evidence_record_ids': [r['id']], 'partial': False})
+    return {'total': len(units), 'standalone': sum(u['kind'] == 'patch' for u in units),
+            'series': sum(u['kind'] == 'series' for u in units),
+            'partial_series': sum(u['partial'] for u in units), 'units': units}
