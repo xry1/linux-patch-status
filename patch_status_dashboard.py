@@ -33,6 +33,13 @@ MAX_EXPANDED = 2 * 1024 * 1024 * 1024
 TEMPLATE = Path(__file__).with_name("patch_dashboard_template.html")
 
 
+def monitor_report_path():
+    root = Path(__file__).resolve().parent
+    if root.name == 'outputs' and (root.parent / 'github-pages').is_dir():
+        root = root.parent / 'github-pages'
+    return root / 'local' / 'mail-monitor' / 'report.html'
+
+
 def decode_header_value(value):
     try:
         return str(make_header(decode_header(value or "")))
@@ -510,6 +517,15 @@ def make_server(state, port):
             if not self.local_request():
                 return self.reply(403, {"error": "Local requests only"})
             route = urlparse(self.path).path
+            if route in ('/mail-monitor', '/api/mail-monitor', '/api/mail-monitor/status'):
+                report = monitor_report_path()
+                if not report.is_file():
+                    return self.reply(404, {'error': '邮箱监测尚未配置，请先运行配置邮箱提醒.cmd。'})
+                if route == '/api/mail-monitor/status':
+                    return self.reply(200, {'revision': str(report.stat().st_mtime_ns)})
+                if route == '/mail-monitor':
+                    return self.reply(200, report.read_bytes(), 'text/html; charset=utf-8')
+                return self.reply(200, load_payload(report))
             with state.lock:
                 payload = state.payload
                 job = dict(state.job)

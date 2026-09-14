@@ -32,6 +32,9 @@ def build(report=None, archive=None, sync_error=None):
         after = {dashboard.message_identity(m) for r in payload["records"] for m in r["messages"]}
         if before - after:
             raise ValueError("This report omits emails already in the site. Import the latest archive into your local dashboard first, or use --archive to merge.")
+    if payload.get('private_mailbox') or payload.get('hosting_mode') == 'mail_monitor' or any(
+            m.get('provenance') == 'private_mailbox' for r in payload.get('records', []) for m in r['messages']):
+        raise ValueError('Mailbox reports are private and cannot be published. Import the public Lore archive into the normal dashboard instead.')
     payload = dashboard.upgrade_payload(payload)
     check_payload = payload
     if previous and previous.get('schema_version') == 3:
