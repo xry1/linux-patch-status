@@ -21,7 +21,7 @@ import urllib.error
 import urllib.request
 from urllib.parse import urlsplit
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timedelta
 from email import policy
 from email.parser import BytesParser
 from email.utils import parseaddr
@@ -39,6 +39,7 @@ DEFAULTS = {
              'username': 'runyu.xiao@seu.edu.cn', 'folder': 'INBOX', 'send_id': True},
     'author_email': 'runyu.xiao@seu.edu.cn', 'author_aliases': [],
     'poll_seconds': 300, 'batch_limit': 200, 'max_message_bytes': 8 * 1024 * 1024,
+    'auto_folders': True, 'folder_batch_limit': 25, 'folder_excludes': [],
     'glm_model': 'glm-4.7-flash', 'glm_max_calls_per_cycle': 5,
     'glm_api_url': OFFICIAL_GLM_URL, 'glm_protocol': 'chat_completions',
     'feishu_keyword': 'Linux Patch', 'feishu_max_calls_per_cycle': 10,
@@ -106,6 +107,14 @@ def load_config(directory):
             raise ValueError('邮箱配置包含空值或非法换行。')
     config['poll_seconds'] = max(60, int(config.get('poll_seconds', 300)))
     config['batch_limit'] = max(1, min(1000, int(config.get('batch_limit', 200))))
+    config.setdefault('auto_folders', True)
+    config.setdefault('folder_excludes', [])
+    if type(config['auto_folders']) is not bool or not isinstance(config['folder_excludes'], list):
+        raise ValueError('文件夹监测配置无效。')
+    if any(not isinstance(name, str) or not name or re.search(r'[\x00-\x1f\x7f]', name)
+           for name in config['folder_excludes']):
+        raise ValueError('排除的文件夹名称无效。')
+    config['folder_batch_limit'] = max(1, min(200, int(config.get('folder_batch_limit', 25))))
     config['max_message_bytes'] = max(1024, min(16 * 1024 * 1024, int(config.get('max_message_bytes', 8 * 1024 * 1024))))
     config['glm_api_url'] = glm_endpoint(config)
     return config
@@ -221,9 +230,8 @@ def open_mailbox(config, password):
             # NetEase may require RFC 2971 ID before SELECT; imaplib has no public ID method.
             imaplib.Commands.setdefault('ID', ('AUTH',))
             client._simple_command('ID', '("name" "LinuxPatchStatus" "version" "1.0" "vendor" "local")')
-        status, _ = client.select('"' + c['folder'].replace('\\', '\\\\').replace('"', '\\"') + '"', readonly=True)
-        if status != 'OK':
-            raise RuntimeError('无法只读打开邮箱文件夹，请检查 IMAP 授权和文件夹名称。')
+        if not config.get('auto_folders'):
+            select_folder(client, c['folder'])
         return client
     except Exception:
         try:
@@ -251,6 +259,227 @@ def fetch_literal(client, uid, fields):
     match = re.search(rb'RFC822.SIZE\s+(\d+)', meta)
     internal = imaplib.Internaldate2tuple(meta)
     return raw, int(match[1]) if match else None, time.mktime(internal) if internal else None
+
+
+def quote_folder(name):
+    if not name or re.search(r'[\x00-\x1f\x7f]', name):
+        raise ValueError('文件夹名称包含无效控制字符。')
+    return '"' + name.replace('\\', '\\\\').replace('"', '\\"') + '"'
+
+
+def folder_label(name):
+    # IMAP modified UTF-7 is used on the wire; decode it only for display.
+    def decode(match):
+        value = match[1]
+        if not value:
+            return '&'
+        return base64.b64decode(value.replace(',', '/') + '=' * (-len(value) % 4)).decode('utf-16-be')
+    try:
+        return re.sub(r'&([A-Za-z0-9+,]*)-', decode, name)
+    except (ValueError, UnicodeError):
+        return name
+
+
+def discover_folders(client, config):
+    status, data = client.list()
+    if status != 'OK' or not data:
+        raise RuntimeError('无法获取邮箱文件夹列表，原同步位置已保留。')
+    result = {}
+    token = rb'"(?:[^"\\]|\\.)*"|NIL'
+    for item in data:
+        if item in (None, b'', b')'):
+            continue
+        prefix, literal = item if isinstance(item, tuple) else (item, None)
+        match = re.fullmatch(rb'\(([^)]*)\)\s+(' + token + rb')\s+(.+)', prefix)
+        if not match:
+            raise RuntimeError('服务器返回了无法解析的文件夹列表，已保留此前范围。')
+        def unquote(value):
+            return re.sub(rb'\\(.)', rb'\1', value[1:-1]) if value.startswith(b'"') and value.endswith(b'"') else value
+        raw_name = literal if literal is not None else unquote(match[3])
+        name = raw_name.decode('ascii')
+        quote_folder(name)
+        delimiter = None if match[2] == b'NIL' else unquote(match[2]).decode('ascii')
+        flags = {flag.decode('ascii').lower() for flag in match[1].split()}
+        label = folder_label(name)
+        leaf = label.rsplit(delimiter, 1)[-1].casefold() if delimiter else label.casefold()
+        excluded = ''
+        roles = {'\\sent': '已发送', '\\drafts': '草稿', '\\junk': '垃圾邮件',
+                 '\\trash': '已删除', '\\all': '汇总文件夹', '\\noselect': '不可打开'}
+        for flag, reason in roles.items():
+            if flag in flags:
+                excluded = reason
+                break
+        aliases = {'sent', 'sent items', 'sent mail', 'draft', 'drafts', 'trash', 'deleted',
+                   'deleted items', 'junk', 'junk e-mail', 'spam', 'all mail',
+                   '已发送', '已发送邮件', '草稿', '草稿箱', '垃圾邮件', '垃圾箱', '已删除', '已删除邮件'}
+        if not excluded and leaf in aliases:
+            excluded = '系统邮件目录'
+        if name in config.get('folder_excludes', []) or label in config.get('folder_excludes', []):
+            excluded = '自定义排除'
+        result[name] = {'name': label, 'delimiter': delimiter, 'excluded_reason': excluded,
+                        'exclude_children': bool(excluded and '\\noselect' not in flags)}
+    for name, entry in result.items():
+        for parent, info in result.items():
+            if (info['exclude_children'] and info['delimiter'] and
+                    name.startswith(parent + info['delimiter'])):
+                entry['excluded_reason'] = '上级目录已排除'
+                break
+    return result
+
+
+def select_folder(client, name):
+    status, _ = client.select(quote_folder(name), readonly=True)
+    if status != 'OK':
+        raise RuntimeError('无法只读打开文件夹，请检查 IMAP 权限。')
+
+
+def folder_numbers(client, name):
+    status, data = client.status(quote_folder(name), '(UIDVALIDITY UIDNEXT)')
+    if status != 'OK':
+        raise RuntimeError('无法检查文件夹状态。')
+    text = b' '.join(x for x in data if isinstance(x, bytes))
+    numbers = {}
+    for key in ('UIDVALIDITY', 'UIDNEXT'):
+        matches = re.findall(rb'\b' + key.encode() + rb'\s+(\d+)\b', text, re.I)
+        if not matches or int(matches[-1]) < 1:
+            raise RuntimeError('文件夹缺少有效的同步位置。')
+        numbers[key] = int(matches[-1])
+    return numbers['UIDVALIDITY'], numbers['UIDNEXT']
+
+
+def collect_folders(client, config, seed, state):
+    """Stage headers across folders, then commit each successful folder's mail and cursor.
+
+    The caller saves this working state with its outbox in one atomic transaction.
+    A failed folder retains its cursor; other folders can still deliver replies.
+    """
+    inventory = discover_folders(client, config)
+    started = now()
+    if not state['initialized_at']:
+        state['initialized_at'] = started
+    cutoff = datetime.fromisoformat(state['initialized_at'])
+    # SINCE is day-granular. Exact INTERNALDATE and Date filtering below enforce
+    # the activation time, including when an old mail is copied into a new folder.
+    months = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+    search_day = cutoff - timedelta(days=1)
+    since = f'{search_day.day:02d}-{months[search_day.month-1]}-{search_day.year}'
+    if 'folders' not in state:
+        state['folders'] = {}
+        if state['uidvalidity'] is not None:
+            state['folders'][config['imap']['folder']] = {
+                'uidvalidity': state['uidvalidity'], 'cursor': state['cursor'],
+                'last_checked_at': state['last_checked_at'], 'cursor_resets': state['cursor_resets']}
+    folders = state['folders']
+    for name, entry in folders.items():
+        entry['present'] = name in inventory
+    for name, info in inventory.items():
+        entry = folders.setdefault(name, {'uidvalidity': None, 'cursor': 0, 'cursor_resets': 0})
+        entry.update(name=info['name'], present=True, excluded_reason=info['excluded_reason'])
+        if info['excluded_reason']:
+            entry.update(phase='excluded', last_error='', pending=0)
+    active = [name for name in inventory if not inventory[name]['excluded_reason']]
+    # Least recently checked first: large folders cannot starve other folders.
+    active.sort(key=lambda name: (folders[name].get('last_checked_at') or '', name != 'INBOX', name))
+    headers, meta, plans = {}, {}, {}
+    remaining = config['batch_limit']
+
+    def failed(name, exc):
+        # Do not expose server error text, which can include authentication data.
+        folders[name].update(last_error='读取失败（' + type(exc).__name__ + '），保留原同步位置。',
+                             last_attempt_at=started, phase='error')
+
+    for index, name in enumerate(active):
+        entry = folders[name]
+        try:
+            validity, next_uid = folder_numbers(client, name)
+            if validity == entry['uidvalidity'] and entry['cursor'] >= next_uid - 1:
+                entry.update(last_checked_at=now(), last_error='', phase='unchanged', pending=0)
+                continue
+            if not remaining:
+                entry.update(phase='pending', pending=max(1, entry.get('pending', 0)))
+                continue
+            select_folder(client, name)
+            validity, next_uid = response_number(client, 'UIDVALIDITY'), response_number(client, 'UIDNEXT')
+            cursor = entry['cursor'] if entry['uidvalidity'] == validity else 0
+            uids = []
+            if cursor < next_uid - 1:
+                status, values = client.uid('SEARCH', None, 'SINCE', since, 'UID', f'{cursor + 1}:{next_uid - 1}')
+                if status != 'OK':
+                    raise RuntimeError('无法搜索文件夹。')
+                uids = sorted({int(x) for value in values if isinstance(value, bytes) for x in value.split()
+                               if x.isdigit() and cursor < int(x) < next_uid})
+            selected = uids[:min(config.get('folder_batch_limit', 25), remaining)]
+            staged, details = {}, {}
+            for uid in selected:
+                raw, size, arrived = fetch_literal(client, uid, '(UID RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (MESSAGE-ID FROM TO CC SUBJECT DATE IN-REPLY-TO REFERENCES)])')
+                remaining -= 1
+                if arrived is None:
+                    raise RuntimeError('邮件缺少有效到达时间。')
+                item = mail_item(raw)
+                sent = datetime.fromisoformat(item['date_iso']).timestamp() if item.get('date_iso') else None
+                if arrived < cutoff.timestamp() or (sent is not None and sent < cutoff.timestamp()):
+                    continue
+                key = (name, uid)
+                staged[key], details[key] = item, (size, arrived)
+            headers.update(staged)
+            meta.update(details)
+            plans[name] = {'uidvalidity': validity, 'cursor': max(selected) if len(uids) > len(selected) else next_uid - 1,
+                           'pending': len(uids) - len(selected)}
+        except (imaplib.IMAP4.error, OSError, RuntimeError, ValueError) as exc:
+            failed(name, exc)
+            if isinstance(exc, (imaplib.IMAP4.abort, OSError)):
+                for later in active[index+1:]:
+                    folders[later].update(phase='pending', pending=max(1, folders[later].get('pending', 0)))
+                break
+
+    matched = match_headers(headers, seed, state, config)
+    known = set(state['messages']) | {m['message_id'] for r in seed.get('records', []) for m in r['messages']}
+    additions = []
+    for name, plan in plans.items():
+        entry = folders[name]
+        staged = {}
+        try:
+            candidates = [key for key in matched if key[0] == name and headers[key]['message_id'] not in known]
+            if candidates:
+                select_folder(client, name)
+                if response_number(client, 'UIDVALIDITY') != plan['uidvalidity']:
+                    raise RuntimeError('文件夹同步标识在读取期间发生变化。')
+            for key in candidates:
+                header = headers[key]
+                if header['message_id'] in staged:
+                    continue
+                size, arrived = meta[key]
+                if size is None or size > config['max_message_bytes']:
+                    item = copy.deepcopy(header)
+                    item.update(body='（邮件大小未知或超过读取上限；请在邮箱查看原文。）', body_omitted=True)
+                else:
+                    raw, _, _ = fetch_literal(client, key[1], '(UID BODY.PEEK[])')
+                    if len(raw) > config['max_message_bytes']:
+                        raise RuntimeError('邮件超过读取上限。')
+                    item = mail_item(raw)
+                    if item['message_id'] != header['message_id']:
+                        raise RuntimeError('邮件身份在读取期间发生变化。')
+                item.update(monitor_topic=matched[key], received_at=now(), mailbox_folder=entry['name'],
+                            mailbox_arrived_at=datetime.fromtimestamp(arrived).astimezone().isoformat(timespec='seconds'))
+                staged[item['message_id']] = item
+            if entry['uidvalidity'] is not None and entry['uidvalidity'] != plan['uidvalidity']:
+                entry['cursor_resets'] = entry.get('cursor_resets', 0) + 1
+            entry.update(plan, last_checked_at=now(), last_error='', phase='pending' if plan['pending'] else 'checked')
+            state['messages'].update(staged)
+            known.update(staged)
+            additions.extend(staged.values())
+        except (imaplib.IMAP4.error, OSError, RuntimeError, ValueError) as exc:
+            failed(name, exc)
+    failed_names = [name for name in active if folders[name].get('phase') == 'error']
+    state['cursor_resets'] = sum(f.get('cursor_resets', 0) for f in folders.values())
+    state['last_error'] = f'{len(failed_names)} 个文件夹读取失败，将在下轮重试；其他目录继续同步。' if failed_names else ''
+    state['folder_scan'] = {'started_at': started, 'completed_at': now(), 'headers_checked': config['batch_limit'] - remaining,
+                            'active': len(active), 'excluded': len(inventory) - len(active), 'failed': len(failed_names),
+                            'pending': sum(folders[name].get('phase') == 'pending' for name in active),
+                            'backfill_since': state['initialized_at']}
+    if not failed_names and not state['folder_scan']['pending']:
+        state['last_checked_at'] = now()
+    return additions
 
 
 def collect(client, config, seed, state):
@@ -328,6 +557,9 @@ def combined_payload(seed, state, config):
         'failed': sum(b['delivery'] == 'failed' for b in state['batches'].values()),
         'sent': sum(b['delivery'] == 'sent' for b in state['batches'].values()),
         'poll_seconds': config['poll_seconds'], 'cursor_resets': state['cursor_resets'],
+        'auto_folders': config.get('auto_folders', False), 'folder_scan': copy.deepcopy(state.get('folder_scan', {})),
+        'folders': [{k: entry.get(k) for k in ('name', 'present', 'phase', 'excluded_reason', 'last_checked_at', 'last_error', 'pending')}
+                    for entry in state.get('folders', {}).values()],
         'glm_provider': urlsplit(glm_endpoint(config)).netloc, 'glm_model': config['glm_model']}
     for record in payload['records']:
         mids = {m['message_id'] for m in record['messages']}
@@ -542,13 +774,14 @@ def run_once(directory, config, state, seed, connect=open_mailbox):
     client = connect(config, password)
     working = copy.deepcopy(state)
     try:
-        additions = collect(client, config, seed, working)
+        additions = (collect_folders if config.get('auto_folders') else collect)(client, config, seed, working)
     finally:
         try:
             client.logout()
         except Exception:
             pass
-    working['last_error'] = ''
+    if not config.get('auto_folders'):
+        working['last_error'] = ''
     payload = combined_payload(seed, working, config)
     enqueue(additions, payload, working, config)
     state.clear()

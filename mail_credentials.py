@@ -106,7 +106,7 @@ def interactive_config(directory, config, save, identity):
 
     candidate['imap']['username'] = setting('完整邮箱地址', candidate['imap']['username'])
     candidate['imap']['host'] = setting('IMAP SSL 服务器（以学校客户端设置为准）', candidate['imap']['host'])
-    candidate['imap']['folder'] = setting('监测文件夹', candidate['imap']['folder'])
+    candidate['imap']['folder'] = setting('兼容单文件夹模式的目录（自动发现模式无需逐项填写）', candidate['imap']['folder'])
     candidate['glm_protocol'] = setting('GLM 协议（chat_completions / anthropic_messages）', candidate.get('glm_protocol', 'chat_completions'))
     candidate['glm_api_url'] = setting('GLM API 地址（完整接口或 Base URL）', candidate.get('glm_api_url', OFFICIAL_GLM_URL))
     candidate['glm_api_url'] = glm_endpoint(candidate)

@@ -45,7 +45,19 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
   <p class="legend" id="topicLegend"></p>
   <p class="legend" id="calibrationNotice"></p>
   <p class="legend" id="seriesNotice"></p>
-  <section class="panel" id="monitorPanel" hidden aria-label="邮箱监测"><h2>邮箱回复 · 本地阅读</h2><p class="legend" id="monitorStatus"></p><p class="legend">GLM 仅整理邮件中的建议，摘要不改变已核实状态。邮箱邮件和 AI 草稿保存在本机。</p><div id="aiUpdates"></div></section>
+  <section class="panel" id="monitorPanel" hidden aria-label="邮箱监测"><h2>邮箱回复 · 本地阅读</h2><p class="legend" id="monitorStatus"></p>
+    <div id="folderMonitor" hidden>
+      <div class="sync-grid" aria-label="文件夹扫描状态">
+        <div class="panel"><small>自动监测文件夹</small><strong id="folderCount">等待扫描</strong><small id="folderScope"></small></div>
+        <div class="panel"><small>最近扫描完成</small><strong id="folderCheckedAt">等待扫描</strong><small id="folderScanDetail"></small></div>
+        <div class="panel"><small>需要关注的文件夹</small><strong id="folderIssues">等待扫描</strong><small id="folderBackfill"></small></div>
+      </div>
+      <details id="folderDetails"><summary>查看文件夹范围与逐项状态</summary>
+        <div class="filters" style="margin-top:12px"><label>搜索文件夹<input type="search" id="folderSearch" placeholder="例如 C0125 或中文目录名"></label><label>显示范围<select id="folderFilter"><option value="active">正在监测</option><option value="issues">失败 / 待继续</option><option value="excluded">已排除</option><option value="all">全部（含已移除）</option></select></label></div>
+        <div class="table-wrap" style="max-height:340px;overflow:auto"><table aria-label="文件夹监测明细"><thead><tr><th>文件夹</th><th>状态</th><th>最近成功检查</th><th>说明</th></tr></thead><tbody id="folderRows"></tbody></table></div>
+      </details>
+    </div>
+    <p class="legend">GLM 仅整理邮件中的建议，摘要不改变已核实状态。邮箱邮件和 AI 草稿保存在本机。</p><div id="aiUpdates"></div></section>
   <div class="charts">
     <section class="panel"><h2>独立信号 · 可重合</h2><div id="bars"></div></section>
     <section class="panel"><h2>最近活动月份</h2><div class="months" id="timeline" aria-label="每月最近活动主题数量"></div></section>
@@ -174,8 +186,25 @@ function renderMonitor(){
   $('monitorPanel').hidden=!monitorMode;if(!monitorMode)return;
   const status=data.mail_monitor||{};
   $('monitorStatus').textContent=(!status.configured?'待配置：双击“配置邮箱提醒.cmd”。':!status.initialized_at?'配置已保存，等待首次连接邮箱。':'检查间隔 '+Math.round((status.poll_seconds||300)/60)+' 分钟 · 最近成功检查 '+timeText(status.last_checked_at))+(status.glm_provider?' · 摘要服务 '+status.glm_provider+' / '+status.glm_model:'')+' · 邮箱新增 '+(status.private_messages||0)+' 封 · 已推送 '+(status.sent||0)+' 批 · 待推送 '+(status.pending||0)+' 批'+(status.uncertain?' · '+status.uncertain+' 批发送结果未确认':'')+(status.failed?' · '+status.failed+' 批失败':'')+(status.last_error?' · '+status.last_error:'');
+  $('folderMonitor').hidden=!status.auto_folders;
+  const scan=status.folder_scan||{};
+  $('folderCount').textContent=scan.active==null?'等待扫描':scan.active+' 个';
+  $('folderScope').textContent='每轮自动发现新目录 · 已排除 '+(scan.excluded||0)+' 个';
+  $('folderCheckedAt').textContent=timeText(scan.completed_at);
+  $('folderScanDetail').textContent='本轮读取 '+(scan.headers_checked||0)+' 封邮件头 · 跨目录去重';
+  $('folderIssues').textContent=(scan.failed||0)+' 个失败 · '+(scan.pending||0)+' 个待继续';
+  $('folderIssues').className=scan.failed?'check-error':'';
+  $('folderBackfill').textContent='跟踪起点：'+timeText(scan.backfill_since||status.initialized_at);
+  renderFolders();
   const batches=new Map();for(const r of records)for(const b of r.ai_updates||[])if(!batches.has(b.id))batches.set(b.id,{b,r});
   $('aiUpdates').innerHTML=[...batches.values()].sort((a,b)=>b.b.created_at.localeCompare(a.b.created_at)).slice(0,20).map(({b,r})=>aiUpdateHTML(b,r)).join('')||'<p class="legend">新回复到达后，这里会显示摘要、待办和原文入口。首次连接建立起点，不推送历史邮件。</p>';
+}
+function renderFolders(){
+  const q=$('folderSearch').value.trim().toLowerCase(), filter=$('folderFilter').value;
+  const folders=(data.mail_monitor?.folders||[]).filter(f=>(!q||String(f.name||'').toLowerCase().includes(q))&&(filter==='all'||filter==='active'&&f.present&&!f.excluded_reason||filter==='issues'&&f.present&&!f.excluded_reason&&['error','pending'].includes(f.phase)||filter==='excluded'&&f.present&&f.excluded_reason));
+  const order=f=>f.phase==='error'?0:f.phase==='pending'?1:2;
+  folders.sort((a,b)=>order(a)-order(b)||String(a.name).localeCompare(String(b.name)));
+  $('folderRows').innerHTML=folders.map(f=>'<tr><td>'+esc(f.name)+'</td><td'+(f.phase==='error'?' class="check-error"':'')+'>'+esc(!f.present?'已移除 / 改名':({checked:'已检查',unchanged:'无新增',pending:'下轮继续',error:'读取失败',excluded:'已排除'}[f.phase]||'等待扫描'))+'</td><td>'+esc(timeText(f.last_checked_at))+'</td><td>'+esc(f.excluded_reason||f.last_error||(f.phase==='pending'?'受本轮读取上限或连接影响，将自动继续':'自动发现 · 只读检查'))+'</td></tr>').join('')||'<tr><td colspan="4" class="empty">没有匹配的文件夹</td></tr>';
 }
 function renderRows(){
   $('markAllRead').disabled=!records.some(r=>unreadCount(r)>0);
@@ -338,6 +367,7 @@ $('archiveFile').addEventListener('change',async()=>{
   }catch(e){notify(e.message,'原报告仍可使用。','error');}
   finally{sending=false;$('archiveFile').value='';await poll();}
 });
+$('folderSearch').addEventListener('input',renderFolders);$('folderFilter').addEventListener('change',renderFolders);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-record]');if(b)openReader(b.dataset.record,b.dataset.mid||null,!!b.dataset.context);const toggle=e.target.closest('[data-series-toggle]');if(toggle){expandedSeries.set(toggle.dataset.seriesToggle,toggle.getAttribute('aria-expanded')!=='true');renderRows();}});
 $('messageList').addEventListener('click',e=>{const b=e.target.closest('[data-mail]');if(b){selectedId=idOf(visibleMessages[Number(b.dataset.mail)]);renderMail();}});
 $('closeReader').addEventListener('click',()=>$('reader').close());

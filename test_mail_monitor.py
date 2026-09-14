@@ -145,6 +145,7 @@ class TLSTrustTests(unittest.TestCase):
 class MailMonitorTests(unittest.TestCase):
     def setUp(self):
         self.config = copy.deepcopy(monitor.DEFAULTS)
+        self.config['auto_folders'] = False
         self.seed = dashboard.upgrade_payload({'records': rows(message('root', '[PATCH] net: example', 'Patch rationale', author=True))})
         self.state = monitor.new_state(self.config)
         self.state.update(uidvalidity=1, cursor=10, initialized_at='2026-09-01T00:00:00+08:00')
