@@ -173,7 +173,7 @@ function aiUpdateHTML(b,r){
 function renderMonitor(){
   $('monitorPanel').hidden=!monitorMode;if(!monitorMode)return;
   const status=data.mail_monitor||{};
-  $('monitorStatus').textContent=(!status.configured?'待配置：双击“配置邮箱提醒.cmd”。':!status.initialized_at?'配置已保存，等待首次连接邮箱。':'检查间隔 '+Math.round((status.poll_seconds||300)/60)+' 分钟 · 最近成功检查 '+timeText(status.last_checked_at))+' · 邮箱新增 '+(status.private_messages||0)+' 封 · 已推送 '+(status.sent||0)+' 批 · 待推送 '+(status.pending||0)+' 批'+(status.uncertain?' · '+status.uncertain+' 批发送结果未确认':'')+(status.failed?' · '+status.failed+' 批失败':'')+(status.last_error?' · '+status.last_error:'');
+  $('monitorStatus').textContent=(!status.configured?'待配置：双击“配置邮箱提醒.cmd”。':!status.initialized_at?'配置已保存，等待首次连接邮箱。':'检查间隔 '+Math.round((status.poll_seconds||300)/60)+' 分钟 · 最近成功检查 '+timeText(status.last_checked_at))+(status.glm_provider?' · 摘要服务 '+status.glm_provider+' / '+status.glm_model:'')+' · 邮箱新增 '+(status.private_messages||0)+' 封 · 已推送 '+(status.sent||0)+' 批 · 待推送 '+(status.pending||0)+' 批'+(status.uncertain?' · '+status.uncertain+' 批发送结果未确认':'')+(status.failed?' · '+status.failed+' 批失败':'')+(status.last_error?' · '+status.last_error:'');
   const batches=new Map();for(const r of records)for(const b of r.ai_updates||[])if(!batches.has(b.id))batches.set(b.id,{b,r});
   $('aiUpdates').innerHTML=[...batches.values()].sort((a,b)=>b.b.created_at.localeCompare(a.b.created_at)).slice(0,20).map(({b,r})=>aiUpdateHTML(b,r)).join('')||'<p class="legend">新回复到达后，这里会显示摘要、待办和原文入口。首次连接建立起点，不推送历史邮件。</p>';
 }

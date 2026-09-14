@@ -1,15 +1,18 @@
 import copy
 import json
 import os
+import ssl
+import urllib.error
 import tempfile
 import unittest
 from email.message import EmailMessage
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import build_pages
 import mail_monitor as monitor
 import mail_credentials
+import api_transport
 import patch_status_dashboard as dashboard
 from test_analysis import message
 from test_series import numbered, rows
@@ -303,6 +306,96 @@ class MailMonitorTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 mail_credentials.interactive_config(Path('.'), self.config, lambda *_: None, lambda _: 'identity')
             reader.assert_not_called()
+
+    def test_provider_endpoints_and_legacy_config(self):
+        self.assertEqual(mail_credentials.glm_endpoint({}), mail_credentials.OFFICIAL_GLM_URL)
+        for url in ('https://loliapi.org', 'https://loliapi.org/v1/', 'https://loliapi.org/v1/chat/completions'):
+            self.assertEqual(mail_credentials.glm_endpoint({'glm_api_url': url}), 'https://loliapi.org/v1/chat/completions')
+        self.assertEqual(mail_credentials.glm_endpoint({'glm_api_url': 'https://loliapi.org/v1',
+            'glm_protocol': 'anthropic_messages'}), 'https://loliapi.org/v1/messages')
+        for url in ('http://loliapi.org/v1', 'https://user:secret@loliapi.org/v1',
+                    'https://loliapi.org/v1?key=secret', 'https://loliapi.org/v1#fragment'):
+            with self.assertRaises(ValueError):
+                mail_credentials.glm_endpoint({'glm_api_url': url})
+        with tempfile.TemporaryDirectory() as folder:
+            config = copy.deepcopy(self.config)
+            config.pop('glm_api_url')
+            config.pop('glm_protocol')
+            monitor.save_json(Path(folder) / 'config.json', config)
+            self.assertEqual(monitor.load_config(Path(folder))['glm_api_url'], mail_credentials.OFFICIAL_GLM_URL)
+
+    def test_custom_gateway_uses_selected_model_without_official_extensions(self):
+        batch = self.batch()
+        self.config.update(glm_api_url='https://loliapi.org/v1', glm_model='glm-5.3')
+        answer = {'summary': '请补充说明', 'intent': 'review', 'action_items': [], 'reply_draft': ''}
+        response = {'choices': [{'finish_reason': 'stop', 'message': {'content': '```json\n' + json.dumps(answer) + '\n```'}}]}
+        with patch.object(monitor, 'post_json', return_value=response) as post:
+            result = monitor.summarize(batch, self.state, self.config, 'synthetic-provider-key')
+            self.assertEqual(post.call_args.args[0], 'https://loliapi.org/v1/chat/completions')
+            request = post.call_args.args[1]
+            self.assertEqual(request['model'], 'glm-5.3')
+            self.assertNotIn('thinking', request)
+            self.assertNotIn('response_format', request)
+            self.assertEqual(post.call_args.args[3], 'synthetic-provider-key')
+        self.assertEqual(result['summary'], answer['summary'])
+
+    def test_messages_protocol_separates_system_and_extracts_text_only(self):
+        batch = self.batch()
+        self.config.update(glm_api_url='https://loliapi.org/v1', glm_protocol='anthropic_messages')
+        answer = {'summary': '请补充说明', 'intent': 'review', 'action_items': [], 'reply_draft': ''}
+        response = {'stop_reason': 'end_turn', 'content': [{'type': 'thinking', 'thinking': 'not an answer'},
+                    {'type': 'text', 'text': json.dumps(answer)}]}
+        with patch.object(monitor, 'post_json', return_value=response) as post:
+            self.assertEqual(monitor.summarize(batch, self.state, self.config, 'fake')['summary'], answer['summary'])
+            self.assertEqual(post.call_args.args[0], 'https://loliapi.org/v1/messages')
+            self.assertIn('system', post.call_args.args[1])
+            self.assertEqual(len(post.call_args.args[1]['messages']), 1)
+        response['stop_reason'] = 'max_tokens'
+        with patch.object(monitor, 'post_json', return_value=response):
+            with self.assertRaises(monitor.ServiceFailure):
+                monitor.summarize(batch, self.state, self.config, 'fake')
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows HTTPS fallback')
+    def test_windows_tls_fallback_is_not_used_for_ambiguous_network_errors(self):
+        for reason, fallback in ((ssl.SSLCertVerificationError('chain'), True), (TimeoutError('timeout'), False)):
+            opener = Mock()
+            opener.open.side_effect = urllib.error.URLError(reason)
+            with patch.object(monitor.urllib.request, 'build_opener', return_value=opener), \
+                    patch.object(monitor, 'windows_json', return_value={'ok': True}) as native, \
+                    patch.dict(os.environ, {'PATCH_MONITOR_CA_FILE': ''}):
+                if fallback:
+                    self.assertEqual(monitor.post_json('https://loliapi.org/v1/chat/completions', {}, 'GLM', 'fake'), {'ok': True})
+                    native.assert_called_once()
+                else:
+                    with self.assertRaises(monitor.ServiceFailure):
+                        monitor.post_json('https://loliapi.org/v1/chat/completions', {}, 'GLM', 'fake')
+                    native.assert_not_called()
+
+    def test_native_transport_keeps_tokens_and_request_text_out_of_command_arguments(self):
+        native_reply = Mock(returncode=0, stdout=json.dumps({'ok': True, 'status': 200, 'body': '{"choices": []}'}))
+        with patch.object(api_transport.subprocess, 'run', return_value=native_reply) as run, \
+                patch.object(api_transport.subprocess, 'CREATE_NO_WINDOW', 0, create=True):
+            result = api_transport.windows_json('https://loliapi.org/v1/chat/completions', {'content': 'synthetic-private-text'}, 'synthetic-token')
+            self.assertEqual(result, {'choices': []})
+            arguments = run.call_args.args[0]
+            self.assertNotIn('synthetic-token', ' '.join(arguments))
+            self.assertNotIn('synthetic-private-text', ' '.join(arguments))
+            self.assertEqual(json.loads(run.call_args.kwargs['input'])['token'], 'synthetic-token')
+            self.assertIn('MaximumRedirection=0', api_transport.SCRIPT)
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows DPAPI only')
+    def test_changing_provider_requires_its_key_before_replacing_saved_config(self):
+        with tempfile.TemporaryDirectory() as folder:
+            answers = iter(['', '', '', '', 'https://loliapi.org/v1', '', ''])
+            with patch.object(mail_credentials, 'interactive_console', return_value=True), \
+                    patch.object(mail_credentials, 'read_credentials', return_value={
+                        'PATCH_IMAP_PASSWORD': 'synthetic-mail-password', 'PATCH_GLM_API_KEY': 'old-provider-key'}), \
+                    patch('builtins.input', side_effect=lambda _: next(answers)), \
+                    patch.object(mail_credentials.getpass, 'getpass', return_value=''), \
+                    patch('builtins.print'), patch.object(monitor, 'save_json') as save:
+                with self.assertRaisesRegex(RuntimeError, 'API Key'):
+                    mail_credentials.interactive_config(Path(folder), self.config, save, lambda _: 'same-mailbox')
+                save.assert_not_called()
 
 
 if __name__ == '__main__':

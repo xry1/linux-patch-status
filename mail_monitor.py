@@ -19,6 +19,7 @@ import tempfile
 import time
 import urllib.error
 import urllib.request
+from urllib.parse import urlsplit
 from contextlib import contextmanager
 from datetime import datetime
 from email import policy
@@ -27,11 +28,11 @@ from email.utils import parseaddr
 from pathlib import Path
 
 import patch_status_dashboard as dashboard
-from mail_credentials import interactive_config, read_credentials
+from mail_credentials import OFFICIAL_GLM_URL, glm_endpoint, interactive_config, read_credentials
+from api_transport import NativeHTTPError, windows_json
 
 ROOT = Path(__file__).resolve().parent
 PRIVATE = ROOT / 'local' / 'mail-monitor'
-GLM_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
 DEFAULTS = {
     'schema_version': 1,
     'imap': {'host': 'imaphz.qiye.163.com', 'port': 993,
@@ -39,6 +40,7 @@ DEFAULTS = {
     'author_email': 'runyu.xiao@seu.edu.cn', 'author_aliases': [],
     'poll_seconds': 300, 'batch_limit': 200, 'max_message_bytes': 8 * 1024 * 1024,
     'glm_model': 'glm-4.7-flash', 'glm_max_calls_per_cycle': 5,
+    'glm_api_url': OFFICIAL_GLM_URL, 'glm_protocol': 'chat_completions',
     'feishu_keyword': 'Linux Patch', 'feishu_max_calls_per_cycle': 10,
     'public_url': 'https://xry1.github.io/linux-patch-status/',
 }
@@ -105,6 +107,7 @@ def load_config(directory):
     config['poll_seconds'] = max(60, int(config.get('poll_seconds', 300)))
     config['batch_limit'] = max(1, min(1000, int(config.get('batch_limit', 200))))
     config['max_message_bytes'] = max(1024, min(16 * 1024 * 1024, int(config.get('max_message_bytes', 8 * 1024 * 1024))))
+    config['glm_api_url'] = glm_endpoint(config)
     return config
 
 
@@ -297,7 +300,8 @@ def combined_payload(seed, state, config):
         'uncertain': sum(b['delivery'] == 'uncertain' for b in state['batches'].values()),
         'failed': sum(b['delivery'] == 'failed' for b in state['batches'].values()),
         'sent': sum(b['delivery'] == 'sent' for b in state['batches'].values()),
-        'poll_seconds': config['poll_seconds'], 'cursor_resets': state['cursor_resets']}
+        'poll_seconds': config['poll_seconds'], 'cursor_resets': state['cursor_resets'],
+        'glm_provider': urlsplit(glm_endpoint(config)).netloc, 'glm_model': config['glm_model']}
     for record in payload['records']:
         mids = {m['message_id'] for m in record['messages']}
         record['ai_updates'] = [{k: copy.deepcopy(b.get(k)) for k in (
@@ -341,6 +345,8 @@ def post_json(url, value, service, token=None):
     headers = {'Content-Type': 'application/json', 'User-Agent': 'LinuxPatchStatus/1.0'}
     if token:
         headers['Authorization'] = 'Bearer ' + token
+    if service == 'GLM' and urlsplit(url).path.endswith('/messages'):
+        headers['anthropic-version'] = '2023-06-01'
     request = urllib.request.Request(url, data=json.dumps(value, ensure_ascii=False).encode(), headers=headers)
     opener = urllib.request.build_opener(NoRedirect(), urllib.request.HTTPSHandler(context=tls_context()))
     try:
@@ -351,7 +357,18 @@ def post_json(url, value, service, token=None):
             return json.loads(raw)
     except urllib.error.HTTPError as exc:
         raise ServiceFailure(service, 'HTTP ' + str(exc.code), uncertain=exc.code >= 500) from None
-    except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+    except urllib.error.URLError as exc:
+        # TLS verification fails before any HTTP payload is sent. Windows can
+        # build chains (including intermediate certificates) Python cannot.
+        if (os.name == 'nt' and isinstance(exc.reason, ssl.SSLCertVerificationError)
+                and not os.environ.get('PATCH_MONITOR_CA_FILE')):
+            try:
+                return windows_json(url, value, token)
+            except NativeHTTPError as native:
+                reason = 'HTTP ' + str(native.status) if native.status else 'Windows HTTPS 网络、证书或响应异常'
+                raise ServiceFailure(service, reason, uncertain=not native.status or native.status >= 500) from None
+        raise ServiceFailure(service, '网络或证书异常', uncertain=True) from None
+    except (TimeoutError, OSError, ValueError):
         # Do not log response bodies or URLs: a webhook URL contains its credential.
         raise ServiceFailure(service, '网络、证书或响应异常', uncertain=True) from None
 
@@ -372,17 +389,34 @@ def summarize(batch, state, config, token):
               '用中文总结，英文回复草稿只能表达计划或询问，不能声称已经修改、测试或发送。'
               '只输出 JSON 对象：summary（简短摘要），intent（accepted/review/question/other），'
               'action_items（最多6条字符串），reply_draft（英文草稿，可为空）。缺少上下文时明确说明。')
-    response = post_json(GLM_URL, {'model': config['glm_model'], 'messages': [
-        {'role': 'system', 'content': system}, {'role': 'user', 'content': json.dumps({
+    content = json.dumps({
             'title': batch['title'], 'messages': messages, 'total_new_messages': len(batch['message_ids']),
-            'context_note': '仅本批新邮件，引用、diff 和过长正文可能被截断；不是完整讨论。'}, ensure_ascii=False)}],
-        'stream': False, 'thinking': {'type': 'disabled'}, 'response_format': {'type': 'json_object'},
-        'max_tokens': 1800, 'temperature': 0.2}, 'GLM', token)
+            'context_note': '仅本批新邮件，引用、diff 和过长正文可能被截断；不是完整讨论。'}, ensure_ascii=False)
+    endpoint = glm_endpoint(config)
+    protocol = config.get('glm_protocol', 'chat_completions')
+    request = {'model': config['glm_model'], 'stream': False, 'max_tokens': 1800,
+               'messages': [{'role': 'user', 'content': content}]}
+    if protocol == 'anthropic_messages':
+        request['system'] = system
+    else:
+        request['messages'].insert(0, {'role': 'system', 'content': system})
+        # Gateway models need not accept the official provider's extensions.
+        if endpoint == OFFICIAL_GLM_URL:
+            request.update(thinking={'type': 'disabled'}, response_format={'type': 'json_object'}, temperature=0.2)
+    response = post_json(endpoint, request, 'GLM', token)
     try:
-        choice = response['choices'][0]
-        if choice.get('finish_reason') not in ('stop', None):
-            raise ValueError('incomplete output')
-        result = json.loads(choice['message']['content'])
+        if protocol == 'anthropic_messages':
+            if response.get('stop_reason') not in ('end_turn', 'stop_sequence'):
+                raise ValueError('incomplete output')
+            text = ''.join(block['text'] for block in response['content'] if block.get('type') == 'text')
+        else:
+            choice = response['choices'][0]
+            if choice.get('finish_reason') not in ('stop', None):
+                raise ValueError('incomplete output')
+            text = choice['message']['content']
+        # Some compatible gateways omit JSON mode and wrap an otherwise valid object.
+        fenced = re.fullmatch(r'\s*```(?:json)?\s*\n?(.*?)\n?```\s*', text, re.S)
+        result = json.loads(fenced[1] if fenced else text)
         if not isinstance(result, dict) or not isinstance(result.get('summary'), str) or not result['summary'].strip():
             raise ValueError('invalid summary')
         if result.get('intent') not in ('accepted', 'review', 'question', 'other'):
@@ -439,6 +473,7 @@ def process_queue(state, config, save, glm_token, webhook, feishu_secret=None):
             save()
         if batch['ai_state'] != 'complete' and batch['ai_attempts'] < 3 and glm_budget and glm_token:
             glm_budget -= 1
+            batch['model'] = config['glm_model']
             batch['ai_attempts'] += 1
             save()
             try:

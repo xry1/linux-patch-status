@@ -28,6 +28,8 @@ Pages 发布地址：<https://xry1.github.io/linux-patch-status/>（首次启用
 
 先双击“配置邮箱提醒.cmd”，再运行“启动邮箱监测.cmd”。凭据通过隐藏输入收集，用 Windows DPAPI 加密保存在 Git 忽略的本地目录。具体设置见 [邮箱接入说明](MAIL_MONITOR.md)。
 
+GLM 支持自定义服务商地址和协议；本机使用 loliapi 的 Chat Completions 接口及 `glm-5.3`。配置界面可修改 API 地址、模型和服务商 Key，旧配置仍兼容智谱官方接口。
+
 本地网页新增“邮箱提醒与 AI 摘要”入口。新邮箱邮件及 AI 草稿仅保存在本机，GitHub Pages 仍由公开 Lore 归档更新；发布脚本会拒绝把私人邮箱报告发布出去。该功能尚需用户配置客户端授权码、GLM API Key 和飞书机器人后才能实际联网运行。
 
 ## Patch series 分组

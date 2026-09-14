@@ -8,8 +8,28 @@ import os
 import re
 import sys
 from ctypes import wintypes
+from urllib.parse import urlsplit, urlunsplit
 
 SECRET_NAMES = ('PATCH_IMAP_PASSWORD', 'PATCH_GLM_API_KEY', 'PATCH_FEISHU_WEBHOOK', 'PATCH_FEISHU_SECRET')
+OFFICIAL_GLM_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
+
+
+def glm_endpoint(config):
+    protocol = config.get('glm_protocol', 'chat_completions')
+    if protocol not in ('chat_completions', 'anthropic_messages'):
+        raise ValueError('GLM 协议应为 chat_completions 或 anthropic_messages。')
+    url = config.get('glm_api_url', OFFICIAL_GLM_URL).strip()
+    parsed = urlsplit(url)
+    if (parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password
+            or parsed.query or parsed.fragment or any(c.isspace() for c in url)):
+        raise ValueError('GLM API 地址必须使用 HTTPS，且不能包含账号、查询参数或片段。')
+    suffix = '/chat/completions' if protocol == 'chat_completions' else '/messages'
+    path = parsed.path.rstrip('/') or '/v1'
+    if not path.endswith(suffix):
+        if path.endswith(('/chat/completions', '/messages')):
+            raise ValueError('GLM 接口路径与所选协议不一致。')
+        path += suffix
+    return urlunsplit((parsed.scheme, parsed.netloc, path, '', ''))
 
 
 def interactive_console():
@@ -87,6 +107,9 @@ def interactive_config(directory, config, save, identity):
     candidate['imap']['username'] = setting('完整邮箱地址', candidate['imap']['username'])
     candidate['imap']['host'] = setting('IMAP SSL 服务器（以学校客户端设置为准）', candidate['imap']['host'])
     candidate['imap']['folder'] = setting('监测文件夹', candidate['imap']['folder'])
+    candidate['glm_protocol'] = setting('GLM 协议（chat_completions / anthropic_messages）', candidate.get('glm_protocol', 'chat_completions'))
+    candidate['glm_api_url'] = setting('GLM API 地址（完整接口或 Base URL）', candidate.get('glm_api_url', OFFICIAL_GLM_URL))
+    candidate['glm_api_url'] = glm_endpoint(candidate)
     candidate['glm_model'] = setting('GLM 模型', candidate['glm_model'])
     candidate['feishu_keyword'] = setting('飞书机器人关键词', candidate['feishu_keyword'])
     if not re.fullmatch(r'[^\s@]+@[^\s@]+', candidate['imap']['username']) or not re.fullmatch(r'[A-Za-z0-9.-]+', candidate['imap']['host']):
@@ -94,10 +117,14 @@ def interactive_config(directory, config, save, identity):
     if (directory / 'state.json').is_file() and identity(candidate) != identity(config):
         raise RuntimeError('更换邮箱或文件夹前，请先备份并更名 local/mail-monitor 目录，再运行配置；原记录已保留。')
     values = {}
-    prompts = ('邮箱客户端授权码（不是网页登录密码）', '智谱开放平台 GLM API Key',
+    provider_changed = urlsplit(glm_endpoint(candidate)).netloc != urlsplit(glm_endpoint(config)).netloc
+    print('邮件摘要将发送到：' + candidate['glm_api_url'])
+    prompts = ('邮箱客户端授权码（不是网页登录密码）', '所选服务商的 GLM API Key',
                '飞书群自定义机器人 Webhook', '飞书签名密钥（未启用签名可留空）')
     for name, prompt in zip(SECRET_NAMES, prompts):
-        values[name] = getpass.getpass(prompt + '（隐藏输入，回车保留已有值）：').strip() or existing.get(name, '')
+        prior = '' if name == 'PATCH_GLM_API_KEY' and provider_changed else existing.get(name, '')
+        hint = '（已更换服务商，请重新输入）：' if name == 'PATCH_GLM_API_KEY' and provider_changed else '（隐藏输入，回车保留已有值）：'
+        values[name] = getpass.getpass(prompt + hint).strip() or prior
         if name != 'PATCH_FEISHU_SECRET' and not values[name]:
             raise RuntimeError(prompt + ' 不能为空；原配置已保留。')
     if not re.fullmatch(r'https://open\.feishu\.cn/open-apis/bot/v2/hook/[A-Za-z0-9-]+', values['PATCH_FEISHU_WEBHOOK']):
