@@ -22,6 +22,33 @@ Pages 发布地址：<https://xry1.github.io/linux-patch-status/>（首次启用
 
 本次功能升级使用已有归档作为变化跟踪起点，不把重新分类伪装成新邮件。
 
+## Applied 校准与核实
+
+Applied 分成两类依据：主线历史已核实，或归档中有明确的接收回复。
+`queued before finish_queued` 等代码描述、条件语句及“其他实现已经合入”的讨论不构成接收证据。
+
+2026-09-14 校准结果：56 个收录主题 = 52 个补丁 + 4 个系列封面。
+其中 44 个主题的提交已验证为主线历史的祖先，12 个主题有明确接收邮件但尚未验证主线归属。
+44 个主线提交中，43 个由 Runyu Xiao 署名作者，1 个是其 Signed-off-by 参与的提交。
+每条依据可以在阅读器中查看。主线验证是指定日期、指定 HEAD 的历史归属核实，不保证代码此后没有被修改或回退。
+
+主线核实同时检查题目和作者 / Signed-off-by 归属。标题相同但不属于用户的提交仅作为参考展示，不能增加 Applied 计数。
+`applied_verifications.json` 保存核对时的主线 HEAD、提交、祖先关系和归属；导入 mbox 时自动沿用这些证据，不会退回仅靠关键词判断。
+`docs/applied-audit.json` 保存本次校准前后变化和逐主题依据。这份报告是本次校准的快照。
+
+在 Windows PowerShell 中重新核实当前主线（只读访问 GitHub，全部成功才替换证据文件）：
+
+```powershell
+./Verify-Applied.ps1
+# 如当前网络需要已有代理：
+./Verify-Applied.ps1 -Proxy 'http://127.0.0.1:7897'
+python build_pages.py
+```
+
+核实程序不更改系统证书或全局代理。搜索或比较失败时保留此前证据。
+只更新证据时应同步本地工作台使用的 `applied_verifications.json`，并在没有导入任务运行时重新启动本地服务。
+日常邮件更新仍可离线重建；不会自动发起 GitHub 核实，也不会执行新的 CVE 查询。
+
 ## 更新状态
 
 网页分别显示最近检查归档、邮件内容更新和 GitHub Pages 最近成功部署时间。

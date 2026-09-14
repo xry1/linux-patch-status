@@ -24,6 +24,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import quote, unquote, urlparse
 from patch_analysis import analyze, clean_title, commit_references, regroup, submission
+from applied_evidence import apply_verifications, load_verifications
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -119,6 +120,8 @@ def enrich_records(records, author_email=DEFAULT_EMAIL):
     records = regroup(records)
     for record in records:
         record.update(analyze(record['messages'], author_email))
+    apply_verifications(records, load_verifications(), author_email)
+    for record in records:
         items = record['messages']
         dates = [m.get('date_iso') or m.get('date', '') for m in items]
         dates = [d[:10] for d in dates if re.match(r'\d{4}-\d{2}-\d{2}', d)]
@@ -152,6 +155,15 @@ def upgrade_payload(payload):
     payload['status_counts'] = dict(Counter(r['status'] for r in payload['records']))
     payload['kind_counts'] = dict(Counter(r['kind'] for r in payload['records']))
     payload['signal_counts'] = {k: sum(r['signals'][k] for r in payload['records']) for k in ('applied', 'reviewed', 'acked', 'tested', 'mainline')}
+    verification = load_verifications()
+    payload['applied_audit'] = {
+        'verified_at': verification.get('checked_at'),
+        'mainline_topics': sum(r['acceptance_basis'] == 'mainline_verified' for r in payload['records']),
+        'mail_only_topics': sum(r['acceptance_basis'] == 'mail_confirmation' for r in payload['records']),
+        'applied_patch_topics': sum(r['signals']['applied'] and r['kind'] == 'patch' for r in payload['records']),
+        'applied_cover_topics': sum(r['signals']['applied'] and r['kind'] == 'cover' for r in payload['records']),
+        'head_sha': verification.get('head_sha'),
+    }
     payload['attention_count'] = sum(r['has_attention'] for r in payload['records'])
     payload['stored_messages'] = len({m['message_id'] for r in payload['records'] for m in r['messages']})
     payload['months'] = dict(Counter(r['last_date'][:7] for r in payload['records'] if r['last_date']))

@@ -37,7 +37,23 @@ def version(message):
 
 
 def acceptance_line(line):
-    return bool(re.search(r'^(?:(?:thanks|thank you)[,! .]*)?(?:(?:I(?: have|[’\']ve)?|both|patch|\d+ patch\(es\))\s+)?(?:applied|merged|queued|picked up|cherry[- ]picked)\b|\b(?:this (?:patch|series) (?:was|is)|(?:has|have) been) (?:applied|merged|queued)\b|\bwhat I applied to\b', line.strip(), re.I)) and not re.search(r'\b(?:if|will|would|should|could|not|once)\b|\?', line, re.I)
+    text = re.sub(r'\s+', ' ', line).strip()
+    if re.search(r'\b(?:if|will|would|should|could|can|not|once|elsewhere|example)\b|\?', text, re.I):
+        return False
+    text = re.sub(r'^(?:thanks|thank you)[,! .]*', '', text, flags=re.I)
+    # Completion announcements need a patch/series subject or a concrete destination.
+    # Bare "queued" also describes workqueues; it is never enough by itself.
+    patterns = (
+        r'^(?:patch\s+)?(?:applied|merged)(?:\s+now)?[\s,.!]*(?:(?:thanks|thank you)[\s,.!]*)?$',
+        r'^(?:applied|merged)(?:\s+it)?\s+(?:to|into|for|as)(?:\s+\S|$)',
+        r'^(?:both|all(?: these)? patches|\d+ patch\(es\))\s+(?:applied|merged|queued)\s+(?:to|for|into)\b',
+        r'^this (?:patch|series) (?:was|is|has been) (?:applied|merged|queued)\b',
+        r'^I(?: have|[’\']ve)? (?:applied|merged|queued|picked up) (?:it|this|both|your|the)\b',
+        r'^queued (?:the |your |this )?(?:patch|series)\b',
+        r'^queued for (?:[\w./-]+/)?(?:fixes|next|net|net-next)(?:\b|[.! ,])',
+        r'\bwhat I applied to the [\w/-]+ branch\b',
+    )
+    return any(re.search(pattern, text, re.I) for pattern in patterns)
 
 
 def scope_of(message, text):

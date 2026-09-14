@@ -34,12 +34,13 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
   <div class="notice" id="importNotice" role="status" aria-live="polite"><span id="importMessage"></span><small id="importDetail"></small></div>
   <section class="summary" aria-label="投稿统计">
     <div class="stat"><button data-kind="patch"><span>补丁主题 · 按同标题归组</span><strong id="total">0</strong><div class="sub" id="mailCount"></div></button></div>
-    <div class="stat"><button data-signal="Applied"><span>Applied · 接收信号</span><strong id="applied">0</strong><div class="sub">主线 / 维护者树邮件信号</div></button></div>
+    <div class="stat"><button data-signal="Applied"><span>Applied · 收录主题</span><strong id="applied">0</strong><div class="sub" id="appliedDetail"></div></button></div>
     <div class="stat"><button data-signal="Reviewed"><span>Reviewed · 审阅信号</span><strong id="reviewed">0</strong><div class="sub" id="reviewDetail"></div></button></div>
     <div class="stat"><button data-focus="waiting"><span>等待反馈 · 非失败状态</span><strong id="submitted">0</strong><div class="sub">最新版本尚无外部回复</div></button></div>
     <div class="stat"><button data-focus="attention"><span>Needs attention · 待确认</span><strong id="attention">0</strong><div class="sub">含分支回移问题，可与接收重合</div></button></div>
   </section>
   <p class="legend" id="topicLegend"></p>
+  <p class="legend" id="calibrationNotice"></p>
   <div class="charts">
     <section class="panel"><h2>独立信号 · 可重合</h2><div id="bars"></div></section>
     <section class="panel"><h2>最近活动月份</h2><div class="months" id="timeline" aria-label="每月最近活动主题数量"></div></section>
@@ -50,7 +51,7 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
     <p class="legend" id="changesNotice"></p>
     <div class="filters">
       <label for="search">全文搜索<input id="search" type="search" placeholder="标题、正文、发件人、commit ID、CVE"></label>
-      <label for="statusFilter">信号<select id="statusFilter"><option value="">所有信号</option><option>Applied</option><option>Reviewed</option><option>Acked</option><option>Tested</option><option>Submitted</option><option>Needs attention</option></select></label>
+      <label for="statusFilter">信号<select id="statusFilter"><option value="">所有信号</option><option>Applied</option><option value="Mainline">主线已核实</option><option value="Mail">接收邮件确认 · 主线未核实</option><option>Reviewed</option><option>Acked</option><option>Tested</option><option>Submitted</option><option>Needs attention</option></select></label>
       <label for="kindFilter">记录类型<select id="kindFilter"><option value="">所有类型</option><option value="patch">补丁</option><option value="cover">系列封面信</option><option value="discussion">讨论</option><option value="backport">独立回移通知</option></select></label>
       <label for="subsystemFilter">子系统<select id="subsystemFilter"><option value="">所有子系统</option></select></label>
       <label for="dateFrom">最近活动自<input id="dateFrom" type="date"></label><label for="dateTo">至<input id="dateTo" type="date"></label>
@@ -61,7 +62,7 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
     <div class="table-wrap"><table><thead><tr><th style="width:43%">Patch</th><th>状态</th><th>活动与邮件</th><th>线索</th></tr></thead><tbody id="rows"></tbody></table></div>
     <div class="pagination"><button id="prevPage">上一页</button><span id="pageCount"></span><button id="nextPage">下一页</button></div>
   </section>
-  <p class="footnote">状态是邮件中的信号，未核实发件人的维护者身份或远端仓库。Applied 与 Reviewed、待办可以重合；旧版本反馈保留在时间线。标题变化不会自动模糊合并。未读标记仅保存在当前浏览器。CVE 候选不是已核实的修复关联。</p>
+  <p class="footnote">Applied 的依据分为主线历史核实和明确接收邮件；后者不等于已经进入主线。主线记录同时核对标题和作者 / Signed-off-by 归属，同题的其他作者提交单独展示。Applied 与 Reviewed、分支待办可以重合。未读标记仅保存在当前浏览器。CVE 候选不是已核实的修复关联。</p>
   <p class="footnote" id="updateFootnote">导入会合并已有归档，按 Message-ID 去重。页面只反映已下载的邮件；未出现在归档里的新回复需要下次导入。</p>
 </main>
 <dialog id="reader" aria-labelledby="readerTitle">
@@ -106,9 +107,9 @@ const idOf=m=>m.message_id||m.link||[m.sender,m.date,m.subject].join('|');
 const dateOf=m=>m.date_iso?new Date(m.date_iso).toLocaleString('zh-CN',{hour12:false}):m.date||'日期未知';
 const timeText=t=>t?new Date(t).toLocaleString('zh-CN',{hour12:false}):'暂无记录';
 const kindNames={patch:'补丁',cover:'系列封面信',discussion:'讨论',backport:'独立回移通知'};
-const eventNames={submitted:'投递',backport_submitted:'回移已投递',applied:'接收信号',reviewed:'Reviewed-by',acked:'Acked-by',tested:'Tested-by',attention:'需确认'};
+const eventNames={submitted:'投递',backport_submitted:'回移已投递',applied:'接收邮件',mainline_verified:'主线已核实',reviewed:'Reviewed-by',acked:'Acked-by',tested:'Tested-by',attention:'需确认'};
 const roleNames={introduced_by:'Fixes 指向的引入提交',upstream_fix:'邮件注明的上游修复',patch_commit:'接收邮件中的提交引用',backport_source:'回移来源提交',backport_commit:'回移提交引用',referenced_commit:'讨论中的未分类提交引用'};
-const scopeName=s=>s==='general'?'未指明分支':s==='mainline'?'主线（邮件信号）':s.replace('stable:','stable / ').replace('maintainer:','维护者树 / ').replace('unspecified','未指明');
+const scopeName=s=>s==='general'?'未指明分支':s==='mainline'?'主线':s.replace('stable:','stable / ').replace('maintainer:','维护者树 / ').replace('unspecified','未指明');
 const readKey='linux-patch-read-v1:'+data.author_email;
 let readIds={};
 try{readIds=JSON.parse(localStorage.getItem(readKey)||'{}');if(!readIds||Array.isArray(readIds)||typeof readIds!=='object')readIds={};}catch{}
@@ -118,10 +119,12 @@ const unreadCount=r=>r.messages.filter(m=>isReply(m)&&!readIds[idOf(m)]).length;
 const latestSubmission=r=>(r.versions||[]).find(v=>v.latest)?.submitted_at||r.first_date;
 const waiting=r=>r.kind==='patch'&&!r.signals?.applied&&!r.has_attention&&!r.messages.some(m=>isReply(m)&&m.patch_version===r.latest_version);
 const waitDays=r=>Math.max(0,Math.floor((Date.now()-new Date(latestSubmission(r)||Date.now()))/86400000));
-function signalMatch(r,s){if(!s)return true;if(s==='Needs attention')return r.has_attention;if(s==='Submitted')return r.status==='Submitted';return !!r.signals?.[s.toLowerCase()];}
+function signalMatch(r,s){if(!s)return true;if(s==='Needs attention')return r.has_attention;if(s==='Submitted')return r.status==='Submitted';if(s==='Mail')return r.acceptance_basis==='mail_confirmation';return !!r.signals?.[s.toLowerCase()];}
 function safeLink(url,label){try{const u=new URL(url);if(u.protocol==='https:'&&['lore.kernel.org','git.kernel.org','github.com','osv.dev','www.cve.org'].includes(u.hostname))return '<a href="'+esc(u.href)+'" target="_blank" rel="noreferrer">'+esc(label)+'</a>';}catch{}return esc(label);}
 function mailButton(r,mid,label,extra=''){return '<button class="evidence-link" data-record="'+esc(r.id)+'" data-mid="'+esc(mid)+'" '+extra+'>'+esc(label)+'</button>';}
-function rebuildIndex(){searchIndex=new Map(records.map(r=>[r.id,[r.title,...(r.branches||[]),...(r.commit_ids_in_mail||[]),...cvList(r),...r.messages.map(m=>[m.subject,m.sender,m.body,m.message_id].join('\n'))].join('\n').toLowerCase()]));const selected=$('subsystemFilter').value;$('subsystemFilter').innerHTML='<option value="">所有子系统</option>'+[...new Set(records.map(r=>r.subsystem).filter(Boolean))].sort().map(s=>'<option value="'+esc(s)+'">'+esc(s)+'</option>').join('');$('subsystemFilter').value=selected;}
+const eventVersion=e=>e.version?'v'+e.version:'提交证据';
+const eventLink=(r,e,label)=>e.message_id?mailButton(r,e.message_id,label):safeLink(e.source,label);
+function rebuildIndex(){searchIndex=new Map(records.map(r=>[r.id,[r.title,...(r.branches||[]),...(r.commit_ids_in_mail||[]),...(r.mainline_commits||[]).map(c=>c.sha),...(r.related_mainline_commits||[]).map(c=>c.sha),...cvList(r),...r.messages.map(m=>[m.subject,m.sender,m.body,m.message_id].join('\n'))].join('\n').toLowerCase()]));const selected=$('subsystemFilter').value;$('subsystemFilter').innerHTML='<option value="">所有子系统</option>'+[...new Set(records.map(r=>r.subsystem).filter(Boolean))].sort().map(s=>'<option value="'+esc(s)+'">'+esc(s)+'</option>').join('');$('subsystemFilter').value=selected;}
 function renderSync(sync=data){$('checkedAt').textContent=timeText(sync.last_checked_at);$('contentAt').textContent=timeText(sync.content_updated_at||data.content_updated_at);$('checkResult').textContent=sync.check_result==='error'?'检查失败：'+(sync.error||'请查看本地任务'):sync.check_result==='unchanged'?'检查成功 · 归档内容无变化':sync.check_result==='updated'?'检查成功 · 已合并归档变化':'已导入归档';$('checkResult').className=sync.check_result==='error'?'check-error':'';}
 async function loadPublicationStatus(){
   if(!pagesMode){$('deployedAt').textContent='当前为本地报告';$('deploymentDetail').textContent='线上部署记录请打开 GitHub Pages 查看。';return;}
@@ -139,6 +142,9 @@ function renderSummary(){
   $('mailCount').textContent=records.length+' 个归档主题 · '+(data.stored_messages||0).toLocaleString()+' 封邮件';
   $('topicLegend').textContent='归档范围：'+Object.entries(kindNames).map(([k,label])=>(kinds[k]||0)+' 个'+label).join(' · ')+'。接收、审阅和待办按全部归档主题计数，封面信单独保留；计数不等于独立主线 commit 数。';
   $('reviewDetail').textContent='另有 Acked '+(signals.acked||0)+' · Tested '+(signals.tested||0)+'（可重合）';
+  const audit=data.applied_audit||{};
+  $('appliedDetail').textContent='主线核实 '+(audit.mainline_topics||0)+' · 邮件确认 '+(audit.mail_only_topics||0);
+  $('calibrationNotice').textContent='Applied 包含 '+(audit.applied_patch_topics||0)+' 个补丁主题和 '+(audit.applied_cover_topics||0)+' 个系列封面；主线证据核对于 '+timeText(audit.verified_at)+'。接收邮件已确认的主题可在“信号”中单独筛选。';
   $('source').textContent=data.source?'最近归档：'+data.source:'尚未导入归档';renderSync();
   const max=Math.max(1,...Object.values(counts));
   $('bars').innerHTML=Object.keys(colors).map(s=>'<div class="bar-row"><button data-status="'+s+'">'+s+'</button><div class="track"><div class="bar" style="background:'+colors[s]+';width:'+((counts[s]||0)/max*100)+'%"></div></div><output>'+(counts[s]||0)+'</output></div>').join('');
@@ -158,24 +164,27 @@ function renderRows(){
   $('changesNotice').textContent=focusView==='changes'?(data.last_changes?.at?'最近一次内容变化：'+timeText(data.last_changes.at)+'。重复导入不会清空这份记录。':'当前快照作为跟踪起点，下次导入后展示新增回复和状态变化。'):focusView==='unread'?'未读仅指当前浏览器尚未打开的外部回复；首次使用会把已有回复显示为未读。':focusView==='waiting'?'按最新版本的投递日期计算等待时间；没有回复不等于被拒绝。':'点击状态依据可直接阅读对应邮件。';
   $('rows').innerHTML=matches.length?matches.slice((page-1)*pageSize,page*pageSize).map(r=>{
     const badges=['reviewed','acked','tested'].filter(s=>r.signals?.[s]).map(s=>'<span class="status Reviewed">'+esc(eventNames[s])+'</span>').join(' ');
-    const ev=(r.events||[]).filter(e=>e.kind!=='submitted').slice(-4).reverse().map(e=>'<li>'+mailButton(r,e.message_id,'v'+e.version+' · '+scopeName(e.scope)+' · '+e.evidence)+'</li>').join('');
+    const ev=(r.events||[]).filter(e=>e.kind!=='submitted').slice(-4).reverse().map(e=>'<li>'+eventLink(r,e,eventVersion(e)+' · '+scopeName(e.scope)+' · '+e.evidence)+'</li>').join('');
     const attention=(r.attention_items||[]).map(e=>'<div class="attention-note">'+esc(scopeName(e.scope))+' · '+(e.reason==='backport_failure'?'回移失败':e.reason==='backport_pending'?'回移已投递 · 待确认':'需要确认反馈')+'<br>'+mailButton(r,e.message_id,e.evidence)+'<div>'+esc(e.action)+'</div></div>').join('');
     const reply=r.messages.filter(isReply).at(-1), unread=unreadCount(r), change=changed.get(r.id);
     const hit=q&&!r.title.toLowerCase().includes(q)?r.messages.find(m=>[m.subject,m.sender,m.body||'',m.message_id].join('\n').toLowerCase().includes(q)):null;
     const delta=focusView==='changes'&&change?'<div class="search-hit">新增 '+change.added_message_ids.length+' 封 · 补全 '+change.updated_message_ids.length+' 封'+(change.status_changed?' · 状态 '+esc(change.before)+' → '+esc(change.after):'')+'</div>':'';
     const cveText=r.cve_state==='candidate'?'候选关联 · '+cvList(r).length+' 条':r.cve_state==='checked'?'已查询 OSV · 未命中':r.cve_state==='error'?'CVE 查询失败':'CVE 尚未查询';
-    return '<tr><td><button class="row-title patch-title" data-record="'+esc(r.id)+'">'+esc(r.title)+'</button><div><span class="badge">'+esc(kindNames[r.kind]||'主题')+'</span><span class="badge">v'+r.latest_version+' · '+r.versions.length+' 个版本</span><span class="badge">'+esc(r.subsystem)+'</span></div>'+delta+(hit?'<div>'+mailButton(r,idOf(hit),'全文命中：'+hit.sender)+'</div>':'')+(reply?'<div class="latest-reply">最近外部回复：'+esc(reply.sender)+' · '+esc(reply.date)+'</div>':'')+'</td><td><span class="status '+esc(r.status.replace(/\s+/g,'-'))+'">'+esc(r.status)+'</span> '+badges+(r.signals?.mainline?'<div class="patch-meta">邮件称已合入主线</div>':'')+attention+'</td><td><div class="patch-meta">'+esc(r.first_date)+' → '+esc(r.last_date)+'</div>'+(waiting(r)?'<div class="patch-meta">等待反馈 '+waitDays(r)+' 天</div>':'')+'<button class="read-button" data-record="'+esc(r.id)+'">Thread messages · '+r.messages.length+' 封</button>'+(unread?'<div class="unread">'+unread+' 封未读回复</div>':'')+'</td><td><div class="patch-meta">'+esc(cveText)+'</div>'+(r.osv_query?.at?'<div class="patch-meta">查询于 '+esc(timeText(r.osv_query.at))+'</div>':'')+'<button class="evidence-link" data-record="'+esc(r.id)+'" data-context="1">查看版本 / CVE 依据</button><details><summary>最近状态依据</summary><ul class="evidence">'+(ev||'<li>尚无明确状态语句。</li>')+'</ul></details></td></tr>';
+    const basis=r.acceptance_basis==='mainline_verified'?'<div class="patch-meta">主线历史已核实'+(r.mainline_commits.some(c=>c.attribution==='signed_off')?' · Signed-off-by 参与':'')+'</div>':r.acceptance_basis==='mail_confirmation'?'<div class="patch-meta">明确接收邮件 · 主线未核实</div>':'';
+    const related=r.related_mainline_commits?.length?'<div class="attention-note">存在其他作者的同题主线提交，未计入你的 Applied。</div>':'';
+    return '<tr><td><button class="row-title patch-title" data-record="'+esc(r.id)+'">'+esc(r.title)+'</button><div><span class="badge">'+esc(kindNames[r.kind]||'主题')+'</span><span class="badge">v'+r.latest_version+' · '+r.versions.length+' 个版本</span><span class="badge">'+esc(r.subsystem)+'</span></div>'+delta+(hit?'<div>'+mailButton(r,idOf(hit),'全文命中：'+hit.sender)+'</div>':'')+(reply?'<div class="latest-reply">最近外部回复：'+esc(reply.sender)+' · '+esc(reply.date)+'</div>':'')+'</td><td><span class="status '+esc(r.status.replace(/\s+/g,'-'))+'">'+esc(r.status)+'</span> '+badges+basis+related+attention+'</td><td><div class="patch-meta">'+esc(r.first_date)+' → '+esc(r.last_date)+'</div>'+(waiting(r)?'<div class="patch-meta">等待反馈 '+waitDays(r)+' 天</div>':'')+'<button class="read-button" data-record="'+esc(r.id)+'">Thread messages · '+r.messages.length+' 封</button>'+(unread?'<div class="unread">'+unread+' 封未读回复</div>':'')+'</td><td><div class="patch-meta">'+esc(cveText)+'</div>'+(r.osv_query?.at?'<div class="patch-meta">查询于 '+esc(timeText(r.osv_query.at))+'</div>':'')+'<button class="evidence-link" data-record="'+esc(r.id)+'" data-context="1">查看收录 / 版本 / CVE 依据</button><details><summary>最近状态依据</summary><ul class="evidence">'+(ev||'<li>尚无明确状态语句。</li>')+'</ul></details></td></tr>';
   }).join(''):'<tr><td colspan="4" class="empty">没有匹配的主题</td></tr>';
 }
 function renderContext(){
   const r=activeRecord;
   $('versionFilter').innerHTML='<option value="">所有版本</option>'+r.versions.map(v=>'<option value="'+v.version+'">v'+v.version+(v.latest?' · 最新':'')+'</option>').join('');
   const branches=r.branch_states.map(e=>'<span class="badge">'+esc(scopeName(e.scope))+'：'+esc(eventNames[e.kind])+'</span>').join('');
-  const events=r.events.slice().reverse().map(e=>'<div class="event"><small>v'+e.version+' · '+esc(timeText(e.date))+' · '+esc(scopeName(e.scope))+' · '+esc(e.sender)+'</small><b>'+esc(eventNames[e.kind])+'</b> '+mailButton(r,e.message_id,e.evidence)+'</div>').join('');
+  const events=r.events.slice().reverse().map(e=>'<div class="event"><small>'+eventVersion(e)+' · '+esc(timeText(e.date))+' · '+esc(scopeName(e.scope))+' · '+esc(e.sender)+'</small><b>'+esc(eventNames[e.kind])+'</b> '+eventLink(r,e,e.evidence)+'</div>').join('');
+  const mainline=[...(r.mainline_commits||[]),...(r.related_mainline_commits||[])].map(c=>'<div class="event">'+safeLink(c.source,c.sha)+'<small>作者：'+esc(c.author)+' · '+(c.attribution==='author'?'你的作者提交':c.attribution==='signed_off'?'你的 Signed-off-by 参与':'其他作者，未计入 Applied')+' · 核对于 '+esc(timeText(c.checked_at))+'</small><small>已确认属于主线历史；核对时主线 HEAD：'+esc(c.head_sha)+'</small></div>').join('');
   const commits=r.commit_refs.map(c=>'<div><span class="badge">'+esc(roleNames[c.role])+'</span><code>'+esc(c.sha)+'</code><br>'+mailButton(r,c.message_id,'查看原文')+' · '+safeLink(c.source,'来源')+'</div>').join('');
   const mentions=(r.cve_mentions||[]).map(c=>'<div>'+esc(c.id)+' · 邮件提及 · '+mailButton(r,c.message_id,'查看原文')+'</div>').join('');
   const candidates=(r.osv_candidates||[]).map(c=>'<div>'+safeLink(c.source||'https://osv.dev/vulnerability/'+encodeURIComponent(c.id),c.id)+' · OSV 受影响版本候选'+(c.commit?' · '+esc(c.commit):'')+'</div>').join('');
-  $('threadContext').innerHTML='<p class="legend">以最新版本 v'+r.latest_version+' 为主；旧版本事件留存。接收与待办按目标分支分别判断。</p>'+branches+'<h3>版本时间线</h3>'+(events||'<p class="legend">暂无明确事件，请阅读邮件。</p>')+'<h3>CVE 与提交依据</h3><p class="legend">'+(r.osv_query?.at?'OSV 查询：'+esc(timeText(r.osv_query.at)):'尚无可核实的 OSV 查询时间')+'。邮件提及和 OSV 命中均是候选；当前没有已核实的 CVE 修复归属。</p><div class="commit-list">'+mentions+candidates+(commits||'未提取到提交引用。')+'</div>';
+  $('threadContext').innerHTML='<p class="legend">最新投递为 v'+r.latest_version+'；主线提交记录独立保存。接收与待办按目标分支分别判断。</p>'+branches+(mainline?'<h3>主线核实与提交归属</h3>'+mainline:'')+'<h3>版本时间线</h3>'+(events||'<p class="legend">暂无明确事件，请阅读邮件。</p>')+'<h3>CVE 与提交依据</h3><p class="legend">'+(r.osv_query?.at?'OSV 查询：'+esc(timeText(r.osv_query.at)):'尚无可核实的 OSV 查询时间')+'。邮件提及和 OSV 命中均是候选；当前没有已核实的 CVE 修复归属。</p><div class="commit-list">'+mentions+candidates+(commits||'未提取到提交引用。')+'</div>';
 }
 function openReader(id,mid=null,context=false){
   activeRecord=records.find(r=>r.id===id||(r.aliases||[]).includes(id));if(!activeRecord)return;

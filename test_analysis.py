@@ -8,6 +8,7 @@ from unittest.mock import patch
 import build_pages
 import patch_status_dashboard as dashboard
 from patch_analysis import analyze, commit_references
+from applied_evidence import apply_verifications
 
 
 def message(mid, subject, body, day=1, author=False, parent=None):
@@ -69,6 +70,69 @@ class AnalysisTests(unittest.TestCase):
         result = self.analyze(message('r', 'Re: [PATCH] net: example',
                                       '> Applied, thanks.\nIf your patch is applied to the wrong tree, tell us.\nThis patch can be applied directly.', 2))
         self.assertFalse(result['signals']['applied'])
+
+    def test_real_ath12k_queue_description_is_not_acceptance(self):
+        result = self.analyze(message('review', 'Re: [PATCH] net: example',
+            'I propose a better commit message.\nAdd a check in the timeout worker so that if it was already\n'
+            'queued before finish_queued was set, it exits without aborting a scan\nthat is already finishing.', 2))
+        self.assertFalse(result['signals']['applied'])
+
+    def test_completed_announcements_with_wrapped_destination(self):
+        for body in ('Applied to\n\nhttps://git.kernel.org/tree for-next', 'Applied now. Thanks.',
+                     'This series was applied to netdev/net.git (main)', 'Queued for fixes, thanks!'):
+            with self.subTest(body=body):
+                self.assertTrue(self.analyze(message('a', 'Re: [PATCH] net: example', body, 2))['signals']['applied'])
+
+    def test_suggestions_and_other_work_are_not_acceptance(self):
+        for body in ('This patch can be applied to net directly.', 'applied elsewhere.',
+                     'queued for freeing', 'The other implementation was merged into driver-core-next already.'):
+            with self.subTest(body=body):
+                self.assertFalse(self.analyze(message('a', 'Re: [PATCH] net: example', body, 2))['signals']['applied'])
+
+    def proof(self, **changes):
+        proof = {'sha': 'b' * 40, 'title': 'net: example', 'mainline_ancestor': True,
+                 'merge_base': 'b' * 40, 'head_sha': 'c' * 40, 'behind_by': 0,
+                 'author_email': dashboard.DEFAULT_EMAIL, 'author': 'Runyu Xiao',
+                 'authored_by_user': True, 'signed_off_by_user': True,
+                 'committed_at': '2026-09-03T10:00:00Z', 'checked_at': '2026-09-14T10:00:00Z',
+                 'source': 'https://github.com/torvalds/linux/commit/' + 'b' * 40}
+        proof.update(changes)
+        return {'author_email': dashboard.DEFAULT_EMAIL, 'head_sha': 'c' * 40, 'commits': [proof]}
+
+    def verified_record(self, snapshot):
+        row = {**record([self.original]), **self.analyze()}
+        return apply_verifications([row], snapshot, dashboard.DEFAULT_EMAIL)[0]
+
+    def test_mainline_proof_restores_patch_without_applied_mail(self):
+        row = self.verified_record(self.proof())
+        self.assertTrue(row['signals']['applied'])
+        self.assertTrue(row['signals']['mainline'])
+        self.assertEqual(row['acceptance_basis'], 'mainline_verified')
+        self.assertIsNone(row['events'][-1]['message_id'])
+
+    def test_foreign_authored_same_title_is_not_our_acceptance(self):
+        row = self.verified_record(self.proof(author_email='other@example.org', authored_by_user=False, signed_off_by_user=False))
+        self.assertFalse(row['signals']['applied'])
+        self.assertEqual(row['related_mainline_commits'][0]['attribution'], 'other_author')
+
+    def test_signed_off_contribution_is_labeled_separately(self):
+        row = self.verified_record(self.proof(author_email='other@example.org', authored_by_user=False))
+        self.assertTrue(row['signals']['applied'])
+        self.assertEqual(row['mainline_commits'][0]['attribution'], 'signed_off')
+
+    def test_unproven_or_unrelated_commit_cannot_change_status(self):
+        for change in ({'mainline_ancestor': False}, {'merge_base': 'd' * 40}, {'behind_by': 1},
+                       {'head_sha': 'd' * 40}, {'title': 'net: another patch'}):
+            with self.subTest(change=change):
+                self.assertFalse(self.verified_record(self.proof(**change))['signals']['applied'])
+
+    def test_mainline_proof_preserves_stable_attention(self):
+        failure = message('f', 'FAILED: patch "net: example" failed to apply to 6.1-stable tree',
+                          'The patch does not apply to the 6.1-stable tree.', 4)
+        row = {**record([self.original, failure]), **self.analyze(failure)}
+        apply_verifications([row], self.proof(), dashboard.DEFAULT_EMAIL)
+        self.assertTrue(row['signals']['mainline'])
+        self.assertEqual(row['attention_items'][0]['scope'], 'stable:6.1')
 
     def test_stable_submission_has_its_own_scope_and_is_not_mainline(self):
         result = self.analyze(message('s', '[PATCH 6.1 1/1] net: example', 'Stable review patch.', 2))
