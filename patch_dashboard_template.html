@@ -45,7 +45,8 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
     <section class="panel"><h2>最近活动月份</h2><div class="months" id="timeline" aria-label="每月最近活动主题数量"></div></section>
   </div>
   <section class="panel">
-    <div class="focus-tabs" id="focusTabs" aria-label="关注视图"><button data-focus="all" aria-pressed="true">全部</button><button data-focus="changes" aria-pressed="false">最近变化</button><button data-focus="unread" aria-pressed="false">未读回复</button><button data-focus="attention" aria-pressed="false">需要处理</button><button data-focus="waiting" aria-pressed="false">等待反馈</button></div>
+    <div class="focus-tabs" id="focusTabs" aria-label="关注视图"><button data-focus="all" aria-pressed="true">全部</button><button data-focus="changes" aria-pressed="false">最近变化</button><button data-focus="unread" aria-pressed="false">未读回复</button><button data-focus="attention" aria-pressed="false">需要处理</button><button data-focus="waiting" aria-pressed="false">等待反馈</button><button id="markAllRead" title="将当前归档所有主题的邮件标为已读，包含筛选外的邮件；之后新增邮件仍为未读。">全部已读</button></div>
+    <p class="legend" id="readNotice" role="status" aria-live="polite" hidden></p>
     <p class="legend" id="changesNotice"></p>
     <div class="filters">
       <label for="search">全文搜索<input id="search" type="search" placeholder="标题、正文、发件人、commit ID、CVE"></label>
@@ -111,7 +112,7 @@ const scopeName=s=>s==='general'?'未指明分支':s==='mainline'?'主线（邮�
 const readKey='linux-patch-read-v1:'+data.author_email;
 let readIds={};
 try{readIds=JSON.parse(localStorage.getItem(readKey)||'{}');if(!readIds||Array.isArray(readIds)||typeof readIds!=='object')readIds={};}catch{}
-function markRead(ids){for(const id of ids)readIds[id]=true;try{localStorage.setItem(readKey,JSON.stringify(readIds));}catch{}}
+function markRead(ids){for(const id of ids)readIds[id]=true;try{localStorage.setItem(readKey,JSON.stringify(readIds));return true;}catch{return false;}}
 const isReply=m=>!(m.sender||'').toLowerCase().includes((data.author_email||'runyu.xiao@seu.edu.cn').toLowerCase());
 const unreadCount=r=>r.messages.filter(m=>isReply(m)&&!readIds[idOf(m)]).length;
 const latestSubmission=r=>(r.versions||[]).find(v=>v.latest)?.submitted_at||r.first_date;
@@ -145,6 +146,7 @@ function renderSummary(){
   $('timeline').innerHTML=keys.length?keys.map(k=>'<div class="month"><span>'+months[k]+'</span><div class="month-bar" style="height:'+Math.max(2,months[k]/mmax*93)+'px" title="'+esc(k)+'：'+months[k]+' 个主题"></div><span class="month-label">'+esc(k)+'</span></div>').join(''):'<p class="empty">导入归档后显示活动记录</p>';
 }
 function renderRows(){
+  $('markAllRead').disabled=!records.some(r=>unreadCount(r)>0);
   const q=$('search').value.trim().toLowerCase(), status=$('statusFilter').value;
   const changed=new Map((data.last_changes?.items||[]).map(c=>[c.record_id,c]));
   const matches=records.filter(r=>signalMatch(r,status)&&(!q||searchIndex.get(r.id)?.includes(q))&&(!$('kindFilter').value||r.kind===$('kindFilter').value)&&(!$('subsystemFilter').value||r.subsystem===$('subsystemFilter').value)&&(!$('dateFrom').value||r.last_date>=$('dateFrom').value)&&(!$('dateTo').value||r.last_date<=$('dateTo').value)&&(focusView==='all'||focusView==='changes'&&changed.has(r.id)||focusView==='unread'&&unreadCount(r)>0||focusView==='attention'&&r.has_attention||focusView==='waiting'&&waiting(r)));
@@ -262,6 +264,13 @@ $('closeReader').addEventListener('click',()=>$('reader').close());
 $('reader').addEventListener('close',()=>{if(new URLSearchParams(location.hash.slice(1)).has('patch'))history.replaceState(null,'',location.pathname+location.search);renderRows();});
 $('versionFilter').addEventListener('change',renderMailList);
 $('markThreadRead').addEventListener('click',()=>{markRead(activeRecord.messages.map(idOf));renderMailList();});
+$('markAllRead').addEventListener('click',()=>{
+  const count=records.reduce((n,r)=>n+unreadCount(r),0);
+  const saved=markRead(records.flatMap(r=>r.messages.map(idOf)));
+  $('readNotice').hidden=false;
+  $('readNotice').textContent='已将所有主题的 '+count+' 封未读回复标为已读。之后新增邮件仍会显示为未读。'+(saved?'':'当前浏览器无法保存标记，刷新后可能恢复。');
+  renderRows();
+});
 $('copyMailLink').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);$('copyResult').textContent='链接已复制';}catch{$('copyResult').textContent='请复制浏览器地址栏中的链接。';}});
 $('mailSearch').addEventListener('input',renderMailList);$('mailOrder').addEventListener('change',renderMailList);$('showQuotes').addEventListener('change',renderMail);
 function stepMail(delta){const i=visibleMessages.findIndex(m=>idOf(m)===selectedId)+delta;if(visibleMessages[i]){selectedId=idOf(visibleMessages[i]);renderMail();document.querySelector('[data-mail="'+i+'"]')?.scrollIntoView({block:'nearest'});}}
