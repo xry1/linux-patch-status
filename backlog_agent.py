@@ -347,6 +347,9 @@ def analyze(topic, config, token, post):
 def process(payload, directory, config, token, post, limit=None):
     available = topics(payload)
     budget = min(10, max(0, int(limit if limit is not None else config.get('backlog_max_calls_per_cycle', 2))))
+    daily_limit = config.get('backlog_max_calls_per_day', 30)
+    if daily_limit is not None and (type(daily_limit) is not int or daily_limit < 0):
+        raise ValueError('每日调用上限必须为非负整数或 null（不限额）。')
     day = clock().astimezone(SHANGHAI).date().isoformat()
     # A distinct worker lock lets UI actions proceed during model requests and
     # serializes the watcher with the scheduled command, including crash recovery.
@@ -364,7 +367,7 @@ def process(payload, directory, config, token, post, limit=None):
                 entry = data['entries'][key]
                 if entry['ai_state'] not in ('pending', 'error') or entry['attempts'] >= 3 or effective(available[key], entry)['status'] in ('done', 'ignored', 'snoozed'):
                     continue
-                if data['usage'].get(day, 0) >= max(0, min(100, int(config.get('backlog_max_calls_per_day', 30)))):
+                if daily_limit is not None and data['usage'].get(day, 0) >= daily_limit:
                     break
                 data['usage'][day] = data['usage'].get(day, 0) + 1
                 entry.update(ai_state='running', attempts=entry['attempts'] + 1, error='')

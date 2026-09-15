@@ -161,6 +161,26 @@ class BacklogTests(unittest.TestCase):
         self.assertNotIn('tools', self.post.call_args.args[1])
         self.assertNotIn('response_format', self.post.call_args.args[1])
 
+    def test_null_daily_limit_continues_past_recorded_usage_and_keeps_counting(self):
+        day = agent.clock().astimezone(agent.SHANGHAI).date().isoformat()
+        with agent.transaction(self.directory) as data:
+            data['usage'][day] = 10000
+        self.config['backlog_max_calls_per_day'] = None
+        self.process()
+        self.post.assert_called_once()
+        self.assertEqual(agent.read(self.directory)['usage'][day], 10001)
+        self.assertEqual(self.item()['status'], 'needs_work')
+
+    def test_zero_daily_limit_disables_calls_and_invalid_limit_fails_before_calling(self):
+        self.config['backlog_max_calls_per_day'] = 0
+        self.process()
+        self.post.assert_not_called()
+        for value in (-1, True, 'unlimited'):
+            self.config['backlog_max_calls_per_day'] = value
+            with self.assertRaises(ValueError):
+                self.process()
+        self.post.assert_not_called()
+
     def test_inline_review_keeps_quoted_metadata_needed_for_version_request(self):
         review = copy.deepcopy(self.review)
         review['body'] = '> Assisted-by: LLM Codex\nPlease add the version.\n> diff --git a/private b/private\n> omitted code\nThe diff looks good.'
