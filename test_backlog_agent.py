@@ -201,6 +201,13 @@ class BacklogTests(unittest.TestCase):
         self.assertIn('system', self.post.call_args.args[1])
         self.assertNotIn('failure injection', self.item()['reply_draft'])
 
+    def test_correspondence_advice_does_not_expand_failure_trigger_setup(self):
+        self.post.side_effect = lambda *args: self.response(action_items=['说明 request_irq() 注入方式。', '核对实际使用的模型版本。'])
+        self.process()
+        actions = self.item()['action_items']
+        self.assertNotIn('request_irq', actions[0])
+        self.assertEqual(actions[1], '核对实际使用的模型版本。')
+
     def send_at(self, time, send):
         with patch.object(agent, 'clock', return_value=datetime.fromisoformat(time)):
             return agent.send_digest(self.payload, self.directory, self.config, send)

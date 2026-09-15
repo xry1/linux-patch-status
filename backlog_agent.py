@@ -200,7 +200,7 @@ def effective(topic, entry):
         'fingerprint': topic['fingerprint'], 'last_date': topic['last_date'], 'status': status,
         'summary': ai['summary'] if ai else topic['base_reason'], 'priority': ai.get('priority', 'normal') if ai else 'normal',
         'action_items': [('核对已有验证事实与提交说明；资料不足时向评审者澄清所需信息。'
-                          if re.search(r'reproduc|fault.inject|failure.inject|复现|故障注入', a, re.I) else a)
+                          if re.search(r'reproduc|fault.inject|failure.inject|request_irq|复现|注入', a, re.I) else a)
                          for a in ai.get('action_items', [])] if ai else [], 'reply_draft': draft,
         'evidence_ids': ai['evidence_ids'] if ai else topic['evidence_ids'],
         'ai_state': entry.get('ai_state', 'pending') if fresh else 'pending',
