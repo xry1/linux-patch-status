@@ -28,6 +28,7 @@ from email.utils import parseaddr
 from pathlib import Path
 
 import patch_status_dashboard as dashboard
+import revision_reminders
 from mail_credentials import OFFICIAL_GLM_URL, glm_endpoint, interactive_config, read_credentials
 from api_transport import NativeHTTPError, windows_json
 
@@ -716,6 +717,12 @@ def send_feishu(batch, state, config, webhook, secret=None):
     else:
         text += '\n\n摘要暂不可用，新邮件已保存在本地阅读页。'
     text += '\n\n电脑本地阅读：http://127.0.0.1:8765/mail-monitor\n邮件批次：' + batch['id'][:8]
+    send_feishu_text(text, webhook, secret)
+
+
+def send_feishu_text(text, webhook, secret=None):
+    if not re.fullmatch(r'https://open\.feishu\.cn/open-apis/bot/v2/hook/[A-Za-z0-9-]+', webhook):
+        raise ServiceFailure('飞书', '请配置有效的群自定义机器人 Webhook')
     response = post_json(webhook, feishu_payload(text[:5500], secret), '飞书')
     code = response.get('code', response.get('StatusCode')) if isinstance(response, dict) else None
     if type(code) is not int or code != 0:
@@ -760,7 +767,29 @@ def process_queue(state, config, save, glm_token, webhook, feishu_secret=None):
 def render_private(directory, config, seed, state):
     payload = combined_payload(seed, state, config)
     payload['mail_monitor']['configured'] = (directory / 'credentials.json').is_file()
+    payload = revision_reminders.decorate(payload, directory)
     dashboard.save_report(directory / 'report.html', payload)
+
+
+def process_revision_reminders(directory, config, seed, state):
+    if not (directory / revision_reminders.STORE).is_file():
+        return
+    saved = read_credentials(directory)
+    webhook = os.environ.get('PATCH_FEISHU_WEBHOOK') or saved.get('PATCH_FEISHU_WEBHOOK')
+    secret = os.environ.get('PATCH_FEISHU_SECRET') or saved.get('PATCH_FEISHU_SECRET')
+    if not webhook:
+        return
+    def send(item):
+        previous = revision_reminders.timestamp(item['submitted_at']).astimezone().strftime('%Y-%m-%d %H:%M:%S %z')
+        due = revision_reminders.timestamp(item['due_at']).astimezone().strftime('%Y-%m-%d %H:%M:%S %z')
+        text = (f'{config.get("feishu_keyword", "Linux Patch")} · 下一版本投递提醒\n'
+                f'{item["title"][:300]}\nv{item["version"]} 投递：{previous}\n'
+                f'间隔 {item["hours"]} 小时已满：{due}\n\n'
+                f'可核对修改意见、测试结果和 changelog，准备投递 v{item["version"] + 1}。'
+                '\n请确认修改已完成；本提醒不会自动发送补丁。'
+                '\n\n电脑本地查看：http://127.0.0.1:8765/mail-monitor\n提醒编号：' + item['id'][:8])
+        send_feishu_text(text, webhook, secret)
+    revision_reminders.process_due(combined_payload(seed, state, config), directory, send)
 
 
 def run_once(directory, config, state, seed, connect=open_mailbox):
@@ -838,6 +867,12 @@ def main():
                     save_json(directory / 'state.json', state)
                     render_private(directory, config, seed, state)
                     print(now() + ' ' + message, file=sys.stderr, flush=True)
+                    code = 1
+                try:
+                    # Deadlines remain actionable even if this IMAP check failed.
+                    process_revision_reminders(directory, config, seed, state)
+                except (OSError, ValueError, RuntimeError):
+                    print(now() + ' 投递提醒检查失败，原提醒记录已保留。', file=sys.stderr, flush=True)
                     code = 1
                 if not args.watch:
                     return code

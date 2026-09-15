@@ -26,6 +26,7 @@ from urllib.parse import quote, unquote, urlparse
 from patch_analysis import analyze, clean_title, commit_references, regroup, submission
 from applied_evidence import apply_verifications, load_verifications
 from patch_series import applied_submissions, build_series
+import revision_reminders
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -522,10 +523,19 @@ def make_server(state, port):
                 if not report.is_file():
                     return self.reply(404, {'error': '邮箱监测尚未配置，请先运行配置邮箱提醒.cmd。'})
                 if route == '/api/mail-monitor/status':
-                    return self.reply(200, {'revision': str(report.stat().st_mtime_ns)})
-                if route == '/mail-monitor':
-                    return self.reply(200, report.read_bytes(), 'text/html; charset=utf-8')
-                return self.reply(200, load_payload(report))
+                    reminders = report.parent / revision_reminders.STORE
+                    return self.reply(200, {'revision': str(report.stat().st_mtime_ns) + ':' +
+                                           str(reminders.stat().st_mtime_ns if reminders.exists() else 0)})
+                try:
+                    payload = load_payload(report)
+                    if not payload:
+                        raise ValueError('Missing private report')
+                    payload = revision_reminders.decorate(payload, report.parent)
+                    if route == '/mail-monitor':
+                        return self.reply(200, render_report(payload).encode(), 'text/html; charset=utf-8')
+                    return self.reply(200, payload)
+                except (OSError, ValueError):
+                    return self.reply(503, {'error': '本地报告或投递提醒暂不可读，原文件已保留。'})
             with state.lock:
                 payload = state.payload
                 job = dict(state.job)
@@ -542,6 +552,27 @@ def make_server(state, port):
             self.reply(404, {"error": "Not found"})
 
         def do_POST(self):
+            if self.path == '/api/mail-monitor/reminders':
+                if not self.local_request() or self.headers.get('X-Patch-Reminder') != '1':
+                    return self.reply(403, {'error': 'Local reminder request required'})
+                if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
+                    return self.reply(415, {'error': '请使用 JSON 提醒请求。'})
+                try:
+                    length = int(self.headers.get('Content-Length', '0'))
+                    if not 0 < length <= 2048:
+                        return self.reply(413, {'error': '提醒请求大小无效。'})
+                    self.connection.settimeout(10)
+                    request = json.loads(self.rfile.read(length))
+                    report = monitor_report_path()
+                    payload = load_payload(report)
+                    if not payload or not payload.get('private_mailbox'):
+                        return self.reply(404, {'error': '请先启动本地邮箱监测。'})
+                    result = revision_reminders.action(payload, report.parent, request)
+                    return self.reply(200, result)
+                except ValueError as exc:
+                    return self.reply(400, {'error': str(exc)})
+                except OSError:
+                    return self.reply(409, {'error': '提醒正在更新或暂不可写，请稍后重试。'})
             if not self.local_request() or self.headers.get("X-Patch-Import") != "1":
                 return self.reply(403, {"error": "Local import required"})
             if self.path != "/api/import":
