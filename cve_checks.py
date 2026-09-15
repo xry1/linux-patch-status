@@ -137,7 +137,7 @@ def check(records, index=None, crosscheck=None):
                         continue
                     seen.add(key)
                     second = corroboration[match['id']]
-                    evidence = {**match, 'cvelist': second}
+                    evidence = {**match, 'cvelist': second, 'severity': second.get('severity', {'level': 'unknown'})}
                     if second.get('state') == 'PUBLISHED' and sha in second.get('matching_fixed', []):
                         entry['matches'].append(evidence)
                     else:
@@ -211,14 +211,50 @@ def decorate(payload):
     payload['cve_confirmed_records'] = sum(bool(r.get('cve_matches')) for r in payload['records'])
     payload['cve_candidate_records'] = sum(r.get('cve_state') == 'pending_review' for r in payload['records'])
     if set(targets(payload['records'])) & set(snapshot.get('records', {})):
-        payload['revision'] = payload.get('revision', '').split(':cve:')[0] + ':cve:' + snapshot.get('attempted_at', '')
+        payload['revision'] = payload.get('revision', '').split(':cve:')[0] + ':cve:' + snapshot.get('attempted_at', '') + ':' + snapshot.get('severity_checked_at', '')
     return payload
+
+
+def refresh_severity():
+    """Refresh ratings of existing confirmed associations without changing fix-check dates."""
+    import linux_cna
+    snapshot = read_store()
+    groups = {}
+    for entry in snapshot.get('records', {}).values():
+        for match in entry.get('matches', []):
+            groups.setdefault(match['id'], set()).add(match['commit'])
+    def fetch(item):
+        identifier, shas = item
+        try:
+            record = linux_cna.cvelist_check(identifier, shas)
+            if record['state'] != 'PUBLISHED' or not shas.issubset(record['matching_fixed']):
+                raise ValueError('CVE association needs rechecking')
+            return identifier, record['severity'], None
+        except Exception as exc:
+            return identifier, None, type(exc).__name__
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        results = list(pool.map(fetch, groups.items()))
+    at = datetime.now(timezone.utc).isoformat(timespec='seconds')
+    for identifier, rating, error in results:
+        for entry in snapshot.get('records', {}).values():
+            for match in entry.get('matches', []):
+                if match['id'] == identifier:
+                    if rating is not None:
+                        match['severity'] = {**rating, 'checked_at': at}
+                    match['severity_error'] = error
+    snapshot['severity_checked_at'] = at
+    save(snapshot)
+    print(json.dumps({'queried': len(results), 'failed': sum(bool(x[2]) for x in results)}, ensure_ascii=False))
+    return int(any(x[2] for x in results))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--if-due', action='store_true')
+    parser.add_argument('--refresh-severity', action='store_true', help='Refresh CVSS ratings for already confirmed CVEs')
     args = parser.parse_args()
+    if args.refresh_severity:
+        return refresh_severity()
     old = read_store()
     if args.if_due and not due(old, datetime.now().astimezone()):
         print('not_due: weekly Applied-only Linux CNA check')

@@ -159,6 +159,28 @@ def reverse_index(index):
     return result
 
 
+def severity_record(value, source):
+    """Keep all CVSS v3/v4 assessments; prefer CNA, then newest version/highest score."""
+    ratings = []
+    containers = value.get('containers', {})
+    for role, container in [('CNA', containers.get('cna', {}))] + [('ADP', x) for x in containers.get('adp', [])]:
+        provider = container.get('providerMetadata', {})
+        for metric in container.get('metrics', []):
+            for field, version in [('cvssV4_0', '4.0'), ('cvssV3_1', '3.1'), ('cvssV3_0', '3.0')]:
+                cvss = metric.get(field, {})
+                score = cvss.get('baseScore')
+                if isinstance(score, bool) or not isinstance(score, (int, float)) or not 0 <= score <= 10:
+                    continue
+                level = 'none' if score == 0 else 'low' if score < 4 else 'medium' if score < 7 else 'high' if score < 9 else 'critical'
+                ratings.append({'level': level, 'score': score, 'version': version,
+                    'vector': cvss.get('vectorString', ''), 'role': role,
+                    'provider': provider.get('shortName') or provider.get('orgId') or role,
+                    'source': source})
+    ratings.sort(key=lambda x: (x['role'] == 'CNA', x['version'], x['score']), reverse=True)
+    return {**(ratings[0] if ratings else {'level': 'unknown', 'source': source}),
+            'ratings': ratings, 'record_updated_at': value.get('cveMetadata', {}).get('dateUpdated', '')}
+
+
 def cvelist_check(identifier, shas):
     from api_transport import windows_json
     year, number = identifier.split('-')[1:]
@@ -176,4 +198,5 @@ def cvelist_check(identifier, shas):
                      if v.get('status') == 'affected' and v.get('versionType') == 'git'
                      and SHA.fullmatch(v.get('lessThan', '')))
     return {'id': identifier, 'state': meta.get('state'), 'updated_at': meta.get('dateUpdated', ''),
-            'matching_fixed': sorted(fixed & set(shas)), 'source': url}
+            'matching_fixed': sorted(fixed & set(shas)), 'source': url,
+            'severity': severity_record(value, url)}

@@ -29,6 +29,7 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
 @media(max-width:850px){.backlog-grid{grid-template-columns:1fr}}
 </style>
 <style>
+.severity-critical{color:#a32335!important;border-color:#e3a5ae!important}.severity-high{color:#b94226!important;border-color:#efbaaa!important}.severity-medium{color:#936210!important;border-color:#e4c98f!important}.severity-low{color:#255bd4!important;border-color:#a9c1ed!important}.severity-unknown,.severity-none{color:var(--muted)!important}
 .workspace-nav{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 0;margin:16px 0;background:var(--bg);border-bottom:1px solid var(--line)}.workspace-nav button[aria-current=page],.mail-nav button[aria-current=page]{background:var(--blue);color:white;border-color:var(--blue)}.workspace-nav a{padding:8px 12px;text-decoration:none}.view-heading{margin:18px 0 6px;font-size:20px}.mail-nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.view-description{color:var(--muted);margin-bottom:16px}.workspace-view{min-width:0}#monitorPanel{margin-top:16px}#monitorPanel #backlogPanel{margin-top:0!important}#cvePanel table{min-width:0}
 @media(max-width:600px){.workspace-nav{gap:5px}.workspace-nav button,.workspace-nav a,.mail-nav button{padding:8px;font-size:13px}.header h1{font-size:23px}}
 </style>
@@ -65,10 +66,12 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
   <section class="panel" id="cvePanel" aria-label="CVE 独立统计">
     <h2>CVE · 官方修复关联</h2>
     <div class="cve-stats" id="cveStats"></div>
+    <div class="cve-stats" id="cveSeverityStats" aria-label="CVE 严重程度统计"></div>
+    <p class="legend">严重程度采用 CVE 官方 JSON 中的 CVSS 基础评分：优先 CNA，其次 ADP；同类优先 CVSS 4.0、3.1、3.0，再取最高分。Low 0.1–3.9 · Medium 4.0–6.9 · High 7.0–8.9 · Critical 9.0–10.0。没有可用评分显示未评级，0 分单列 None；不使用 LLM 推断。</p>
     <p class="legend" id="cveStatsScope"></p>
     <p class="legend" id="cveStatsTime"></p>
     <details><summary id="cveListTitle">查看已确认 CVE 清单</summary>
-      <div class="table-wrap"><table><thead><tr><th scope="col">CVE 编号</th><th scope="col">关联补丁 · 点击查看官方证据</th></tr></thead><tbody id="cveList"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th scope="col">CVE 编号</th><th scope="col">严重程度 / 评分来源</th><th scope="col">关联补丁 · 点击查看官方证据</th></tr></thead><tbody id="cveList"></tbody></table></div>
     </details>
   </section>
   <section class="panel" id="monitorPanel" hidden aria-label="邮箱监测"><h2>邮箱回复 · 本地阅读</h2><p class="legend" id="monitorStatus"></p>
@@ -242,6 +245,14 @@ async function loadPublicationStatus(){
 }
 function notify(message,detail='',kind=''){ $('importMessage').textContent=message;$('importDetail').textContent=detail;$('importNotice').className='notice '+kind; }
 function saveBlob(text,name,type='text/plain;charset=utf-8'){const u=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+const severityLabels={critical:'Critical',high:'High',medium:'Medium',low:'Low',none:'None',unknown:'未评级'};
+function severityHtml(c){
+  const s=c.severity||{},label=severityLabels[s.level]||severityLabels.unknown;
+  return '<span class="status severity-'+esc(s.level||'unknown')+'">'+label+(s.score!=null?' · '+esc(s.score):'')+'</span>'+(s.version?'<small style="display:block">CVSS '+esc(s.version)+' · '+esc(s.role)+' / '+esc(s.provider)+'</small>':'')+
+    (s.source?'<div>'+safeLink(s.source,'评分记录')+'</div>':'')+
+    (s.vector?'<details><summary>评分依据'+(s.ratings?.length>1?' · '+s.ratings.length+' 份评估':'')+'</summary>'+esc(s.vector)+(s.ratings||[]).map(r=>'<p>'+esc(r.role+' / '+r.provider+' · CVSS '+r.version+' · '+r.score+' · '+r.vector)+'</p>').join('')+'</details>':'')+
+    (c.severity_error?'<small class="check-error">评分更新失败，请核对原始记录</small>':'');
+}
 function cveStatistics(items){
   const applied=items.filter(r=>r.kind==='patch'&&r.signals?.applied), byCve=new Map(), linked=new Set();
   const counts={confirmed:0,unmatched:0,missing_commit:0,pending_review:0,error:0,unqueried:0};
@@ -263,8 +274,12 @@ function renderCveStatistics(){
   const times=[...new Set(s.applied.map(r=>r.cve_query?.at).filter(Boolean))].sort();
   $('cveStatsTime').textContent=times.length?'官方核查时间：'+timeText(times.at(-1))+(times.length>1?'（部分补丁结果来自较早核查，请查看各项证据）':''):'尚无官方核查记录。';
   const ids=[...s.byCve.keys()].sort((a,b)=>b.localeCompare(a,undefined,{numeric:true}));
+  const ratings=new Map(ids.map(id=>[id,[...s.byCve.get(id).values()].flatMap(r=>r.cve_matches||[]).find(m=>m.id===id)]));
+  const severityCounts={critical:0,high:0,medium:0,low:0,unknown:0,none:0};
+  for(const m of ratings.values()){const level=m?.severity?.level;severityCounts[Object.hasOwn(severityCounts,level)?level:'unknown']++;}
+  $('cveSeverityStats').innerHTML=Object.entries(severityCounts).filter(([level,n])=>level!=='none'||n).map(([level,n])=>'<div class="stat severity-'+level+'"><span>'+severityLabels[level]+'</span><strong>'+n+'</strong><div class="sub">按 CVE 编号去重</div></div>').join('');
   $('cveListTitle').textContent='查看已确认 CVE 清单 · '+ids.length+' 个编号 / '+s.linked.size+' 个补丁';
-  $('cveList').innerHTML=ids.map(id=>'<tr><td>'+safeLink('https://www.cve.org/CVERecord?id='+encodeURIComponent(id),id)+'</td><td>'+[...s.byCve.get(id).values()].map(r=>'<button class="evidence-link" data-record="'+esc(r.id)+'" data-context="1">'+esc(r.title)+'</button>').join('')+'</td></tr>').join('')||'<tr><td colspan="2" class="empty">暂无已确认的 CVE 修复关联。</td></tr>';
+  $('cveList').innerHTML=ids.map(id=>'<tr><td>'+safeLink('https://www.cve.org/CVERecord?id='+encodeURIComponent(id),id)+'</td><td>'+severityHtml(ratings.get(id))+'</td><td>'+[...s.byCve.get(id).values()].map(r=>'<button class="evidence-link" data-record="'+esc(r.id)+'" data-context="1">'+esc(r.title)+'</button>').join('')+'</td></tr>').join('')||'<tr><td colspan="3" class="empty">暂无已确认的 CVE 修复关联。</td></tr>';
 }
 function renderSummary(){
   renderCveStatistics();
@@ -443,7 +458,7 @@ function recordRow(r,q,changed,options={}){
 }
 function cveContext(r){
   const q=r.cve_query||{}, source=q.official_source||{};
-  const matches=(items,label)=>(items||[]).map(c=>'<div class="event"><b>'+esc(label)+' · '+safeLink('https://www.cve.org/CVERecord?id='+encodeURIComponent(c.id),c.id)+'</b><p>'+esc(c.title||'')+'</p><code>'+esc(c.commit)+'</code><p>'+safeLink(c.proof?.source,'Linux CNA 修复证据')+' · '+safeLink(c.cvelist?.source,'CVE 官方 JSON')+'</p><small>'+esc(c.proof?.evidence||'')+'</small></div>').join('');
+  const matches=(items,label)=>(items||[]).map(c=>'<div class="event"><b>'+esc(label)+' · '+safeLink('https://www.cve.org/CVERecord?id='+encodeURIComponent(c.id),c.id)+'</b><p>'+esc(c.title||'')+'</p>'+severityHtml(c)+'<code>'+esc(c.commit)+'</code><p>'+safeLink(c.proof?.source,'Linux CNA 修复证据')+' · '+safeLink(c.cvelist?.source,'CVE 官方 JSON')+'</p><small>'+esc(c.proof?.evidence||'')+'</small></div>').join('');
   return '<h3>CVE 修复关联 · 官方记录</h3><p class="legend">'+(q.at?'核查时间：'+esc(timeText(q.at)):'尚未执行官方修复提交匹配')+'。只确认明确的修复 SHA；暂未匹配不代表没有 CVE。</p>'+
     (source.revision?'<p class="legend">Linux CNA 数据版本 '+esc(source.revision.slice(0,12))+' · 源更新时间 '+esc(timeText(source.committed_at))+' · '+source.published_records+' 条已发布记录</p>':'')+
     matches(r.cve_matches,'已确认')+matches(q.candidates,'待核实')+
