@@ -21,6 +21,10 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
 @media(max-width:850px){.sync-grid{grid-template-columns:1fr}.filters label:first-child{min-width:0;width:100%}.thread-context{max-height:28dvh}}
 @media(max-width:600px){table{min-width:0}thead{display:none}table,tbody,tr,td{display:block;width:100%}tr{border-bottom:1px solid var(--line);padding:10px 0}td{border:0;padding:5px 0}td:first-child{padding-top:8px}td:last-child{padding-bottom:10px}.filters input[type=date]{width:100%}.focus-tabs button{font-size:12px;padding:7px 9px}.thread-context{padding:7px 12px}.reader-content{grid-template-rows:115px minmax(0,1fr)}.sync-grid{gap:7px}.sync-grid .panel{padding:10px 12px}}
 </style>
+<style>
+.backlog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.backlog-card{border:1px solid var(--line);border-radius:9px;padding:16px;min-width:0}.backlog-card h3{font-size:14px;margin:8px 0;overflow-wrap:anywhere}.backlog-card p{white-space:pre-wrap;overflow-wrap:anywhere}.backlog-card ol{padding-left:22px;font-size:13px}.backlog-card pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f6f8fc;padding:12px;font:12px/1.6 Consolas,monospace}.backlog-card .actions{margin-top:12px}.backlog-card button{font-size:12px}.backlog-card .evidence-link{display:block}.backlog-card small{color:var(--muted)}.backlog-card.needs_reply,.backlog-card.needs_work{border-left:3px solid var(--orange)}
+@media(max-width:850px){.backlog-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <main>
@@ -57,6 +61,15 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
         <div class="table-wrap" style="max-height:340px;overflow:auto"><table aria-label="文件夹监测明细"><thead><tr><th>文件夹</th><th>状态</th><th>最近成功检查</th><th>说明</th></tr></thead><tbody id="folderRows"></tbody></table></div>
       </details>
     </div>
+    <section aria-label="积压邮件助手" style="margin-top:20px" id="backlogPanel">
+      <h2>积压邮件助手 <span class="badge">GLM · 供你核对</span></h2>
+      <p class="legend" id="backlogSchedule"></p>
+      <div class="sync-grid" aria-label="待办统计"><div class="panel"><small>需要回复 / 修改</small><strong id="backlogActionCount">—</strong></div><div class="panel"><small>需要人工确认</small><strong id="backlogUncertainCount">—</strong></div><div class="panel"><small>等待对方</small><strong id="backlogWaitingCount">—</strong></div></div>
+      <p class="legend" id="backlogCoverage"></p>
+      <div class="filters"><label>搜索待办<input id="backlogSearch" type="search" placeholder="补丁、系列或建议"></label><label>显示<select id="backlogFilter"><option value="active">需要我处理</option><option value="needs_reply">需要回复</option><option value="needs_work">需要修改 / 核实</option><option value="uncertain">需要人工确认</option><option value="unassessed">待分析</option><option value="waiting">等待对方</option><option value="closed">已处理 / 忽略 / 暂无待办</option><option value="snoozed">已延后</option><option value="all">全部</option></select></label></div>
+      <p class="legend" id="backlogCount" aria-live="polite"></p><div class="backlog-grid" id="backlogItems"></div>
+      <div class="pagination"><button id="backlogPrev">上一页</button><span id="backlogPage"></span><button id="backlogNext">下一页</button></div>
+    </section>
     <section aria-label="下一版本投递提醒" style="margin-top:20px">
       <h2>下一版本投递提醒</h2>
       <p class="legend">需要重投时开启。按前一版投递时间计算间隔，默认 24 小时；到点后在下一轮后台检查时提醒一次。新版本被收录后，旧提醒自动结束。</p>
@@ -204,8 +217,38 @@ function renderMonitor(){
   $('folderBackfill').textContent='跟踪起点：'+timeText(scan.backfill_since||status.initialized_at);
   renderFolders();
   renderReminders();
+  renderBacklog();
   const batches=new Map();for(const r of records)for(const b of r.ai_updates||[])if(!batches.has(b.id))batches.set(b.id,{b,r});
   $('aiUpdates').innerHTML=[...batches.values()].sort((a,b)=>b.b.created_at.localeCompare(a.b.created_at)).slice(0,20).map(({b,r})=>aiUpdateHTML(b,r)).join('')||'<p class="legend">新回复到达后，这里会显示摘要、待办和原文入口。首次连接建立起点，不推送历史邮件。</p>';
+}
+let backlogPage=1;
+const backlogNames={needs_reply:'需要回复',needs_work:'需要修改 / 核实',waiting:'等待对方',resolved:'暂无待办',uncertain:'需要人工确认',unassessed:'待分析',done:'已处理',ignored:'已忽略',snoozed:'已延后'};
+function renderBacklog(){
+  if(!monitorMode)return;
+  const report=data.backlog_agent||{}, counts=report.counts||{}, schedule=report.schedule||{}, last=report.digests?.[0];
+  $('backlogActionCount').textContent=(counts.needs_reply||0)+(counts.needs_work||0)+' 项';
+  $('backlogUncertainCount').textContent=(counts.uncertain||0)+' 项';$('backlogWaitingCount').textContent=(counts.waiting||0)+' 项';
+  $('backlogSchedule').textContent=(schedule.start_date?'每天 09:00（北京时间）飞书晨报 · 从 '+schedule.start_date+' 开始 · 请保持电脑与 Codex 运行':'每日晨报尚未登记')+(last?' · 最近晨报 '+last.date+'：'+({sent:'飞书已确认',empty:'无待办，未发送',sending:'正在发送',uncertain:'结果未确认，请核对飞书',pending:'发送失败，可重试',failed:'发送失败'}[last.status]||last.status):'')+'。无待办且分析完成时保持安静。';
+  $('backlogCoverage').textContent=(report.coverage||'正在建立历史讨论索引。')+' GLM 已分析 '+(report.analyzed||0)+' 项，待分析 / 失败 '+(report.pending_analysis||0)+' 项；其余采用明确邮件信号。已读与已处理分别记录。';
+  const q=$('backlogSearch').value.trim().toLowerCase(),filter=$('backlogFilter').value;
+  const items=(report.items||[]).filter(i=>(!q||(i.title+' '+i.summary+' '+i.action_items.join(' ')).toLowerCase().includes(q))&&(filter==='all'||filter==='active'&&['needs_reply','needs_work','uncertain'].includes(i.status)||filter==='closed'&&['done','ignored','resolved'].includes(i.status)||i.status===filter));
+  const pages=Math.max(1,Math.ceil(items.length/8));backlogPage=Math.min(backlogPage,pages);
+  $('backlogPage').textContent=backlogPage+' / '+pages;$('backlogPrev').disabled=backlogPage<=1;$('backlogNext').disabled=backlogPage>=pages;
+  $('backlogCount').textContent=items.length+' 项 · 同一系列合并展示。已处理或忽略后，新的外部反馈会重新进入判断。';
+  $('backlogItems').innerHTML=items.slice((backlogPage-1)*8,backlogPage*8).map(i=>{
+    const button=(action,label)=>'<button data-backlog-action="'+action+'" data-backlog-id="'+esc(i.id)+'">'+label+'</button>';
+    const evidence=i.evidence_ids.map(mid=>{const r=records.find(r=>i.record_ids.includes(r.id)&&r.messages.some(m=>idOf(m)===mid));const m=r?.messages.find(m=>idOf(m)===mid);return r?mailButton(r,mid,'原文：'+m.sender+' · '+m.date):'';}).join('');
+    return '<article class="backlog-card '+esc(i.status)+'"><span class="badge">'+esc(backlogNames[i.status])+'</span>'+(i.priority==='high'?'<span class="badge">优先核对</span>':'')+'<h3>'+esc(i.title)+'</h3><small>v'+i.version+' · 最近讨论 '+esc(timeText(i.last_date))+' · '+(i.ai_state==='complete'?'GLM '+esc(i.model):i.ai_state==='rule'?'邮件信号':i.ai_state==='running'?'GLM 正在分析':i.ai_state==='error'?'分析失败，待核对':'等待 GLM 分析')+'</small><p style="margin-top:10px">'+esc(i.summary)+'</p>'+(i.action_items.length?'<ol>'+i.action_items.map(a=>'<li>'+esc(a)+'</li>').join('')+'</ol>':'')+(i.snoozed_until?'<p class="legend">延后至 '+esc(timeText(i.snoozed_until))+'</p>':'')+(i.error?'<p class="legend check-error">'+esc(i.error)+'</p>':'')+evidence+(i.reply_draft?'<details><summary>英文回复草稿 · 核对后自行发送</summary><pre>'+esc(i.reply_draft)+'</pre>'+button('copy','复制草稿')+'</details>':'')+'<div class="actions">'+(['done','ignored','snoozed'].includes(i.status)?button('reopen','重新核对'):button('done','已处理')+button('snooze','明天再提醒')+button('ignore','忽略'))+button('reanalyze','重新分析')+'</div></article>';
+  }).join('')||'<p class="legend">当前筛选下没有待办。</p>';
+}
+async function changeBacklog(id,action){
+  const item=data.backlog_agent?.items.find(i=>i.id===id);if(!item)return;
+  try{
+    if(action==='copy'){await navigator.clipboard.writeText(item.reply_draft);notify('草稿已复制。','请核对事实、收件人与上下文后自行发送。');return;}
+    const response=await fetch('/api/mail-monitor/backlog',{method:'POST',headers:{'Content-Type':'application/json','X-Patch-Backlog':'1'},body:JSON.stringify({id,action,fingerprint:item.fingerprint,days:1})});
+    const result=await response.json();if(!response.ok)throw Error(result.error||'待办保存失败');data.backlog_agent=result;renderBacklog();
+    notify('待办已更新。',action==='reanalyze'?'已登记分析请求，后台会在调用限额内处理。':'处理状态已保存在本机，晨报会使用最新状态。');
+  }catch(error){notify('无法更新待办。',error.message,'error');}
 }
 function renderFolders(){
   const q=$('folderSearch').value.trim().toLowerCase(), filter=$('folderFilter').value;
@@ -408,6 +451,9 @@ $('archiveFile').addEventListener('change',async()=>{
   finally{sending=false;$('archiveFile').value='';await poll();}
 });
 $('folderSearch').addEventListener('input',renderFolders);$('folderFilter').addEventListener('change',renderFolders);
+$('backlogSearch').addEventListener('input',()=>{backlogPage=1;renderBacklog();});$('backlogFilter').addEventListener('change',()=>{backlogPage=1;renderBacklog();});
+$('backlogPrev').addEventListener('click',()=>{backlogPage--;renderBacklog();});$('backlogNext').addEventListener('click',()=>{backlogPage++;renderBacklog();});
+$('backlogItems').addEventListener('click',e=>{const b=e.target.closest('[data-backlog-action]');if(b)changeBacklog(b.dataset.backlogId,b.dataset.backlogAction);});
 $('reminderTarget').addEventListener('change',renderReminderPreview);$('reminderHours').addEventListener('input',renderReminderPreview);
 $('scheduleReminder').addEventListener('click',()=>{const target=(data.revision_reminders?.targets||[]).find(t=>t.id===$('reminderTarget').value);if(target)changeReminder({action:'schedule',target_id:target.id,source_id:target.source_id,hours:Number($('reminderHours').value)});});
 $('revisionReminderList').addEventListener('click',e=>{const b=e.target.closest('[data-reminder-action]');if(b)changeReminder({action:b.dataset.reminderAction,id:b.dataset.reminderId});});

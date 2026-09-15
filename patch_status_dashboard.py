@@ -27,6 +27,7 @@ from patch_analysis import analyze, clean_title, commit_references, regroup, sub
 from applied_evidence import apply_verifications, load_verifications
 from patch_series import applied_submissions, build_series
 import revision_reminders
+import backlog_agent
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -524,13 +525,16 @@ def make_server(state, port):
                     return self.reply(404, {'error': '邮箱监测尚未配置，请先运行配置邮箱提醒.cmd。'})
                 if route == '/api/mail-monitor/status':
                     reminders = report.parent / revision_reminders.STORE
+                    backlog = report.parent / backlog_agent.STORE
                     return self.reply(200, {'revision': str(report.stat().st_mtime_ns) + ':' +
-                                           str(reminders.stat().st_mtime_ns if reminders.exists() else 0)})
+                                           str(reminders.stat().st_mtime_ns if reminders.exists() else 0) + ':' +
+                                           str(backlog.stat().st_mtime_ns if backlog.exists() else 0)})
                 try:
                     payload = load_payload(report)
                     if not payload:
                         raise ValueError('Missing private report')
                     payload = revision_reminders.decorate(payload, report.parent)
+                    payload = backlog_agent.decorate(payload, report.parent)
                     if route == '/mail-monitor':
                         return self.reply(200, render_report(payload).encode(), 'text/html; charset=utf-8')
                     return self.reply(200, payload)
@@ -552,6 +556,26 @@ def make_server(state, port):
             self.reply(404, {"error": "Not found"})
 
         def do_POST(self):
+            if self.path == '/api/mail-monitor/backlog':
+                if not self.local_request() or self.headers.get('X-Patch-Backlog') != '1':
+                    return self.reply(403, {'error': 'Local backlog request required'})
+                if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
+                    return self.reply(415, {'error': '请使用 JSON 待办请求。'})
+                try:
+                    length = int(self.headers.get('Content-Length', '0'))
+                    if not 0 < length <= 2048:
+                        return self.reply(413, {'error': '待办请求大小无效。'})
+                    self.connection.settimeout(10)
+                    request = json.loads(self.rfile.read(length))
+                    report = monitor_report_path()
+                    payload = load_payload(report)
+                    if not payload or not payload.get('private_mailbox'):
+                        return self.reply(404, {'error': '请先启动本地邮箱监测。'})
+                    return self.reply(200, backlog_agent.action(payload, report.parent, request))
+                except ValueError as exc:
+                    return self.reply(400, {'error': str(exc)})
+                except OSError:
+                    return self.reply(409, {'error': '待办正在更新，请稍后重试。'})
             if self.path == '/api/mail-monitor/reminders':
                 if not self.local_request() or self.headers.get('X-Patch-Reminder') != '1':
                     return self.reply(403, {'error': 'Local reminder request required'})

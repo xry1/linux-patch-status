@@ -29,6 +29,7 @@ from pathlib import Path
 
 import patch_status_dashboard as dashboard
 import revision_reminders
+import backlog_agent
 from mail_credentials import OFFICIAL_GLM_URL, glm_endpoint, interactive_config, read_credentials
 from api_transport import NativeHTTPError, windows_json
 
@@ -45,6 +46,7 @@ DEFAULTS = {
     'glm_api_url': OFFICIAL_GLM_URL, 'glm_protocol': 'chat_completions',
     'feishu_keyword': 'Linux Patch', 'feishu_max_calls_per_cycle': 10,
     'public_url': 'https://xry1.github.io/linux-patch-status/',
+    'backlog_enabled': False, 'backlog_max_calls_per_cycle': 2, 'backlog_max_calls_per_day': 30,
 }
 
 
@@ -551,6 +553,7 @@ def combined_payload(seed, state, config):
         by_title[key]['messages'].append(copy.deepcopy(item))
     payload = dashboard.upgrade_payload({**copy.deepcopy(seed), 'records': records, 'author_email': config['author_email']})
     payload.update(hosting_mode='mail_monitor', private_mailbox=True, source='本地邮箱增量 + 已有公开归档')
+    payload['author_aliases'] = sorted(own_addresses(config))
     payload['mail_monitor'] = {'initialized_at': state['initialized_at'], 'last_checked_at': state['last_checked_at'],
         'last_error': state['last_error'], 'private_messages': len(state['messages']),
         'pending': sum(b['delivery'] in ('pending', 'sending') for b in state['batches'].values()),
@@ -768,6 +771,7 @@ def render_private(directory, config, seed, state):
     payload = combined_payload(seed, state, config)
     payload['mail_monitor']['configured'] = (directory / 'credentials.json').is_file()
     payload = revision_reminders.decorate(payload, directory)
+    payload = backlog_agent.decorate(payload, directory)
     dashboard.save_report(directory / 'report.html', payload)
 
 
@@ -874,6 +878,13 @@ def main():
                 except (OSError, ValueError, RuntimeError):
                     print(now() + ' 投递提醒检查失败，原提醒记录已保留。', file=sys.stderr, flush=True)
                     code = 1
+                if config.get('backlog_enabled'):
+                    try:
+                        backlog_agent.process(combined_payload(seed, state, config), directory, config,
+                            os.environ.get('PATCH_GLM_API_KEY') or saved.get('PATCH_GLM_API_KEY'), post_json)
+                        render_private(directory, config, seed, state)
+                    except (OSError, ValueError, RuntimeError):
+                        print(now() + ' 积压助手暂不可用或正在分析，稍后继续。', file=sys.stderr, flush=True)
                 if not args.watch:
                     return code
                 time.sleep(config['poll_seconds'])
