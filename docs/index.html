@@ -15,6 +15,9 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
 .series-row{background:#f1f5fd}.series-row td{border-top:2px solid #c8d7f0}.series-toggle{border:0;background:transparent;padding:0;text-align:left;color:var(--blue);font-weight:650}.series-child td:first-child{padding-left:28px;border-left:3px solid #c8d7f0}.series-child.context-row{background:#fafbfd}.series-label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.series-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:12px 0}.series-tools label{display:flex;gap:8px;align-items:center}.series-nav{padding:8px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#f8faff}.series-nav select{min-width:0;max-width:100%;flex:1}.series-nav small{width:100%;color:var(--muted)}.reader-shell{grid-template-rows:auto auto auto auto minmax(0,1fr)}.series-progress{font-size:12px;line-height:1.7}.series-versions{max-width:300px;font-size:12px}.series-versions li{margin:8px 0;overflow-wrap:anywhere}
 </style>
 <style>
+#cvePanel{margin:20px 0}#cvePanel .cve-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin:14px 0}#cvePanel .stat{background:var(--bg);padding:12px}#cvePanel .stat:first-child{background:#e9f4ee;border-color:#b9d9c7}#cvePanel .stat:first-child strong{color:var(--green)}#cvePanel td{overflow-wrap:anywhere}#cvePanel .evidence-link{display:block;text-align:left;margin:3px 0}#cvePanel table{min-width:540px}
+</style>
+<style>
 .sync-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}.sync-grid .panel{padding:13px 16px}.sync-grid small{display:block;color:var(--muted)}.sync-grid strong{display:block;font-size:14px;margin:5px 0;font-weight:550}.focus-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 12px}.focus-tabs button[aria-pressed=true]{background:var(--blue);color:white;border-color:var(--blue)}.stat button{padding:0;border:0;background:none;text-align:left;width:100%}.badge{display:inline-block;padding:2px 6px;background:#edf1f6;border-radius:4px;font-size:11px;color:var(--muted);margin:3px 4px 0 0}.unread{color:var(--blue);font-weight:650}.attention-note{font-size:12px;color:var(--orange);margin-top:7px}.evidence-link{border:0;color:var(--blue);background:transparent;padding:3px 0;text-align:left;overflow-wrap:anywhere;font-size:12px}.pagination{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px}.filters input[type=date]{min-width:0;width:145px}.filters select{min-width:130px}.filters label:first-child{flex:1;min-width:240px}.latest-reply{font-size:12px;color:var(--muted);margin-top:6px;max-width:500px;overflow-wrap:anywhere}.reader-shell{grid-template-rows:auto auto auto minmax(0,1fr)}.thread-context{padding:8px 18px;border-bottom:1px solid var(--line);max-height:35dvh;overflow:auto}.event{border-left:2px solid var(--line);padding:6px 12px;margin-left:5px}.event small{color:var(--muted);display:block}.commit-list{display:grid;gap:8px;overflow-wrap:anywhere;font-size:12px}.commit-list code{font-size:11px}.diff-add{color:#17623b;background:#edf8ef;display:block}.diff-remove{color:#962b2b;background:#fff0ee;display:block}.diff-head{color:#255bd4;background:#edf3ff;display:block}.diff-quote{color:#728094;display:block}.mail-body span{min-height:1.65em}.check-error{color:var(--orange)}#changesNotice{margin:0 0 16px}.legend{font-size:12px;color:var(--muted);margin:8px 0 14px}.search-hit{color:var(--blue);font-size:12px}.row-title{padding:0;border:0;background:none;text-align:left;line-height:1.5;overflow-wrap:anywhere}.table-wrap td:nth-child(2){min-width:165px}
 .mail-body span{display:inline}
 .reader-shell{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto auto minmax(0,1fr)}.reader-shell>*{min-width:0}.reader-header{grid-row:1}.reader-header>div{min-width:0}.reader-header>button{flex-shrink:0}.series-nav{grid-row:2}.series-nav small{overflow-wrap:anywhere}.thread-context{grid-row:3}.reader-tools{grid-row:4}.reader-content{grid-row:5}
@@ -49,6 +52,15 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
   <p class="legend" id="topicLegend"></p>
   <p class="legend" id="calibrationNotice"></p>
   <p class="legend" id="seriesNotice"></p>
+  <section class="panel" id="cvePanel" aria-label="CVE 独立统计">
+    <h2>CVE · 官方修复关联</h2>
+    <div class="cve-stats" id="cveStats"></div>
+    <p class="legend" id="cveStatsScope"></p>
+    <p class="legend" id="cveStatsTime"></p>
+    <details><summary id="cveListTitle">查看已确认 CVE 清单</summary>
+      <div class="table-wrap"><table><thead><tr><th scope="col">CVE 编号</th><th scope="col">关联补丁 · 点击查看官方证据</th></tr></thead><tbody id="cveList"></tbody></table></div>
+    </details>
+  </section>
   <section class="panel" id="monitorPanel" hidden aria-label="邮箱监测"><h2>邮箱回复 · 本地阅读</h2><p class="legend" id="monitorStatus"></p>
     <div id="folderMonitor" hidden>
       <div class="sync-grid" aria-label="文件夹扫描状态">
@@ -177,13 +189,37 @@ async function loadPublicationStatus(){
 }
 function notify(message,detail='',kind=''){ $('importMessage').textContent=message;$('importDetail').textContent=detail;$('importNotice').className='notice '+kind; }
 function saveBlob(text,name,type='text/plain;charset=utf-8'){const u=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+function cveStatistics(items){
+  const applied=items.filter(r=>r.kind==='patch'&&r.signals?.applied), byCve=new Map(), linked=new Set();
+  const counts={confirmed:0,unmatched:0,missing_commit:0,pending_review:0,error:0,unqueried:0};
+  for(const r of applied){
+    const state=Object.hasOwn(counts,r.cve_state)?r.cve_state:'unqueried';counts[state]++;
+    if(state!=='confirmed')continue;
+    for(const match of r.cve_matches||[]){
+      if(!/^CVE-\d{4}-\d{4,}$/.test(match.id))continue;
+      if(!byCve.has(match.id))byCve.set(match.id,new Map());
+      byCve.get(match.id).set(r.id,r);linked.add(r.id);
+    }
+  }
+  return {applied,counts,byCve,linked};
+}
+function renderCveStatistics(){
+  const s=cveStatistics(records), cards=[['已确认 CVE',s.byCve.size,'按 CVE 编号去重'],['关联补丁',s.linked.size,'已确认的 Applied 子补丁'],['官方暂未匹配',s.counts.unmatched,'不代表没有 CVE'],['缺少修复提交',s.counts.missing_commit,'尚无法精确查询'],['待核实 / 查询失败',s.counts.pending_review+s.counts.error,'待核实 '+s.counts.pending_review+' · 失败 '+s.counts.error]];
+  $('cveStats').innerHTML=cards.map(([label,count,note])=>'<div class="stat"><span>'+esc(label)+'</span><strong>'+count+'</strong><div class="sub">'+esc(note)+'</div></div>').join('');
+  $('cveStatsScope').textContent='范围：全部 '+s.applied.length+' 个 Applied 子补丁，未查询 '+s.counts.unqueried+' 个；不随下方筛选变化。同一 CVE 只计一次，同一补丁关联多个 CVE 仍只计一个补丁。Series 的 Applied 统计仍按一组；OSV 受影响信息及待核实、失败结果不计入已确认。';
+  const times=[...new Set(s.applied.map(r=>r.cve_query?.at).filter(Boolean))].sort();
+  $('cveStatsTime').textContent=times.length?'官方核查时间：'+timeText(times.at(-1))+(times.length>1?'（部分补丁结果来自较早核查，请查看各项证据）':''):'尚无官方核查记录。';
+  const ids=[...s.byCve.keys()].sort((a,b)=>b.localeCompare(a,undefined,{numeric:true}));
+  $('cveListTitle').textContent='查看已确认 CVE 清单 · '+ids.length+' 个编号 / '+s.linked.size+' 个补丁';
+  $('cveList').innerHTML=ids.map(id=>'<tr><td>'+safeLink('https://www.cve.org/CVERecord?id='+encodeURIComponent(id),id)+'</td><td>'+[...s.byCve.get(id).values()].map(r=>'<button class="evidence-link" data-record="'+esc(r.id)+'" data-context="1">'+esc(r.title)+'</button>').join('')+'</td></tr>').join('')||'<tr><td colspan="2" class="empty">暂无已确认的 CVE 修复关联。</td></tr>';
+}
 function renderSummary(){
+  renderCveStatistics();
   appliedUnits=data.applied_submissions?.units||[];appliedEvidence=new Set(appliedUnits.flatMap(u=>u.evidence_record_ids));
   const signals=data.signal_counts||{}, kinds=data.kind_counts||{}, counts={Applied:signals.applied||0,Reverted:signals.reverted||0,Reviewed:signals.reviewed||0,Submitted:records.filter(r=>r.status==='Submitted').length,'Needs attention':data.attention_count||0};
   $('total').textContent=kinds.patch||0;$('applied').textContent=counts.Applied;$('reviewed').textContent=counts.Reviewed;$('submitted').textContent=records.filter(waiting).length;$('attention').textContent=counts['Needs attention'];
   $('mailCount').textContent=records.length+' 个归档主题 · '+(data.stored_messages||0).toLocaleString()+' 封邮件';
 $('topicLegend').textContent='归档范围：'+Object.entries(kindNames).map(([k,label])=>(kinds[k]||0)+' 个'+label).join(' · ')+'。Applied 按投稿去重（独立补丁 1 个、同一系列 1 个）；其余统计按主题计数，信号可重合，不能相加。';
-  $('topicLegend').textContent+=' CVE 官方修复关联：'+records.filter(r=>r.cve_matches?.length).length+' 个子补丁；OSV 受影响命中不计入。';
   $('reviewDetail').textContent='另有 Acked '+(signals.acked||0)+' · Tested '+(signals.tested||0)+'（可重合）';
   const audit=data.applied_audit||{};
   const accepted=data.applied_submissions||{};
