@@ -53,6 +53,9 @@ def windows_json(url, value=None, token=None):
         response = json.loads(result.stdout.lstrip('\ufeff'))
         if not response.get('ok'):
             raise NativeHTTPError(response.get('status', 0))
-        return json.loads(response['body'])
+        body = response['body']
+        if body.startswith(")]}'\n"):
+            body = body.split('\n', 1)[1]  # Gitiles' documented JSON XSSI prefix.
+        return json.loads(body)
     except (OSError, subprocess.TimeoutExpired, ValueError, KeyError, TypeError):
         raise NativeHTTPError() from None

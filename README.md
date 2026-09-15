@@ -191,5 +191,11 @@ CVE 线索需要单独核对，不能据此认定某个 patch 获得了 CVE。
 只查询 Applied 的 patch 子项（封面不查询，series 统计仍合并），只使用完整修复提交，排除 Fixes 引入提交。
 结果保存于 `applied_cve_checks.json`，网页导入新 mbox 后按当前状态和 commit 匹配复用。
 缺失 commit 和请求失败单独显示；请求失败下次定时运行会重试，保留上次成功证据。
-OSV commit 查询返回受影响版本候选，不能确认修复归属；未命中不证明没有 CVE。
+主要依据是 Linux 官方 security/vulns 仓库的 .sha1 修复提交、.dyad 修复列，以及 JSON 中 Git 受影响范围的排他上界，绝不把普通 references 当作修复证据。
+首次建立本地索引，后续 Git 增量更新并重解析变化记录；rejected、删除及修正记录不会继续计为已确认。
+精确命中再读取 CVEProject/cvelistV5 的官方 JSON 核对 PUBLISHED 状态及修复上界，两者一致才显示“已确认修复关联”；不一致待核实，请求失败显示失败并保留历史。
+索引和完整官方数据仅存 local/，发布结果包含匹配 SHA、证据字段、官方数据版本和来源链接。
+网络更新失败不会使用旧索引冒充本次成功；kernel.org Git 不可用时使用 kernel.googlesource.com 的内核仓库镜像。
+原有 OSV 命中保留为独立“版本受影响信息”，不再进入修复关联统计。官方暂未匹配不证明没有 CVE。
+`python -X utf8 resolve_maintainer_commits.py` 可重试补齐已配置的四个维护者树补丁：按分支父链、标题、作者和改动文件核对，最多查60个提交；未找到不等于未接收，不将维护者树当作主线。
 此检查只读取公开归档，不上传私人邮箱内容，结果随现有 Pages 发布流程更新。

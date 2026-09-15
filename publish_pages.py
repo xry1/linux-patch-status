@@ -17,6 +17,7 @@ FILES = [
     "mail_monitor.py", "mail_credentials.py", "api_transport.py", "revision_reminders.py", "test_revision_reminders.py", "test_mail_monitor.py", "test_mail_folders.py", "MAIL_MONITOR.md",
     "backlog_agent.py", "test_backlog_agent.py",
     "cve_checks.py", "test_cve_checks.py", "applied_cve_checks.json",
+    "linux_cna.py", "test_linux_cna.py", "resolve_maintainer_commits.py", "maintainer_commits.json",
     "配置邮箱提醒.cmd", "启动邮箱监测.cmd",
     "生成网站.cmd", "发布网站.cmd", "docs/index.html", "docs/update.html", "docs/.nojekyll", "docs/sync-status.json",
 ]

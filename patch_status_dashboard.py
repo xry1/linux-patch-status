@@ -29,6 +29,7 @@ from patch_series import applied_submissions, build_series
 import revision_reminders
 import backlog_agent
 import cve_checks
+import resolve_maintainer_commits
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -155,6 +156,7 @@ def enrich_records(records, author_email=DEFAULT_EMAIL):
         record['cve_state'] = 'candidate' if record['cves_in_mail'] or record.get('osv_candidates') else 'unqueried'
         if record.get('osv_query'):
             record['cve_state'] = 'candidate' if record['cve_state'] == 'candidate' else record['osv_query']['state']
+    resolve_maintainer_commits.overlay(records)
     cve_checks.overlay(records)
     return sorted(records, key=lambda r: (r['last_date'], r['title']), reverse=True)
 
@@ -168,6 +170,8 @@ def upgrade_payload(payload):
         'mainline': sum(s['state'] == 'mainline' for s in payload['series']),
         'grouped_topics': sum(bool(r['series_ids']) for r in payload['records'])}
     payload['schema_version'] = 3
+    payload['cve_confirmed_records'] = sum(bool(r.get('cve_matches')) for r in payload['records'])
+    payload['cve_candidate_records'] = sum(r.get('cve_state') == 'pending_review' for r in payload['records'])
     payload['status_counts'] = dict(Counter(r['status'] for r in payload['records']))
     payload['kind_counts'] = dict(Counter(r['kind'] for r in payload['records']))
     payload['topic_signal_counts'] = {k: sum(r['signals'][k] for r in payload['records']) for k in ('applied', 'reviewed', 'acked', 'tested', 'mainline', 'mainline_history', 'reverted')}
@@ -642,7 +646,7 @@ def main():
     parser.add_argument("mbox_gz", type=Path, nargs="?", help=".mbox or .mbox.gz file")
     parser.add_argument("--author-email", default=DEFAULT_EMAIL)
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--check-cve", action="store_true", help="Query OSV affected-version candidates (not fix mappings)")
+    parser.add_argument("--check-cve", action="store_true", help="Match Applied repair commits against official Linux CNA records")
     parser.add_argument("--serve", action="store_true", help="Open a local website with an archive import button")
     parser.add_argument("--open", action="store_true", help="Open the local website in the default browser")
     parser.add_argument("--port", type=int, default=8765)

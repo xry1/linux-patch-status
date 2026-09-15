@@ -1,194 +1,481 @@
 {
-  "schema": 1,
-  "attempted_at": "2026-09-15T06:56:16+00:00",
-  "completed_at": "2026-09-15T06:56:16+00:00",
-  "source": "OSV affected-commit query; not a CVE repair-association search",
+  "schema": 2,
+  "attempted_at": "2026-09-15T07:26:19+00:00",
+  "completed_at": "2026-09-15T07:26:19+00:00",
   "records": {
     "2b4805549f42b8df": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "ebdb6b0cc453103972278258d88d555d43129aef"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "ebdb6b0cc453103972278258d88d555d43129aef"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "5f11b859aba5bb67": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [],
-      "errors": [],
       "state": "missing_commit",
-      "candidates": []
+      "matches": [],
+      "candidates": [],
+      "errors": [],
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [],
+        "errors": [],
+        "state": "missing_commit"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "7c44203887fb9e2a": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "bda8324270b1ac91bfba1df8928e0570e29759e8"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-80938",
+          "title": "wifi: mt76: mt7615: avoid waiting for mac work under the mt76 mutex",
+          "commit": "bda8324270b1ac91bfba1df8928e0570e29759e8",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80938.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "bda8324270b1ac91bfba1df8928e0570e29759e8",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "bda8324270b1ac91bfba1df8928e0570e29759e8",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80938.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-80938",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-14T11:59:02.208Z",
+            "matching_fixed": [
+              "bda8324270b1ac91bfba1df8928e0570e29759e8"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80938.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "bda8324270b1ac91bfba1df8928e0570e29759e8"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "637076efe88171af": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "33930840b5f0a79f826e7c69dc6cd78f72a67481"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": [
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "33930840b5f0a79f826e7c69dc6cd78f72a67481"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [
         {
           "id": "CVE-2026-89484",
           "commit": "33930840b5f0a79f826e7c69dc6cd78f72a67481",
           "summary": "lockd: fix NULL dereference on lockowner allocation failure",
           "source": "https://osv.dev/vulnerability/CVE-2026-89484"
         }
-      ]
+      ],
+      "removed_matches": []
     },
     "508b47b1bc809d42": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "3f92a64545165bdbb36dee8fa35626b295463313"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "3f92a64545165bdbb36dee8fa35626b295463313"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "3894e6486686ba70": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "f8e43fe0f22b7137ce456e6fe3581d3098174f74"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-89599",
+          "title": "fbdev: omapfb: panel-dsi-cm: initialize lock before registering display",
+          "commit": "f8e43fe0f22b7137ce456e6fe3581d3098174f74",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89599.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "f8e43fe0f22b7137ce456e6fe3581d3098174f74",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "f8e43fe0f22b7137ce456e6fe3581d3098174f74",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89599.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-89599",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-14T12:01:22.440Z",
+            "matching_fixed": [
+              "f8e43fe0f22b7137ce456e6fe3581d3098174f74"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89599.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "f8e43fe0f22b7137ce456e6fe3581d3098174f74"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "4b35430398b67689": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "612ccf42acd14bb2685fa60c3495ca13e63e8989"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "612ccf42acd14bb2685fa60c3495ca13e63e8989"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "ccb8cefe827bcef5": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "4105a4c0678b2808fc8046b60321b4f1cc7dae75"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "4105a4c0678b2808fc8046b60321b4f1cc7dae75"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "159c234ff129dcdb": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "e074c12c428c633e079154301207a6079a208583"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "e074c12c428c633e079154301207a6079a208583"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "7b3b630bc073dcca": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "6c97817e20598e5473094e0e38d1f51f1cf4dfff"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-80967",
+          "title": "ALSA: pcxhr: initialize mutexes before requesting threaded IRQ",
+          "commit": "6c97817e20598e5473094e0e38d1f51f1cf4dfff",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80967.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "6c97817e20598e5473094e0e38d1f51f1cf4dfff",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "6c97817e20598e5473094e0e38d1f51f1cf4dfff",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80967.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-80967",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-14T11:59:13.926Z",
+            "matching_fixed": [
+              "6c97817e20598e5473094e0e38d1f51f1cf4dfff"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80967.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": [
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "6c97817e20598e5473094e0e38d1f51f1cf4dfff"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [
         {
           "id": "CVE-2026-80829",
           "commit": "6c97817e20598e5473094e0e38d1f51f1cf4dfff",
           "summary": "ALSA: usb-audio: fix OOB write in snd_usbmidi_novation_output()",
           "source": "https://osv.dev/vulnerability/CVE-2026-80829"
         }
-      ]
+      ],
+      "removed_matches": []
     },
     "91b1345ba0a2f3e6": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "c73cb5b7c159246dd572277c668851a56e516019"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": [
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "c73cb5b7c159246dd572277c668851a56e516019"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [
         {
           "id": "CVE-2026-80829",
           "commit": "c73cb5b7c159246dd572277c668851a56e516019",
           "summary": "ALSA: usb-audio: fix OOB write in snd_usbmidi_novation_output()",
           "source": "https://osv.dev/vulnerability/CVE-2026-80829"
         }
-      ]
+      ],
+      "removed_matches": []
     },
     "8851bfdaefd58f7e": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "33abb7491e89285a41565670945293dda841afc4"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "33abb7491e89285a41565670945293dda841afc4"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "3ecea0a9c7d4913e": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "14dc3dee0efd18a7b85ba59879e7e217c7c6279a"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "14dc3dee0efd18a7b85ba59879e7e217c7c6279a"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "0a63e2e3cbdc3f32": {
-      "at": "2026-09-15T06:56:16+00:00",
-      "commits": [],
-      "errors": [],
-      "state": "missing_commit",
-      "candidates": []
+      "at": "2026-09-15T07:26:19+00:00",
+      "commits": [
+        "d5ea0d226e8f0801d78702142a124d78c317d822"
+      ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
+      "errors": []
     },
     "2a9ca751e9d7c1e4": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [],
-      "errors": [],
       "state": "missing_commit",
-      "candidates": []
+      "matches": [],
+      "candidates": [],
+      "errors": [],
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [],
+        "errors": [],
+        "state": "missing_commit"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "1b2012c4db6a9e95": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "e1406330d70e56dd44fa6fbafc86e77e5c80c122"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "e1406330d70e56dd44fa6fbafc86e77e5c80c122"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "68747837c3fa5fb3": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "4cfa625b60d55b81bc6620113f213349bcc85a4e"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "4cfa625b60d55b81bc6620113f213349bcc85a4e"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "9c922badf3fb2950": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "ed4f05d9f2f42fd866f55108db8123eefcc5fb33"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-80943",
+          "title": "wifi: rtlwifi: rtl8192du: check QoS TID before indexing tids",
+          "commit": "ed4f05d9f2f42fd866f55108db8123eefcc5fb33",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80943.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "ed4f05d9f2f42fd866f55108db8123eefcc5fb33",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "ed4f05d9f2f42fd866f55108db8123eefcc5fb33",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80943.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-80943",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-13T06:28:18.870Z",
+            "matching_fixed": [
+              "ed4f05d9f2f42fd866f55108db8123eefcc5fb33"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80943.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "ed4f05d9f2f42fd866f55108db8123eefcc5fb33"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "38f900538707c95b": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": [
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [
         {
           "id": "CVE-2026-80793",
           "commit": "43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7",
@@ -201,308 +488,959 @@
           "summary": "sctp: stop processing a packet once its association is deleted",
           "source": "https://osv.dev/vulnerability/CVE-2026-89479"
         }
-      ]
+      ],
+      "removed_matches": []
     },
     "1152f7246aad8924": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "c4da23777d35f4aaae7ff0ea9a503ba2702ef53c"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "c4da23777d35f4aaae7ff0ea9a503ba2702ef53c"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "8f0c04939361b88c": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "8a53f9102a0d3eeb8784999f925028acf339c276"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-80953",
+          "title": "i3c: master: adi: initialize the lock before enabling interrupts",
+          "commit": "8a53f9102a0d3eeb8784999f925028acf339c276",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80953.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "8a53f9102a0d3eeb8784999f925028acf339c276",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "8a53f9102a0d3eeb8784999f925028acf339c276",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80953.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-80953",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-13T06:28:26.721Z",
+            "matching_fixed": [
+              "8a53f9102a0d3eeb8784999f925028acf339c276"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80953.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "8a53f9102a0d3eeb8784999f925028acf339c276"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "3fe658e725fec144": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "3e5d1bf4bd687beb2cb4e32a07af695455925588"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "3e5d1bf4bd687beb2cb4e32a07af695455925588"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "46109ae67bf8e0f7": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "f48763beab4eea41fc480c9702ec6eebe8d75e4f"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": [
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "f48763beab4eea41fc480c9702ec6eebe8d75e4f"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [
         {
           "id": "CVE-2026-72406",
           "commit": "f48763beab4eea41fc480c9702ec6eebe8d75e4f",
           "summary": "net: sungem: fix probe error cleanup",
           "source": "https://osv.dev/vulnerability/CVE-2026-72406"
         }
-      ]
+      ],
+      "removed_matches": []
     },
     "e2ab5de9d048121a": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "7a20eb54224ab7481c1f5a1619a6a5677be93eed"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "7a20eb54224ab7481c1f5a1619a6a5677be93eed"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "602dc5faccb49c33": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "04405aeef4f8d7bcac6dcb1947acafdb4420c2c3"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "04405aeef4f8d7bcac6dcb1947acafdb4420c2c3"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "8aae52492e4bf043": {
-      "at": "2026-09-15T06:56:16+00:00",
-      "commits": [],
-      "errors": [],
-      "state": "missing_commit",
-      "candidates": []
+      "at": "2026-09-15T07:26:19+00:00",
+      "commits": [
+        "baf7e43b7fb5afb777353bf265ddf9d909f72b9f"
+      ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
+      "errors": []
     },
     "f9056af03581aa8f": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "0b352f04b9be2c83c0240aa6dae7257fefa90464"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "0b352f04b9be2c83c0240aa6dae7257fefa90464"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "10a60bd7f8430cb9": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "f918554fb7246e89b98ef90abe80801f038258b3"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "f918554fb7246e89b98ef90abe80801f038258b3"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "2777ff27ccc31b8d": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-72063",
+          "title": "gpio: tegra: do not call pinctrl for GPIO direction",
+          "commit": "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-72063.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-72063.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-72063",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-23T12:46:39.651Z",
+            "matching_fixed": [
+              "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72063.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "157e7b44d4271a6e": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "2a665946e0407a05a3f81bd56a08553c446498e0"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-68403",
+          "title": "wifi: brcmfmac: initialize SDIO data work before cleanup",
+          "commit": "2a665946e0407a05a3f81bd56a08553c446498e0",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-68403.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "2a665946e0407a05a3f81bd56a08553c446498e0",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "2a665946e0407a05a3f81bd56a08553c446498e0",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-68403.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-68403",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-19T16:34:54.805Z",
+            "matching_fixed": [
+              "2a665946e0407a05a3f81bd56a08553c446498e0"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68403.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "2a665946e0407a05a3f81bd56a08553c446498e0"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "659777370b073ee9": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "18f116931f52e3c3303ad4b15ff41eb89b0e4239"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": [
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "18f116931f52e3c3303ad4b15ff41eb89b0e4239"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [
         {
           "id": "CVE-2026-68143",
           "commit": "18f116931f52e3c3303ad4b15ff41eb89b0e4239",
           "summary": "net: slip: serialize receive against buffer reallocation",
           "source": "https://osv.dev/vulnerability/CVE-2026-68143"
         }
-      ]
+      ],
+      "removed_matches": []
     },
     "5502fe92a40b961a": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "ce1fed11d18e163baf7f875152a33bf80f625c1a"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-68179",
+          "title": "misc: nsm: only unlock nsm_dev on post-lock error paths",
+          "commit": "ce1fed11d18e163baf7f875152a33bf80f625c1a",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-68179.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "ce1fed11d18e163baf7f875152a33bf80f625c1a",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "ce1fed11d18e163baf7f875152a33bf80f625c1a",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-68179.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-68179",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-17T05:00:20.666Z",
+            "matching_fixed": [
+              "ce1fed11d18e163baf7f875152a33bf80f625c1a"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68179.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "ce1fed11d18e163baf7f875152a33bf80f625c1a"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "7e2f0e098b8e04f7": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "536fb3d739d75a03cb318c0c6fe799425cfea501"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-72005",
+          "title": "wifi: rt2x00: avoid full teardown before work setup in probe",
+          "commit": "536fb3d739d75a03cb318c0c6fe799425cfea501",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-72005.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "536fb3d739d75a03cb318c0c6fe799425cfea501",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "536fb3d739d75a03cb318c0c6fe799425cfea501",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-72005.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-72005",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-17T05:39:22.758Z",
+            "matching_fixed": [
+              "536fb3d739d75a03cb318c0c6fe799425cfea501"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72005.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "536fb3d739d75a03cb318c0c6fe799425cfea501"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "3fabe868f4974737": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "010382937fb69892b3469ac4d30af072262f59e8"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-64454",
+          "title": "usb: dwc3: run gadget disconnect from sleepable suspend context",
+          "commit": "010382937fb69892b3469ac4d30af072262f59e8",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64454.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "010382937fb69892b3469ac4d30af072262f59e8",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "010382937fb69892b3469ac4d30af072262f59e8",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64454.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-64454",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-17T04:55:58.408Z",
+            "matching_fixed": [
+              "010382937fb69892b3469ac4d30af072262f59e8"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64454.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "010382937fb69892b3469ac4d30af072262f59e8"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "bf432d53d8359aa5": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "e98ca4e3c7f3b17e": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "ee5fb641c4ccac8406c668d3e947eb20ce44f233"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-80659",
+          "title": "mmc: vub300: defer reset until cmd_mutex is unlocked",
+          "commit": "ee5fb641c4ccac8406c668d3e947eb20ce44f233",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80659.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "ee5fb641c4ccac8406c668d3e947eb20ce44f233",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "ee5fb641c4ccac8406c668d3e947eb20ce44f233",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80659.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-80659",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-28T06:49:04.389Z",
+            "matching_fixed": [
+              "ee5fb641c4ccac8406c668d3e947eb20ce44f233"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80659.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "ee5fb641c4ccac8406c668d3e947eb20ce44f233"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "2a87f3b6b8bf9831": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "47186409c092cd7dd70350999186c700233e854d"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-74262",
+          "title": "kcm: use WRITE_ONCE() when changing lower socket callbacks",
+          "commit": "47186409c092cd7dd70350999186c700233e854d",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-74262.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "47186409c092cd7dd70350999186c700233e854d",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "47186409c092cd7dd70350999186c700233e854d",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-74262.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-74262",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-17T05:45:10.909Z",
+            "matching_fixed": [
+              "47186409c092cd7dd70350999186c700233e854d"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/74xxx/CVE-2026-74262.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "47186409c092cd7dd70350999186c700233e854d"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "82bac9bdb989a6a8": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "29bef9934b2521f787bb15dd1985d4c0d12ae02a"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-64425",
+          "title": "io_uring/io-wq: re-check IO_WQ_BIT_EXIT for each linked work item",
+          "commit": "29bef9934b2521f787bb15dd1985d4c0d12ae02a",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64425.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "29bef9934b2521f787bb15dd1985d4c0d12ae02a",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "29bef9934b2521f787bb15dd1985d4c0d12ae02a",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64425.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-64425",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-08T08:50:39.947Z",
+            "matching_fixed": [
+              "29bef9934b2521f787bb15dd1985d4c0d12ae02a"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64425.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "29bef9934b2521f787bb15dd1985d4c0d12ae02a"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "e8b92080485195e1": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "cd5a6a5096b246e10600da3ac47a1274ce9573c8"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "cd5a6a5096b246e10600da3ac47a1274ce9573c8"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "79c27c91cb60dfd0": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "6e1b9bff1202da55c464e36bd34a2b6863d7fe30"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "6e1b9bff1202da55c464e36bd34a2b6863d7fe30"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "6eec996c51cb7de7": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "e31408734332b8cc611342cdaaab6ba492180156"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-80660",
+          "title": "hwmon: (occ) unregister sysfs devices outside occ lock",
+          "commit": "e31408734332b8cc611342cdaaab6ba492180156",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80660.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "e31408734332b8cc611342cdaaab6ba492180156",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "e31408734332b8cc611342cdaaab6ba492180156",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-80660.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-80660",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-28T06:49:04.992Z",
+            "matching_fixed": [
+              "e31408734332b8cc611342cdaaab6ba492180156"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80660.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "e31408734332b8cc611342cdaaab6ba492180156"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "dfd6c624d28ff7bb": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-64428",
+          "title": "gpio: sch: use raw_spinlock_t in the irq startup path",
+          "commit": "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64428.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64428.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-64428",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-17T04:55:28.748Z",
+            "matching_fixed": [
+              "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64428.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "03f1c13f64c578cf": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "90f0109019e6817eb40a486671b7722d1544ae29"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-64429",
+          "title": "gpio: eic-sprd: use raw_spinlock_t in the irq startup path",
+          "commit": "90f0109019e6817eb40a486671b7722d1544ae29",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64429.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "90f0109019e6817eb40a486671b7722d1544ae29",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "90f0109019e6817eb40a486671b7722d1544ae29",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64429.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-64429",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-17T04:55:29.849Z",
+            "matching_fixed": [
+              "90f0109019e6817eb40a486671b7722d1544ae29"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64429.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "90f0109019e6817eb40a486671b7722d1544ae29"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "97a189f8dfc4e260": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "fa09f08ede3db3050ae16ae1ed92c902d0cada23"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "fa09f08ede3db3050ae16ae1ed92c902d0cada23"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "ae0b7cff9a91630f": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "2641a9e0a1dd4af2e21995470a21d55dd35e5203"
       ],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-64206",
+          "title": "Bluetooth: L2CAP: cancel pending_rx_work before taking conn->lock",
+          "commit": "2641a9e0a1dd4af2e21995470a21d55dd35e5203",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64206.json?id=06447456a1589f63912de8a468e1313738ac8243",
+          "proof": {
+            "sha": "2641a9e0a1dd4af2e21995470a21d55dd35e5203",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "2641a9e0a1dd4af2e21995470a21d55dd35e5203",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-64206.sha1?id=06447456a1589f63912de8a468e1313738ac8243"
+          },
+          "cvelist": {
+            "id": "CVE-2026-64206",
+            "state": "PUBLISHED",
+            "updated_at": "2026-08-17T04:51:53.043Z",
+            "matching_fixed": [
+              "2641a9e0a1dd4af2e21995470a21d55dd35e5203"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64206.json"
+          }
+        }
+      ],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "2641a9e0a1dd4af2e21995470a21d55dd35e5203"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "1b37d011620bd759": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "4fa0619d039f561dd2207055cf21a10abaeebe0e"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "4fa0619d039f561dd2207055cf21a10abaeebe0e"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "691eb3b75715c37e": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "684a00c291fbde2d42b6692c75855df7ff8894ee"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "684a00c291fbde2d42b6692c75855df7ff8894ee"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "e43236f5b0eb9b4b": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "0e901ee5c6f9e1a382099cd7dbee1360c80c441c"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "0e901ee5c6f9e1a382099cd7dbee1360c80c441c"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "2667403b883ffaa8": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "f425c55cb60e116a53f2c196100dc09c5a828383"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "f425c55cb60e116a53f2c196100dc09c5a828383"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "a1eca66950e06f2b": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "9cc47acc2f6ec74869e4be3ab59fe662cec887c3"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "9cc47acc2f6ec74869e4be3ab59fe662cec887c3"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     },
     "4353bb3bc339a390": {
-      "at": "2026-09-15T06:56:16+00:00",
+      "at": "2026-09-15T07:26:19+00:00",
       "commits": [
         "5a9c554ff86d7f3750d95ce72ad0666e02e37b92"
       ],
+      "state": "unmatched",
+      "matches": [],
+      "candidates": [],
       "errors": [],
-      "state": "checked",
-      "candidates": []
+      "osv_query": {
+        "at": "2026-09-15T06:56:16+00:00",
+        "commits": [
+          "5a9c554ff86d7f3750d95ce72ad0666e02e37b92"
+        ],
+        "errors": [],
+        "state": "checked"
+      },
+      "osv_affected": [],
+      "removed_matches": []
     }
   },
-  "unique_commits": 47
+  "unique_commits": 49,
+  "official_source": {
+    "repository": "https://git.kernel.org/pub/scm/linux/security/vulns.git",
+    "revision": "06447456a1589f63912de8a468e1313738ac8243",
+    "committed_at": "2026-09-14T14:06:03+02:00",
+    "published_records": 15636,
+    "rejected_records": 312
+  }
 }
