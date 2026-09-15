@@ -171,6 +171,26 @@ class BacklogTests(unittest.TestCase):
         self.assertEqual(agent.read(self.directory)['usage'][day], 10001)
         self.assertEqual(self.item()['status'], 'needs_work')
 
+    def test_continuous_mode_finishes_more_than_cycle_budget_and_retains_retry_bound(self):
+        self.config.update(backlog_max_calls_per_day=None, backlog_max_calls_per_cycle=1)
+        self.post.side_effect = [RuntimeError('temporary'), self.response()]
+        progress = Mock()
+        agent.process(self.payload, self.directory, self.config, 'fake', self.post, continuous=True, progress=progress)
+        self.assertEqual(self.post.call_count, 2)
+        self.assertEqual(self.item()['status'], 'needs_work')
+        self.assertEqual(progress.call_count, 2)
+        self.action('reanalyze')
+        self.post.reset_mock()
+        self.post.side_effect = RuntimeError('persistent')
+        agent.process(self.payload, self.directory, self.config, 'fake', self.post, continuous=True)
+        self.assertEqual(self.post.call_count, 3)
+
+    def test_continuous_mode_still_honors_explicit_daily_quota(self):
+        self.config['backlog_max_calls_per_day'] = 1
+        self.post.side_effect = RuntimeError('temporary')
+        agent.process(self.payload, self.directory, self.config, 'fake', self.post, continuous=True)
+        self.post.assert_called_once()
+
     def test_zero_daily_limit_disables_calls_and_invalid_limit_fails_before_calling(self):
         self.config['backlog_max_calls_per_day'] = 0
         self.process()
