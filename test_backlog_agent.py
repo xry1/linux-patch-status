@@ -53,6 +53,22 @@ class BacklogTests(unittest.TestCase):
         self.assertEqual(self.item()['status'], 'unassessed')
         self.assertNotIn(self.item()['status'], agent.ACTIVE)
 
+    def test_explicit_retry_preserves_completed_and_reopens_exhausted_error(self):
+        self.process()
+        before = agent.read(self.directory)
+        agent.process(self.payload, self.directory, self.config, 'synthetic', self.post, retry_failed=True)
+        self.assertEqual(self.post.call_count, 1)
+        self.assertEqual(agent.read(self.directory)['entries'], before['entries'])
+        with agent.transaction(self.directory) as data:
+            entry = next(iter(data['entries'].values()))
+            entry.update(ai_state='error', attempts=3, error='old error')
+        agent.process(self.payload, self.directory, self.config, 'synthetic', self.post, retry_failed=True)
+        self.assertEqual(self.post.call_count, 2)
+        entry = next(iter(agent.read(self.directory)['entries'].values()))
+        self.assertEqual(entry['ai_state'], 'complete')
+        self.assertEqual(entry['retry_history'][-1]['attempts'], 3)
+        self.assertEqual(self.post.call_args.args[1]['max_tokens'], 8192)
+
     def test_acknowledgment_only_does_not_need_llm_or_reply(self):
         p = self.payload_for(self.original, message('ack', 'Re: [PATCH net] driver: example', 'Thanks!\nReviewed-by: R <r@example.org>', day=2, parent='v1'))
         self.process(p)

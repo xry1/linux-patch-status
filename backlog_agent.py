@@ -304,7 +304,7 @@ def analyze(topic, config, token, post):
         'needs_reply或needs_work至少引用一封外部反馈。不确定时用uncertain。')
     content = json.dumps({'title': topic['title'], 'latest_version': topic['version'], 'has_acceptance_evidence': topic['accepted'],
         'coverage': COVERAGE, 'context_limited': limited, 'omitted': '原始补丁正文及 diff 省略；评审引用保留，过长内容截断', 'messages': messages}, ensure_ascii=False)
-    req = {'model': config['glm_model'], 'stream': False, 'max_tokens': 2100, 'messages': [{'role': 'user', 'content': content}]}
+    req = {'model': config['glm_model'], 'stream': False, 'max_tokens': 8192, 'messages': [{'role': 'user', 'content': content}]}
     if config.get('glm_protocol') == 'anthropic_messages':
         req['system'] = system
     else:
@@ -344,7 +344,7 @@ def analyze(topic, config, token, post):
         raise ValueError('GLM 输出缺少有效分类或原邮件依据；保留待核对。') from None
 
 
-def process(payload, directory, config, token, post, limit=None, continuous=False, progress=None):
+def process(payload, directory, config, token, post, limit=None, continuous=False, progress=None, retry_failed=False):
     available = topics(payload)
     budget = len(available) * 3 if continuous else min(10, max(0, int(limit if limit is not None else config.get('backlog_max_calls_per_cycle', 2))))
     daily_limit = config.get('backlog_max_calls_per_day', 30)
@@ -360,7 +360,16 @@ def process(payload, directory, config, token, post, limit=None, continuous=Fals
                 if entry['ai_state'] == 'running':
                     entry.update(ai_state='error', error='上次分析中断，将在调用限额内重试。')
             keys = sorted(available, key=lambda k: available[k]['last_date'], reverse=True)
-            if continuous:
+            if retry_failed:
+                keys = [key for key in keys if data['entries'][key]['ai_state'] == 'error'
+                        and effective(available[key], data['entries'][key])['status'] not in ('done', 'ignored', 'snoozed')]
+                budget = len(keys)
+                for key in keys:
+                    entry = data['entries'][key]
+                    entry['retry_history'] = (entry.get('retry_history', []) + [{
+                        'at': stamp(), 'attempts': entry['attempts'], 'error': entry.get('error', '')}])[-10:]
+                    entry.update(attempts=0, error='')
+            elif continuous:
                 # Complete a first pass before retrying failures. The worker lock
                 # stays held throughout, so the mailbox watcher cannot duplicate
                 # requests; its independent IMAP polling continues normally.
@@ -459,6 +468,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--analyze', action='store_true', help='Analyze changed discussions within the configured budget')
     parser.add_argument('--drain', action='store_true', help='Continuously analyze the current backlog without inter-batch sleeps')
+    parser.add_argument('--retry-failed', action='store_true', help='Retry only failed discussions once, preserving completed analyses')
     parser.add_argument('--digest', action='store_true', help='Send the daily digest if due and not already sent')
     parser.add_argument('--limit', type=int, default=5)
     args = parser.parse_args()
@@ -471,7 +481,7 @@ def main():
     payload = monitor.combined_payload(monitor.load_seed(), state, config)
     saved = monitor.read_credentials(directory)
     credentials = {name: os.environ.get(name) or saved.get(name, '') for name in ('PATCH_GLM_API_KEY', 'PATCH_FEISHU_WEBHOOK', 'PATCH_FEISHU_SECRET')}
-    if args.analyze or args.drain:
+    if args.analyze or args.drain or args.retry_failed:
         if not credentials['PATCH_GLM_API_KEY']:
             raise RuntimeError('GLM 凭据不可用。')
         completed = {'complete': 0, 'error': 0}
@@ -479,7 +489,8 @@ def main():
             completed[status] += 1
             print(stamp() + f' 连续分析：本次成功 {completed["complete"]} 项，失败请求 {completed["error"]} 次。', flush=True)
         process(payload, directory, config, credentials['PATCH_GLM_API_KEY'], monitor.post_json, args.limit,
-                continuous=args.drain, progress=progress if args.drain else None)
+                continuous=args.drain, progress=progress if args.drain or args.retry_failed else None,
+                retry_failed=args.retry_failed)
     if args.digest:
         if not credentials['PATCH_FEISHU_WEBHOOK']:
             raise RuntimeError('飞书凭据不可用。')

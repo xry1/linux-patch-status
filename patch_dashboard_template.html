@@ -28,6 +28,10 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
 .backlog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.backlog-card{border:1px solid var(--line);border-radius:9px;padding:16px;min-width:0}.backlog-card h3{font-size:14px;margin:8px 0;overflow-wrap:anywhere}.backlog-card p{white-space:pre-wrap;overflow-wrap:anywhere}.backlog-card ol{padding-left:22px;font-size:13px}.backlog-card pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f6f8fc;padding:12px;font:12px/1.6 Consolas,monospace}.backlog-card .actions{margin-top:12px}.backlog-card button{font-size:12px}.backlog-card .evidence-link{display:block}.backlog-card small{color:var(--muted)}.backlog-card.needs_reply,.backlog-card.needs_work{border-left:3px solid var(--orange)}
 @media(max-width:850px){.backlog-grid{grid-template-columns:1fr}}
 </style>
+<style>
+.workspace-nav{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 0;margin:16px 0;background:var(--bg);border-bottom:1px solid var(--line)}.workspace-nav button[aria-current=page],.mail-nav button[aria-current=page]{background:var(--blue);color:white;border-color:var(--blue)}.workspace-nav a{padding:8px 12px;text-decoration:none}.view-heading{margin:18px 0 6px;font-size:20px}.mail-nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.view-description{color:var(--muted);margin-bottom:16px}.workspace-view{min-width:0}#monitorPanel{margin-top:16px}#monitorPanel #backlogPanel{margin-top:0!important}#cvePanel table{min-width:0}
+@media(max-width:600px){.workspace-nav{gap:5px}.workspace-nav button,.workspace-nav a,.mail-nav button{padding:8px;font-size:13px}.header h1{font-size:23px}}
+</style>
 </head>
 <body>
 <main>
@@ -36,6 +40,12 @@ dialog{padding:0;border:1px solid var(--line);border-radius:12px;background:var(
     <div class="actions"><button class="primary" id="importButton">导入 / 更新 mbox</button><a id="updateGuide" href="./update.html" hidden>更新说明</a><a id="monitorLink" href="/mail-monitor" hidden>邮箱提醒与 AI 摘要</a><button id="download">导出完整 JSON</button><input id="archiveFile" type="file" accept=".gz,.mbox" hidden></div>
   </header>
   <div class="source" id="source"></div>
+  <nav class="workspace-nav" id="workspaceNav" aria-label="工作台导航">
+    <button data-view="overview" aria-controls="view-overview">投稿概览</button>
+    <button data-view="mailbox" aria-controls="view-mailbox" hidden>邮箱与待办</button>
+    <a id="localMailboxLink" href="/mail-monitor" hidden>邮箱与待办 ↗</a>
+    <button data-view="archive" aria-controls="view-archive">补丁归档</button>
+  </nav>
   <section class="sync-grid" aria-label="更新记录">
     <div class="panel"><small>最近检查归档</small><strong id="checkedAt">尚无记录</strong><small id="checkResult"></small></div>
     <div class="panel"><small>邮件内容更新</small><strong id="contentAt">尚无记录</strong><small>仅在邮件或投递状态变化时更新</small></div>
@@ -155,6 +165,49 @@ const colors={'Applied':'#237b52','Reverted':'#704697','Reviewed':'#255bd4','Sub
 const pagesMode=data.hosting_mode==='pages';
 const monitorMode=data.hosting_mode==='mail_monitor';
 const localMode=!pagesMode&&!monitorMode&&location.protocol==='http:'&&location.hostname==='127.0.0.1';
+function initializeWorkspace(){
+  const main=document.querySelector('main');
+  const panels={};
+  for(const [name,title,description] of [
+    ['overview','投稿概览','查看投稿信号、活动趋势与官方 CVE 修复关联；点击统计卡片进入补丁归档。'],
+    ['mailbox','邮箱与待办','跟进需要回复的讨论、安排重投提醒，并查看后台监测状态。'],
+    ['archive','补丁归档','按系列检索补丁，筛选状态，并在站内阅读完整讨论。']]){
+    const panel=document.createElement('section');panel.id='view-'+name;panel.className='workspace-view';panel.setAttribute('aria-labelledby','heading-'+name);
+    panel.innerHTML='<h2 class="view-heading" tabindex="-1" id="heading-'+name+'">'+title+'</h2><p class="view-description">'+description+'</p>';
+    main.insertBefore(panel,$('updateFootnote'));panels[name]=panel;
+  }
+  for(const node of [document.querySelector('main > .sync-grid'),document.querySelector('.summary'),$('topicLegend'),$('calibrationNotice'),$('seriesNotice'),$('cvePanel'),document.querySelector('.charts')])panels.overview.append(node);
+  panels.mailbox.append($('monitorPanel'));
+  panels.archive.append($('focusTabs').closest('section'),document.querySelector('main > .footnote'));
+  const mailboxButton=document.querySelector('[data-view="mailbox"]');mailboxButton.hidden=!monitorMode;
+  $('localMailboxLink').hidden=!localMode;
+  const monitor=$('monitorPanel'),nav=document.createElement('nav');nav.className='mail-nav';nav.setAttribute('aria-label','邮箱功能');
+  monitor.insertBefore(nav,$('folderMonitor'));
+  const reminder=$('reminderTarget').closest('section');
+  const aiHelp=$('aiUpdates').previousElementSibling;
+  const groups={todo:[$('backlogPanel')],reminders:[reminder],summaries:[aiHelp,$('aiUpdates')],monitor:[$('folderMonitor')]};
+  for(const [key,label] of [['todo','待办分析'],['reminders','投递提醒'],['summaries','最新摘要'],['monitor','监测状态']]){
+    const wrapper=document.createElement('div');wrapper.id='mail-section-'+key;monitor.append(wrapper);groups[key].forEach(n=>wrapper.append(n));
+    const button=document.createElement('button');button.textContent=label;button.dataset.mailView=key;button.setAttribute('aria-controls',wrapper.id);nav.append(button);
+  }
+  function selectMail(key){
+    if(!groups[key])key='todo';
+    for(const k of Object.keys(groups)){$('mail-section-'+k).hidden=k!==key;nav.querySelector('[data-mail-view="'+k+'"]').setAttribute('aria-current',k===key?'page':'false');}
+    return key;
+  }
+  function select(view,write=false,focus=false){
+    if(!panels[view]||(view==='mailbox'&&!monitorMode))view=monitorMode?'mailbox':'overview';
+    for(const [key,panel] of Object.entries(panels))panel.hidden=key!==view;
+    document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',b.dataset.view===view?'page':'false'));
+    if(write){const url=new URL(location.href);url.searchParams.set('view',view);history.replaceState(null,'',url);}
+    if(focus){$('heading-'+view).focus({preventScroll:true});$('workspaceNav').scrollIntoView({block:'start'});}
+  }
+  window.showWorkspaceView=(view)=>select(view,true,true);
+  $('workspaceNav').addEventListener('click',e=>{const button=e.target.closest('[data-view]');if(button)window.showWorkspaceView(button.dataset.view);});
+  nav.addEventListener('click',e=>{const button=e.target.closest('[data-mail-view]');if(button){const key=selectMail(button.dataset.mailView),url=new URL(location.href);url.searchParams.set('mailView',key);history.replaceState(null,'',url);}});
+  function restore(){const query=new URLSearchParams(location.search);select(query.get('view'));selectMail(query.get('mailView'));}
+  window.addEventListener('popstate',restore);restore();
+}
 const cvList=r=>[...new Set([...(r.cves_in_mail||[]),...(r.cve_matches||[]).map(x=>x.id),...(r.cve_query?.candidates||[]).map(x=>x.id)])];
 const idOf=m=>m.message_id||m.link||[m.sender,m.date,m.subject].join('|');
 const dateOf=m=>m.date_iso?new Date(m.date_iso).toLocaleString('zh-CN',{hour12:false}):m.date||'日期未知';
@@ -540,12 +593,12 @@ $('expandSeries').addEventListener('click',()=>{series.forEach(s=>expandedSeries
 $('collapseSeries').addEventListener('click',()=>{series.forEach(s=>expandedSeries.set(s.id,false));renderRows();});
 function resetFilters(){for(const id of ['search','statusFilter','kindFilter','subsystemFilter','dateFrom','dateTo'])$(id).value='';$('sortFilter').value='newest';$('grouping').value='series';focusView='all';}
 $('resetFilters').addEventListener('click',()=>{resetFilters();expandedSeries.clear();resetPage();});
-document.addEventListener('click',e=>{const f=e.target.closest('[data-focus]'),s=e.target.closest('[data-signal],[data-status]'),k=e.target.closest('[data-kind]');if(f){resetFilters();focusView=f.dataset.focus;resetPage();}else if(s){resetFilters();$('statusFilter').value=s.dataset.signal||s.dataset.status;resetPage();}else if(k){resetFilters();$('kindFilter').value=k.dataset.kind;resetPage();}});
+document.addEventListener('click',e=>{const f=e.target.closest('[data-focus]'),s=e.target.closest('[data-signal],[data-status]'),k=e.target.closest('[data-kind]');if(f){resetFilters();focusView=f.dataset.focus;resetPage();}else if(s){resetFilters();$('statusFilter').value=s.dataset.signal||s.dataset.status;resetPage();}else if(k){resetFilters();$('kindFilter').value=k.dataset.kind;resetPage();}if(f||s||k)window.showWorkspaceView('archive');});
 $('prevPage').addEventListener('click',()=>{page--;renderRows();});$('nextPage').addEventListener('click',()=>{page++;renderRows();});
 function readHash(){const h=new URLSearchParams(location.hash.slice(1));if(h.has('patch'))openReader(h.get('patch'),h.get('mail'));}
 window.addEventListener('hashchange',readHash);
 $('download').addEventListener('click',()=>saveBlob(JSON.stringify(data,null,2),'linux-patch-status.json','application/json'));
-rebuildIndex();renderSummary();renderRows();readHash();loadPublicationStatus();
+initializeWorkspace();rebuildIndex();renderSummary();renderRows();readHash();loadPublicationStatus();
 let monitorRevision=null;
 async function pollMonitor(){
   if(!monitorMode||location.hostname!=='127.0.0.1')return;
