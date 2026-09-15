@@ -184,3 +184,12 @@ python publish_pages.py --report "C:\路径\runyu-patch-status-cve.html"
 
 Applied 按投稿去重，其余统计按主题及邮件信号推断，均不等于主线 commit 数；Applied 也可能仅指某个维护者树。
 CVE 线索需要单独核对，不能据此认定某个 patch 获得了 CVE。
+# 每周 Applied CVE 检查
+
+运行 `python -X utf8 cve_checks.py` 立即查询；定时任务运行
+`python -X utf8 cve_checks.py --if-due`，距上次完成日期满七天才查询。
+只查询 Applied 的 patch 子项（封面不查询，series 统计仍合并），只使用完整修复提交，排除 Fixes 引入提交。
+结果保存于 `applied_cve_checks.json`，网页导入新 mbox 后按当前状态和 commit 匹配复用。
+缺失 commit 和请求失败单独显示；请求失败下次定时运行会重试，保留上次成功证据。
+OSV commit 查询返回受影响版本候选，不能确认修复归属；未命中不证明没有 CVE。
+此检查只读取公开归档，不上传私人邮箱内容，结果随现有 Pages 发布流程更新。

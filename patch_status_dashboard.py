@@ -28,6 +28,7 @@ from applied_evidence import apply_verifications, load_verifications
 from patch_series import applied_submissions, build_series
 import revision_reminders
 import backlog_agent
+import cve_checks
 
 DEFAULT_EMAIL = "runyu.xiao@seu.edu.cn"
 MAX_UPLOAD = 512 * 1024 * 1024
@@ -154,6 +155,7 @@ def enrich_records(records, author_email=DEFAULT_EMAIL):
         record['cve_state'] = 'candidate' if record['cves_in_mail'] or record.get('osv_candidates') else 'unqueried'
         if record.get('osv_query'):
             record['cve_state'] = 'candidate' if record['cve_state'] == 'candidate' else record['osv_query']['state']
+    cve_checks.overlay(records)
     return sorted(records, key=lambda r: (r['last_date'], r['title']), reverse=True)
 
 
@@ -361,15 +363,8 @@ def build_payload(source_name, records, total, author_email=DEFAULT_EMAIL, previ
     records = enrich_records(records, author_email)
     now = datetime.now().astimezone().isoformat(timespec="seconds")
     if online_cves:
-        osv = osv_candidates(sorted({x['sha'] for r in records for x in r['commit_refs'] if x['role'] not in {'introduced_by', 'referenced_commit'}}))
-        for record in records:
-            shas = {x['sha'] for x in record['commit_refs'] if x['role'] not in {'introduced_by', 'referenced_commit'}}
-            record["osv_candidates"] = sorted(
-                {x["id"]: x for c in shas for x in osv[c]['candidates']}.values(),
-                key=lambda x: x["id"])
-            record['osv_query'] = {'at': now, 'state': 'error' if any(osv[c]['state'] == 'error' for c in shas)
-                                   else 'checked' if shas else 'unqueried', 'commits': sorted(shas),
-                                   'errors': [osv[c]['error'] for c in shas if osv[c].get('error')]}
+        snapshot = cve_checks.check(records)
+        cve_checks.overlay(records, snapshot)
     previous = upgrade_payload(previous) if previous else {}
     prior_messages = {message_identity(m) for r in previous.get("records", []) for m in r["messages"]}
     current_messages = {m["message_id"] for r in records for m in r["messages"]}
@@ -410,7 +405,10 @@ def build_payload(source_name, records, total, author_email=DEFAULT_EMAIL, previ
             "changed_statuses": sum(subject_key(r["title"]) in old_status and
                                     old_status[subject_key(r["title"])] != r["status"] for r in records)}
     }
-    return upgrade_payload(payload)
+    payload = upgrade_payload(payload)
+    if online_cves:
+        cve_checks.overlay(payload['records'], snapshot)
+    return payload
 
 
 def render_report(payload):
@@ -528,13 +526,15 @@ def make_server(state, port):
                     backlog = report.parent / backlog_agent.STORE
                     return self.reply(200, {'revision': str(report.stat().st_mtime_ns) + ':' +
                                            str(reminders.stat().st_mtime_ns if reminders.exists() else 0) + ':' +
-                                           str(backlog.stat().st_mtime_ns if backlog.exists() else 0)})
+                                           str(backlog.stat().st_mtime_ns if backlog.exists() else 0) + ':' +
+                                           str(cve_checks.STORE.stat().st_mtime_ns if cve_checks.STORE.exists() else 0)})
                 try:
                     payload = load_payload(report)
                     if not payload:
                         raise ValueError('Missing private report')
                     payload = revision_reminders.decorate(payload, report.parent)
                     payload = backlog_agent.decorate(payload, report.parent)
+                    payload = cve_checks.decorate(payload)
                     if route == '/mail-monitor':
                         return self.reply(200, render_report(payload).encode(), 'text/html; charset=utf-8')
                     return self.reply(200, payload)
@@ -543,6 +543,8 @@ def make_server(state, port):
             with state.lock:
                 payload = state.payload
                 job = dict(state.job)
+            if payload:
+                payload = cve_checks.decorate(payload)
             if route == "/":
                 if payload:
                     return self.reply(200, render_report(payload).encode(), "text/html; charset=utf-8")

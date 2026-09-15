@@ -245,9 +245,12 @@ class AnalysisTests(unittest.TestCase):
 
     def test_osv_errors_are_not_empty_success_or_verified_fix(self):
         rows = [record([self.original, message('a', 'Re: [PATCH] net: example', 'Applied.\ncommit ' + 'b' * 40, 2)])]
-        with patch.object(dashboard, 'osv_candidates', return_value={'b' * 40: {'state': 'error', 'error': 'timeout', 'candidates': []}}) as query:
+        snapshot = {'records': {dashboard.enrich_records(rows)[0]['id']: {
+            'at': '2026-09-15T00:00:00+00:00', 'commits': ['b' * 40],
+            'state': 'error', 'errors': ['b' * 40], 'candidates': []}}}
+        with patch.object(dashboard.cve_checks, 'check', return_value=snapshot) as query:
             payload = dashboard.build_payload('one', rows, 2, online_cves=True)
-        self.assertEqual(query.call_args.args[0], ['b' * 40])
+        self.assertEqual(list(dashboard.cve_checks.targets(query.call_args.args[0]).values()), [['b' * 40]])
         self.assertEqual(payload['records'][0]['cve_state'], 'error')
 
     def test_unchanged_check_publishes_only_small_status_file(self):

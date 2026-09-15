@@ -1,0 +1,508 @@
+{
+  "schema": 1,
+  "attempted_at": "2026-09-15T06:56:16+00:00",
+  "completed_at": "2026-09-15T06:56:16+00:00",
+  "source": "OSV affected-commit query; not a CVE repair-association search",
+  "records": {
+    "2b4805549f42b8df": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "ebdb6b0cc453103972278258d88d555d43129aef"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "5f11b859aba5bb67": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [],
+      "errors": [],
+      "state": "missing_commit",
+      "candidates": []
+    },
+    "7c44203887fb9e2a": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "bda8324270b1ac91bfba1df8928e0570e29759e8"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "637076efe88171af": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "33930840b5f0a79f826e7c69dc6cd78f72a67481"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": [
+        {
+          "id": "CVE-2026-89484",
+          "commit": "33930840b5f0a79f826e7c69dc6cd78f72a67481",
+          "summary": "lockd: fix NULL dereference on lockowner allocation failure",
+          "source": "https://osv.dev/vulnerability/CVE-2026-89484"
+        }
+      ]
+    },
+    "508b47b1bc809d42": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "3f92a64545165bdbb36dee8fa35626b295463313"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "3894e6486686ba70": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "f8e43fe0f22b7137ce456e6fe3581d3098174f74"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "4b35430398b67689": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "612ccf42acd14bb2685fa60c3495ca13e63e8989"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "ccb8cefe827bcef5": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "4105a4c0678b2808fc8046b60321b4f1cc7dae75"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "159c234ff129dcdb": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "e074c12c428c633e079154301207a6079a208583"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "7b3b630bc073dcca": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "6c97817e20598e5473094e0e38d1f51f1cf4dfff"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": [
+        {
+          "id": "CVE-2026-80829",
+          "commit": "6c97817e20598e5473094e0e38d1f51f1cf4dfff",
+          "summary": "ALSA: usb-audio: fix OOB write in snd_usbmidi_novation_output()",
+          "source": "https://osv.dev/vulnerability/CVE-2026-80829"
+        }
+      ]
+    },
+    "91b1345ba0a2f3e6": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "c73cb5b7c159246dd572277c668851a56e516019"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": [
+        {
+          "id": "CVE-2026-80829",
+          "commit": "c73cb5b7c159246dd572277c668851a56e516019",
+          "summary": "ALSA: usb-audio: fix OOB write in snd_usbmidi_novation_output()",
+          "source": "https://osv.dev/vulnerability/CVE-2026-80829"
+        }
+      ]
+    },
+    "8851bfdaefd58f7e": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "33abb7491e89285a41565670945293dda841afc4"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "3ecea0a9c7d4913e": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "14dc3dee0efd18a7b85ba59879e7e217c7c6279a"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "0a63e2e3cbdc3f32": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [],
+      "errors": [],
+      "state": "missing_commit",
+      "candidates": []
+    },
+    "2a9ca751e9d7c1e4": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [],
+      "errors": [],
+      "state": "missing_commit",
+      "candidates": []
+    },
+    "1b2012c4db6a9e95": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "e1406330d70e56dd44fa6fbafc86e77e5c80c122"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "68747837c3fa5fb3": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "4cfa625b60d55b81bc6620113f213349bcc85a4e"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "9c922badf3fb2950": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "ed4f05d9f2f42fd866f55108db8123eefcc5fb33"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "38f900538707c95b": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": [
+        {
+          "id": "CVE-2026-80793",
+          "commit": "43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7",
+          "summary": "ipv4: reject undersized MTUs in ip_do_fragment()",
+          "source": "https://osv.dev/vulnerability/CVE-2026-80793"
+        },
+        {
+          "id": "CVE-2026-89479",
+          "commit": "43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7",
+          "summary": "sctp: stop processing a packet once its association is deleted",
+          "source": "https://osv.dev/vulnerability/CVE-2026-89479"
+        }
+      ]
+    },
+    "1152f7246aad8924": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "c4da23777d35f4aaae7ff0ea9a503ba2702ef53c"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "8f0c04939361b88c": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "8a53f9102a0d3eeb8784999f925028acf339c276"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "3fe658e725fec144": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "3e5d1bf4bd687beb2cb4e32a07af695455925588"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "46109ae67bf8e0f7": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "f48763beab4eea41fc480c9702ec6eebe8d75e4f"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": [
+        {
+          "id": "CVE-2026-72406",
+          "commit": "f48763beab4eea41fc480c9702ec6eebe8d75e4f",
+          "summary": "net: sungem: fix probe error cleanup",
+          "source": "https://osv.dev/vulnerability/CVE-2026-72406"
+        }
+      ]
+    },
+    "e2ab5de9d048121a": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "7a20eb54224ab7481c1f5a1619a6a5677be93eed"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "602dc5faccb49c33": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "04405aeef4f8d7bcac6dcb1947acafdb4420c2c3"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "8aae52492e4bf043": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [],
+      "errors": [],
+      "state": "missing_commit",
+      "candidates": []
+    },
+    "f9056af03581aa8f": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "0b352f04b9be2c83c0240aa6dae7257fefa90464"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "10a60bd7f8430cb9": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "f918554fb7246e89b98ef90abe80801f038258b3"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "2777ff27ccc31b8d": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "157e7b44d4271a6e": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "2a665946e0407a05a3f81bd56a08553c446498e0"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "659777370b073ee9": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "18f116931f52e3c3303ad4b15ff41eb89b0e4239"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": [
+        {
+          "id": "CVE-2026-68143",
+          "commit": "18f116931f52e3c3303ad4b15ff41eb89b0e4239",
+          "summary": "net: slip: serialize receive against buffer reallocation",
+          "source": "https://osv.dev/vulnerability/CVE-2026-68143"
+        }
+      ]
+    },
+    "5502fe92a40b961a": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "ce1fed11d18e163baf7f875152a33bf80f625c1a"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "7e2f0e098b8e04f7": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "536fb3d739d75a03cb318c0c6fe799425cfea501"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "3fabe868f4974737": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "010382937fb69892b3469ac4d30af072262f59e8"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "bf432d53d8359aa5": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "e98ca4e3c7f3b17e": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "ee5fb641c4ccac8406c668d3e947eb20ce44f233"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "2a87f3b6b8bf9831": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "47186409c092cd7dd70350999186c700233e854d"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "82bac9bdb989a6a8": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "29bef9934b2521f787bb15dd1985d4c0d12ae02a"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "e8b92080485195e1": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "cd5a6a5096b246e10600da3ac47a1274ce9573c8"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "79c27c91cb60dfd0": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "6e1b9bff1202da55c464e36bd34a2b6863d7fe30"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "6eec996c51cb7de7": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "e31408734332b8cc611342cdaaab6ba492180156"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "dfd6c624d28ff7bb": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "03f1c13f64c578cf": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "90f0109019e6817eb40a486671b7722d1544ae29"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "97a189f8dfc4e260": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "fa09f08ede3db3050ae16ae1ed92c902d0cada23"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "ae0b7cff9a91630f": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "2641a9e0a1dd4af2e21995470a21d55dd35e5203"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "1b37d011620bd759": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "4fa0619d039f561dd2207055cf21a10abaeebe0e"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "691eb3b75715c37e": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "684a00c291fbde2d42b6692c75855df7ff8894ee"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "e43236f5b0eb9b4b": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "0e901ee5c6f9e1a382099cd7dbee1360c80c441c"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "2667403b883ffaa8": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "f425c55cb60e116a53f2c196100dc09c5a828383"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "a1eca66950e06f2b": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "9cc47acc2f6ec74869e4be3ab59fe662cec887c3"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    },
+    "4353bb3bc339a390": {
+      "at": "2026-09-15T06:56:16+00:00",
+      "commits": [
+        "5a9c554ff86d7f3750d95ce72ad0666e02e37b92"
+      ],
+      "errors": [],
+      "state": "checked",
+      "candidates": []
+    }
+  },
+  "unique_commits": 47
+}

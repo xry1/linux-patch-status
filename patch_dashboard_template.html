@@ -345,7 +345,7 @@ function recordRow(r,q,changed,options={}){
     const reply=r.messages.filter(isReply).at(-1), unread=unreadCount(r), change=changed.get(r.id);
     const hit=q&&!r.title.toLowerCase().includes(q)?r.messages.find(m=>[m.subject,m.sender,m.body||'',m.message_id].join('\n').toLowerCase().includes(q)):null;
     const delta=focusView==='changes'&&change?'<div class="search-hit">新增 '+change.added_message_ids.length+' 封 · 补全 '+change.updated_message_ids.length+' 封'+(change.status_changed?' · 状态 '+esc(change.before)+' → '+esc(change.after):'')+'</div>':'';
-    const cveText=r.cve_state==='candidate'?'候选关联 · '+cvList(r).length+' 条':r.cve_state==='checked'?'已查询 OSV · 未命中':r.cve_state==='error'?'CVE 查询失败':'CVE 尚未查询';
+    const cveText=r.cve_state==='candidate'?'候选关联 · '+cvList(r).length+' 条':r.cve_state==='checked'?'OSV 暂未查到关联':r.cve_state==='missing_commit'?'缺少修复 commit · 尚无法查询':r.cve_state==='error'?'OSV 查询失败 / 不完整':'CVE 尚未查询';
     const cover=coverProgress(r);
     const basis=cover?'<div class="patch-meta">'+esc(cover)+'</div>':r.acceptance_basis==='reverted_verified'?'<div class="patch-meta">已核实回退 · 保留历史接收记录</div>':r.acceptance_basis==='mainline_verified'?'<div class="patch-meta">主线历史已核实'+(r.mainline_commits.some(c=>c.attribution==='signed_off')?' · Signed-off-by 参与':'')+'</div>':r.acceptance_basis==='mail_confirmation'?'<div class="patch-meta">明确接收邮件 · 主线未核实</div>':'';
     const related=r.related_mainline_commits?.length?'<div class="attention-note">存在其他作者的同题主线提交，未计入你的 Applied。</div>':'';
@@ -372,7 +372,9 @@ function renderContext(){
 function openReader(id,mid=null,context=false){
   activeRecord=records.find(r=>r.id===id||(r.aliases||[]).includes(id));if(!activeRecord)return;
   selectedId=mid;$('mailSearch').value='';$('readerTitle').textContent=activeRecord.title;
-  renderContext();$('versionFilter').value='';$('contextDetails').open=context;
+  renderContext();
+  $('threadContext').insertAdjacentHTML('beforeend','<p class="legend">每周仅查询 Applied 子补丁的完整修复 commit。OSV 的 commit 查询检查受影响版本，并非反查修复提交对应的 CVE；暂未查到不代表没有 CVE。缺少 commit 的补丁不计为查询成功。</p>'+(activeRecord.osv_query?.commits?.length?'<p class="legend">本轮查询 commit：'+activeRecord.osv_query.commits.map(esc).join('、')+'</p>':'')+(activeRecord.osv_query?.errors?.length?'<p class="legend">查询失败 commit：'+activeRecord.osv_query.errors.map(esc).join('、')+'</p>':''));
+  $('versionFilter').value='';$('contextDetails').open=context;
   renderMailList();if(!$('reader').open)$('reader').showModal();
 }
 function renderMailList(){
