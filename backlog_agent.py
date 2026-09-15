@@ -18,7 +18,7 @@ from email.utils import parseaddr
 from patch_analysis import plain, submission, version
 
 STORE = 'backlog.json'
-POLICY = 2
+POLICY = 3
 SHANGHAI = timezone(timedelta(hours=8), 'Asia/Shanghai')
 ACTIVE = {'needs_reply', 'needs_work', 'uncertain'}
 LABELS = {'needs_reply': '需要回复', 'needs_work': '需要修改 / 核实', 'waiting': '等待对方',
@@ -108,6 +108,21 @@ def acknowledgment(message):
     return not text.strip()
 
 
+def discussion_text(message):
+    # Inline reviews depend on the immediately preceding quotation (for example
+    # "Please add the version" after an Assisted-by trailer). Keep that context,
+    # but leave diffs in the original-mail reader instead of sending them to AI.
+    lines, in_diff = [], False
+    for line in message.get('body', '').splitlines():
+        if re.match(r'^\s*(?:>\s*)*diff --git ', line):
+            in_diff = True
+            continue
+        if in_diff and (line.lstrip().startswith('>') or re.match(r'^(?:[+@\-]|index |\s+\S)', line)):
+            continue
+        lines.append(line)
+    return '\n'.join(lines)
+
+
 def topics(payload):
     records = {r['id']: r for r in payload.get('records', [])}
     groups = [{k: copy.deepcopy(s[k]) for k in ('id', 'title', 'record_ids')} for s in payload.get('series', [])]
@@ -184,7 +199,9 @@ def effective(topic, entry):
     return {'id': topic['id'], 'title': topic['title'], 'record_ids': topic['record_ids'], 'version': topic['version'],
         'fingerprint': topic['fingerprint'], 'last_date': topic['last_date'], 'status': status,
         'summary': ai['summary'] if ai else topic['base_reason'], 'priority': ai.get('priority', 'normal') if ai else 'normal',
-        'action_items': ai.get('action_items', []) if ai else [], 'reply_draft': draft,
+        'action_items': [('核对已有验证事实与提交说明；资料不足时向评审者澄清所需信息。'
+                          if re.search(r'reproduc|fault.inject|failure.inject|复现|故障注入', a, re.I) else a)
+                         for a in ai.get('action_items', [])] if ai else [], 'reply_draft': draft,
         'evidence_ids': ai['evidence_ids'] if ai else topic['evidence_ids'],
         'ai_state': entry.get('ai_state', 'pending') if fresh else 'pending',
         'analyzed_at': entry.get('analyzed_at', '') if fresh else '', 'model': entry.get('model', '') if fresh else '',
@@ -257,7 +274,7 @@ def analyze(topic, config, token, post):
         author = parseaddr(m.get('sender', ''))[1].casefold() in topic['own']
         # Submission metadata establishes versions. Detailed patch bodies are
         # unnecessary for correspondence triage; author follow-up replies stay.
-        source = '本人原始投递（补丁正文省略）。' if author and submission(m) else plain(m.get('body', ''))
+        source = '本人原始投递（补丁正文省略）。' if author and submission(m) else discussion_text(m)
         body = source[:min(3500, remaining)]
         limited |= len(body) < len(source)
         remaining -= len(body)
@@ -277,14 +294,16 @@ def analyze(topic, config, token, post):
         '历史私信/已发送邮件并不完整，只能说归档未见，不能断言用户忘记回复。'
         '不改变 Applied、主线、CVE。不生成或补写漏洞触发、故障注入、漏洞复现、攻击payload或利用操作步骤；'
         '遇到此类请求只提醒用户核对已有测试事实、提供必要背景或向reviewer澄清，不给出具体操作。'
-        '建议限于通信、修改计划和核实；区分内核版本信息与patch的v1/v2，不能擅自混为一谈；'
+        '建议限于通信、修改计划和核实；依据紧邻引用理解指代，尤其 version 可能指内核版本、patch的v1/v2或辅助工具/模型版本。'
+        '例如 Assisted-by: LLM Codex 后的 Please add the version 是在要求补充所用工具或模型版本；'
+        '未知版本应建议用户核对，绝不能编造；引用中的旧请求不等于本封作者再次提出请求。'
         '英文草稿只表达计划和询问，不得编造已经修改、测试或发送，也不得虚构测试结果。'
         '只输出JSON：status(needs_reply/needs_work/waiting/resolved/uncertain)，summary(中文，明确剩余问题)，'
         'priority(high/normal/low，仅明确阻塞/回归为high)，action_items(最多5条中文具体下一步)，'
         'reply_draft(英文可编辑草稿，可为空)，evidence_ids(1到5个输入中的message_id，支撑当前结论)。'
         'needs_reply或needs_work至少引用一封外部反馈。不确定时用uncertain。')
     content = json.dumps({'title': topic['title'], 'latest_version': topic['version'], 'has_acceptance_evidence': topic['accepted'],
-        'coverage': COVERAGE, 'context_limited': limited, 'omitted': '引用行、diff、签名后内容可能省略', 'messages': messages}, ensure_ascii=False)
+        'coverage': COVERAGE, 'context_limited': limited, 'omitted': '原始补丁正文及 diff 省略；评审引用保留，过长内容截断', 'messages': messages}, ensure_ascii=False)
     req = {'model': config['glm_model'], 'stream': False, 'max_tokens': 2100, 'messages': [{'role': 'user', 'content': content}]}
     if config.get('glm_protocol') == 'anthropic_messages':
         req['system'] = system

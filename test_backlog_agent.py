@@ -161,6 +161,17 @@ class BacklogTests(unittest.TestCase):
         self.assertNotIn('tools', self.post.call_args.args[1])
         self.assertNotIn('response_format', self.post.call_args.args[1])
 
+    def test_inline_review_keeps_quoted_metadata_needed_for_version_request(self):
+        review = copy.deepcopy(self.review)
+        review['body'] = '> Assisted-by: LLM Codex\nPlease add the version.\n> diff --git a/private b/private\n> omitted code\nThe diff looks good.'
+        self.process(self.payload_for(self.original, review))
+        context = json.loads(self.post.call_args.args[1]['messages'][-1]['content'])
+        text = context['messages'][-1]['text']
+        self.assertIn('> Assisted-by: LLM Codex\nPlease add the version.', text)
+        self.assertNotIn('diff --git', text)
+        self.assertNotIn('omitted code', text)
+        self.assertIn('The diff looks good.', text)
+
     def test_ui_update_during_model_request_preserves_user_override(self):
         def model(*args):
             self.action('done')
