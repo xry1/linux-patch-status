@@ -94,20 +94,32 @@ class BacklogTests(unittest.TestCase):
         self.process(self.payload_for(self.original, self.review, v2, late))
         self.post.assert_called_once()
 
-    def test_acceptance_closes_old_work_but_post_acceptance_and_backport_requests_survive(self):
+    def test_applied_series_is_not_a_mail_todo_even_with_late_feedback(self):
         accepted = message('accept', 'Re: [PATCH net] driver: example', 'Applied to net.', day=3)
         p = self.payload_for(self.original, self.review, accepted)
         self.process(p)
-        self.assertEqual(self.item(p)['status'], 'resolved')
+        self.assertEqual(agent.topics(p), {})
         self.post.assert_not_called()
         late = message('late', 'Re: [PATCH net] driver: example', 'Please send a follow-up to fix this regression.', day=4)
-        self.process(self.payload_for(self.original, self.review, accepted, late))
-        self.post.assert_called_once()
+        late_payload = self.payload_for(self.original, self.review, accepted, late)
+        self.assertEqual(agent.topics(late_payload), {})
+        self.process(late_payload)
+        self.post.assert_not_called()
+
+    def test_applied_series_is_excluded_from_mail_todo(self):
+        accepted = message('accept', 'Re: [PATCH net] driver: example', 'Applied to net.', day=3)
+        p = self.payload_for(self.original, self.review, accepted)
+        self.assertEqual(agent.topics(p), {})
+        report = agent.view(p, self.directory)
+        self.assertEqual(report['items'], [])
+        self.assertEqual(report['counts'], {label: 0 for label in agent.LABELS})
+        agent.process(p, self.directory, self.config, 'synthetic', self.post, limit=5)
+        self.post.assert_not_called()
 
     def test_acceptance_mail_with_followup_request_is_not_silently_closed(self):
         accepted = message('accept', 'Re: [PATCH net] driver: example', 'Applied to net.\nPlease add tests in a follow-up.', day=3)
         p = self.payload_for(self.original, self.review, accepted)
-        self.assertTrue(next(iter(agent.topics(p).values()))['candidate'])
+        self.assertEqual(agent.topics(p), {})
 
     def test_series_is_one_task_including_review_of_member(self):
         p = self.payload_for(numbered('c', '0/2', 'net: series'), numbered('a', '1/2', 'net: one', parent='c'),

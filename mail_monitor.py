@@ -30,7 +30,7 @@ from pathlib import Path
 import patch_status_dashboard as dashboard
 import revision_reminders
 import backlog_agent
-from mail_credentials import OFFICIAL_GLM_URL, glm_endpoint, interactive_config, read_credentials
+from mail_credentials import OFFICIAL_GLM_URL, glm_endpoint, interactive_config, read_credentials, ai_token
 from api_transport import NativeHTTPError, windows_json
 
 ROOT = Path(__file__).resolve().parent
@@ -42,8 +42,10 @@ DEFAULTS = {
     'author_email': 'runyu.xiao@seu.edu.cn', 'author_aliases': [],
     'poll_seconds': 300, 'batch_limit': 200, 'max_message_bytes': 8 * 1024 * 1024,
     'auto_folders': True, 'folder_batch_limit': 25, 'folder_excludes': [],
-    'glm_model': 'glm-4.7-flash', 'glm_max_calls_per_cycle': 5,
-    'glm_api_url': OFFICIAL_GLM_URL, 'glm_protocol': 'chat_completions',
+    # loliapi is the configured gateway; the model can be changed without
+    # moving mailbox text or credentials to another provider.
+    'glm_model': 'deepseek-flash', 'glm_max_calls_per_cycle': 5,
+    'glm_api_url': 'https://loliapi.org/v1/chat/completions', 'glm_protocol': 'chat_completions',
     'feishu_keyword': 'Linux Patch', 'feishu_max_calls_per_cycle': 10,
     'public_url': 'https://xry1.github.io/linux-patch-status/',
     'backlog_enabled': False, 'backlog_max_calls_per_cycle': 2, 'backlog_max_calls_per_day': 30,
@@ -800,7 +802,8 @@ def run_once(directory, config, state, seed, connect=open_mailbox):
     saved = read_credentials(directory)
     credentials = {name: os.environ.get(name) or saved.get(name, '') for name in (
         'PATCH_IMAP_PASSWORD', 'PATCH_GLM_API_KEY', 'PATCH_FEISHU_WEBHOOK', 'PATCH_FEISHU_SECRET')}
-    password, glm_token, webhook = (credentials[name] for name in ('PATCH_IMAP_PASSWORD', 'PATCH_GLM_API_KEY', 'PATCH_FEISHU_WEBHOOK'))
+    credentials['PATCH_AI_API_KEY'] = ai_token(config, credentials)
+    password, glm_token, webhook = (credentials[name] for name in ('PATCH_IMAP_PASSWORD', 'PATCH_AI_API_KEY', 'PATCH_FEISHU_WEBHOOK'))
     if not password or not glm_token or not webhook:
         raise RuntimeError('尚未配置完整：请运行“配置邮箱提醒.cmd”，填写邮箱客户端授权码、GLM API Key 和飞书 Webhook。')
     save = lambda: save_json(directory / 'state.json', state)
@@ -858,8 +861,10 @@ def main():
                 return 0
             saved = read_credentials(directory)
             if any(not (os.environ.get(name) or saved.get(name)) for name in (
-                    'PATCH_IMAP_PASSWORD', 'PATCH_GLM_API_KEY', 'PATCH_FEISHU_WEBHOOK')):
+                    'PATCH_IMAP_PASSWORD', 'PATCH_FEISHU_WEBHOOK')):
                 raise RuntimeError('尚未配置完整，请先运行“配置邮箱提醒.cmd”。监测未启动。')
+            if not ai_token(config, saved):
+                raise RuntimeError('尚未配置当前 AI 服务商的 API Key，请先运行“配置邮箱提醒.cmd”。监测未启动。')
             while True:
                 seed = load_seed()
                 try:
@@ -881,7 +886,7 @@ def main():
                 if config.get('backlog_enabled'):
                     try:
                         backlog_agent.process(combined_payload(seed, state, config), directory, config,
-                            os.environ.get('PATCH_GLM_API_KEY') or saved.get('PATCH_GLM_API_KEY'), post_json)
+                            ai_token(config, saved), post_json)
                         render_private(directory, config, seed, state)
                     except (OSError, ValueError, RuntimeError):
                         print(now() + ' 积压助手暂不可用或正在分析，稍后继续。', file=sys.stderr, flush=True)

@@ -395,6 +395,18 @@ class MailMonitorTests(unittest.TestCase):
                     'https://loliapi.org/v1?key=secret', 'https://loliapi.org/v1#fragment'):
             with self.assertRaises(ValueError):
                 mail_credentials.glm_endpoint({'glm_api_url': url})
+
+    def test_deepseek_endpoint_and_provider_key_are_separated(self):
+        self.assertEqual(mail_credentials.glm_endpoint({'glm_api_url': 'https://api.deepseek.com'}),
+                         'https://api.deepseek.com/v1/chat/completions')
+        self.assertEqual(mail_credentials.ai_provider({'glm_api_url': 'https://api.deepseek.com/v1'}), 'deepseek')
+        with patch.dict(os.environ, {'PATCH_DEEPSEEK_API_KEY': 'deep-key', 'PATCH_GLM_API_KEY': 'old-key'}, clear=True):
+            self.assertEqual(mail_credentials.ai_token({'glm_api_url': 'https://api.deepseek.com'}, {}), 'deep-key')
+        with patch.dict(os.environ, {'PATCH_GLM_API_KEY': 'old-key'}, clear=True):
+            self.assertEqual(mail_credentials.ai_token({'glm_api_url': 'https://api.deepseek.com'},
+                                                       {'PATCH_GLM_API_KEY': 'stored-old-key'}), '')
+        self.assertEqual(mail_credentials.ai_token({'glm_api_url': 'https://loliapi.org/v1'},
+                                                   {'PATCH_GLM_API_KEY': 'stored-old-key'}), 'stored-old-key')
         with tempfile.TemporaryDirectory() as folder:
             config = copy.deepcopy(self.config)
             config.pop('glm_api_url')
@@ -464,7 +476,7 @@ class MailMonitorTests(unittest.TestCase):
     @unittest.skipUnless(os.name == 'nt', 'Windows DPAPI only')
     def test_changing_provider_requires_its_key_before_replacing_saved_config(self):
         with tempfile.TemporaryDirectory() as folder:
-            answers = iter(['', '', '', '', 'https://loliapi.org/v1', '', ''])
+            answers = iter(['', '', '', '', 'https://api.deepseek.com/v1', '', ''])
             with patch.object(mail_credentials, 'interactive_console', return_value=True), \
                     patch.object(mail_credentials, 'read_credentials', return_value={
                         'PATCH_IMAP_PASSWORD': 'synthetic-mail-password', 'PATCH_GLM_API_KEY': 'old-provider-key'}), \

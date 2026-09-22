@@ -1,10 +1,10 @@
 {
   "schema": 2,
-  "attempted_at": "2026-09-15T07:26:19+00:00",
-  "completed_at": "2026-09-15T07:26:19+00:00",
+  "attempted_at": "2026-09-22T09:24:57+00:00",
+  "completed_at": "2026-09-22T09:24:57+00:00",
   "records": {
     "2b4805549f42b8df": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "ebdb6b0cc453103972278258d88d555d43129aef"
       ],
@@ -24,7 +24,7 @@
       "removed_matches": []
     },
     "5f11b859aba5bb67": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [],
       "state": "missing_commit",
       "matches": [],
@@ -40,7 +40,7 @@
       "removed_matches": []
     },
     "7c44203887fb9e2a": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "bda8324270b1ac91bfba1df8928e0570e29759e8"
       ],
@@ -65,16 +65,20 @@
             "matching_fixed": [
               "bda8324270b1ac91bfba1df8928e0570e29759e8"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80938.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80938.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80938.json",
+              "ratings": [],
+              "record_updated_at": "2026-09-14T11:59:02.208Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80938.json",
             "ratings": [],
-            "record_updated_at": "2026-09-14T11:59:02.208Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-09-14T11:59:02.208Z"
+          }
         }
       ],
       "candidates": [],
@@ -91,12 +95,77 @@
       "removed_matches": []
     },
     "637076efe88171af": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "33930840b5f0a79f826e7c69dc6cd78f72a67481"
       ],
-      "state": "unmatched",
-      "matches": [],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-90235",
+          "title": "sunrpc: xprtsock: annotate shared socket callbacks with READ_ONCE/WRITE_ONCE",
+          "commit": "33930840b5f0a79f826e7c69dc6cd78f72a67481",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-90235.json?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+          "proof": {
+            "sha": "33930840b5f0a79f826e7c69dc6cd78f72a67481",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "33930840b5f0a79f826e7c69dc6cd78f72a67481",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-90235.sha1?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c"
+          },
+          "cvelist": {
+            "id": "CVE-2026-90235",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-18T17:54:01.752Z",
+            "matching_fixed": [
+              "33930840b5f0a79f826e7c69dc6cd78f72a67481"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90235.json",
+            "severity": {
+              "level": "critical",
+              "score": 9.8,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90235.json",
+              "ratings": [
+                {
+                  "level": "critical",
+                  "score": 9.8,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90235.json"
+                }
+              ],
+              "record_updated_at": "2026-09-18T17:54:01.752Z"
+            }
+          },
+          "severity": {
+            "level": "critical",
+            "score": 9.8,
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "role": "CNA",
+            "provider": "Linux",
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90235.json",
+            "ratings": [
+              {
+                "level": "critical",
+                "score": 9.8,
+                "version": "3.1",
+                "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                "role": "CNA",
+                "provider": "Linux",
+                "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90235.json"
+              }
+            ],
+            "record_updated_at": "2026-09-18T17:54:01.752Z"
+          }
+        }
+      ],
       "candidates": [],
       "errors": [],
       "osv_query": {
@@ -118,12 +187,77 @@
       "removed_matches": []
     },
     "508b47b1bc809d42": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "3f92a64545165bdbb36dee8fa35626b295463313"
       ],
-      "state": "unmatched",
-      "matches": [],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-90007",
+          "title": "scsi: pm8001: Use rollback index when freeing MSI-X vectors",
+          "commit": "3f92a64545165bdbb36dee8fa35626b295463313",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-90007.json?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+          "proof": {
+            "sha": "3f92a64545165bdbb36dee8fa35626b295463313",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "3f92a64545165bdbb36dee8fa35626b295463313",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-90007.sha1?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c"
+          },
+          "cvelist": {
+            "id": "CVE-2026-90007",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-16T14:41:21.926Z",
+            "matching_fixed": [
+              "3f92a64545165bdbb36dee8fa35626b295463313"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90007.json",
+            "severity": {
+              "level": "high",
+              "score": 7.8,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90007.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 7.8,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90007.json"
+                }
+              ],
+              "record_updated_at": "2026-09-16T14:41:21.926Z"
+            }
+          },
+          "severity": {
+            "level": "high",
+            "score": 7.8,
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "role": "CNA",
+            "provider": "Linux",
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90007.json",
+            "ratings": [
+              {
+                "level": "high",
+                "score": 7.8,
+                "version": "3.1",
+                "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+                "role": "CNA",
+                "provider": "Linux",
+                "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90007.json"
+              }
+            ],
+            "record_updated_at": "2026-09-16T14:41:21.926Z"
+          }
+        }
+      ],
       "candidates": [],
       "errors": [],
       "osv_query": {
@@ -138,7 +272,7 @@
       "removed_matches": []
     },
     "3894e6486686ba70": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "f8e43fe0f22b7137ce456e6fe3581d3098174f74"
       ],
@@ -163,7 +297,28 @@
             "matching_fixed": [
               "f8e43fe0f22b7137ce456e6fe3581d3098174f74"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89599.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89599.json",
+            "severity": {
+              "level": "high",
+              "score": 8.4,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89599.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 8.4,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89599.json"
+                }
+              ],
+              "record_updated_at": "2026-09-14T12:01:22.440Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -184,10 +339,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89599.json"
               }
             ],
-            "record_updated_at": "2026-09-14T12:01:22.440Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-09-14T12:01:22.440Z"
+          }
         }
       ],
       "candidates": [],
@@ -204,12 +357,47 @@
       "removed_matches": []
     },
     "4b35430398b67689": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "612ccf42acd14bb2685fa60c3495ca13e63e8989"
       ],
-      "state": "unmatched",
-      "matches": [],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-93185",
+          "title": "ASoC: rt700-sdw: always drain jack work on remove",
+          "commit": "612ccf42acd14bb2685fa60c3495ca13e63e8989",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-93185.json?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+          "proof": {
+            "sha": "612ccf42acd14bb2685fa60c3495ca13e63e8989",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "612ccf42acd14bb2685fa60c3495ca13e63e8989",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-93185.sha1?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c"
+          },
+          "cvelist": {
+            "id": "CVE-2026-93185",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-17T16:12:11.454Z",
+            "matching_fixed": [
+              "612ccf42acd14bb2685fa60c3495ca13e63e8989"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/93xxx/CVE-2026-93185.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/93xxx/CVE-2026-93185.json",
+              "ratings": [],
+              "record_updated_at": "2026-09-17T16:12:11.454Z"
+            }
+          },
+          "severity": {
+            "level": "unknown",
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/93xxx/CVE-2026-93185.json",
+            "ratings": [],
+            "record_updated_at": "2026-09-17T16:12:11.454Z"
+          }
+        }
+      ],
       "candidates": [],
       "errors": [],
       "osv_query": {
@@ -224,12 +412,47 @@
       "removed_matches": []
     },
     "ccb8cefe827bcef5": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "4105a4c0678b2808fc8046b60321b4f1cc7dae75"
       ],
-      "state": "unmatched",
-      "matches": [],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-89945",
+          "title": "ASoC: cs35l34: drain threaded IRQ before runtime suspend",
+          "commit": "4105a4c0678b2808fc8046b60321b4f1cc7dae75",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89945.json?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+          "proof": {
+            "sha": "4105a4c0678b2808fc8046b60321b4f1cc7dae75",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "4105a4c0678b2808fc8046b60321b4f1cc7dae75",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89945.sha1?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c"
+          },
+          "cvelist": {
+            "id": "CVE-2026-89945",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-16T10:32:31.951Z",
+            "matching_fixed": [
+              "4105a4c0678b2808fc8046b60321b4f1cc7dae75"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89945.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89945.json",
+              "ratings": [],
+              "record_updated_at": "2026-09-16T10:32:31.951Z"
+            }
+          },
+          "severity": {
+            "level": "unknown",
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89945.json",
+            "ratings": [],
+            "record_updated_at": "2026-09-16T10:32:31.951Z"
+          }
+        }
+      ],
       "candidates": [],
       "errors": [],
       "osv_query": {
@@ -244,12 +467,47 @@
       "removed_matches": []
     },
     "159c234ff129dcdb": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "e074c12c428c633e079154301207a6079a208583"
       ],
-      "state": "unmatched",
-      "matches": [],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-89946",
+          "title": "ASoC: cs35l33: drain threaded IRQ before runtime suspend",
+          "commit": "e074c12c428c633e079154301207a6079a208583",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89946.json?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+          "proof": {
+            "sha": "e074c12c428c633e079154301207a6079a208583",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "e074c12c428c633e079154301207a6079a208583",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89946.sha1?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c"
+          },
+          "cvelist": {
+            "id": "CVE-2026-89946",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-16T10:32:32.675Z",
+            "matching_fixed": [
+              "e074c12c428c633e079154301207a6079a208583"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89946.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89946.json",
+              "ratings": [],
+              "record_updated_at": "2026-09-16T10:32:32.675Z"
+            }
+          },
+          "severity": {
+            "level": "unknown",
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89946.json",
+            "ratings": [],
+            "record_updated_at": "2026-09-16T10:32:32.675Z"
+          }
+        }
+      ],
       "candidates": [],
       "errors": [],
       "osv_query": {
@@ -264,7 +522,7 @@
       "removed_matches": []
     },
     "7b3b630bc073dcca": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "6c97817e20598e5473094e0e38d1f51f1cf4dfff"
       ],
@@ -289,7 +547,28 @@
             "matching_fixed": [
               "6c97817e20598e5473094e0e38d1f51f1cf4dfff"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80967.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80967.json",
+            "severity": {
+              "level": "high",
+              "score": 8.4,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80967.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 8.4,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80967.json"
+                }
+              ],
+              "record_updated_at": "2026-09-14T11:59:13.926Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -310,10 +589,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80967.json"
               }
             ],
-            "record_updated_at": "2026-09-14T11:59:13.926Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-09-14T11:59:13.926Z"
+          }
         }
       ],
       "candidates": [],
@@ -337,12 +614,47 @@
       "removed_matches": []
     },
     "91b1345ba0a2f3e6": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "c73cb5b7c159246dd572277c668851a56e516019"
       ],
-      "state": "unmatched",
-      "matches": [],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-90116",
+          "title": "ALSA: mtpav: shut down output timer before card teardown",
+          "commit": "c73cb5b7c159246dd572277c668851a56e516019",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-90116.json?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+          "proof": {
+            "sha": "c73cb5b7c159246dd572277c668851a56e516019",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "c73cb5b7c159246dd572277c668851a56e516019",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-90116.sha1?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c"
+          },
+          "cvelist": {
+            "id": "CVE-2026-90116",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-17T16:06:22.065Z",
+            "matching_fixed": [
+              "c73cb5b7c159246dd572277c668851a56e516019"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90116.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90116.json",
+              "ratings": [],
+              "record_updated_at": "2026-09-17T16:06:22.065Z"
+            }
+          },
+          "severity": {
+            "level": "unknown",
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/90xxx/CVE-2026-90116.json",
+            "ratings": [],
+            "record_updated_at": "2026-09-17T16:06:22.065Z"
+          }
+        }
+      ],
       "candidates": [],
       "errors": [],
       "osv_query": {
@@ -364,12 +676,77 @@
       "removed_matches": []
     },
     "8851bfdaefd58f7e": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "33abb7491e89285a41565670945293dda841afc4"
       ],
-      "state": "unmatched",
-      "matches": [],
+      "state": "confirmed",
+      "matches": [
+        {
+          "id": "CVE-2026-89980",
+          "title": "ALSA: harmony: initialize locks before requesting IRQ",
+          "commit": "33abb7491e89285a41565670945293dda841afc4",
+          "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89980.json?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+          "proof": {
+            "sha": "33abb7491e89285a41565670945293dda841afc4",
+            "kind": "original_fix",
+            "field": ".sha1",
+            "evidence": "33abb7491e89285a41565670945293dda841afc4",
+            "source": "https://git.kernel.org/pub/scm/linux/security/vulns.git/tree/cve/published/2026/CVE-2026-89980.sha1?id=ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c"
+          },
+          "cvelist": {
+            "id": "CVE-2026-89980",
+            "state": "PUBLISHED",
+            "updated_at": "2026-09-16T14:40:59.448Z",
+            "matching_fixed": [
+              "33abb7491e89285a41565670945293dda841afc4"
+            ],
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89980.json",
+            "severity": {
+              "level": "high",
+              "score": 8.4,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89980.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 8.4,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89980.json"
+                }
+              ],
+              "record_updated_at": "2026-09-16T14:40:59.448Z"
+            }
+          },
+          "severity": {
+            "level": "high",
+            "score": 8.4,
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "role": "CNA",
+            "provider": "Linux",
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89980.json",
+            "ratings": [
+              {
+                "level": "high",
+                "score": 8.4,
+                "version": "3.1",
+                "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                "role": "CNA",
+                "provider": "Linux",
+                "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/89xxx/CVE-2026-89980.json"
+              }
+            ],
+            "record_updated_at": "2026-09-16T14:40:59.448Z"
+          }
+        }
+      ],
       "candidates": [],
       "errors": [],
       "osv_query": {
@@ -384,7 +761,7 @@
       "removed_matches": []
     },
     "3ecea0a9c7d4913e": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "14dc3dee0efd18a7b85ba59879e7e217c7c6279a"
       ],
@@ -404,17 +781,20 @@
       "removed_matches": []
     },
     "0a63e2e3cbdc3f32": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "d5ea0d226e8f0801d78702142a124d78c317d822"
       ],
       "state": "unmatched",
       "matches": [],
       "candidates": [],
-      "errors": []
+      "errors": [],
+      "osv_query": {},
+      "osv_affected": [],
+      "removed_matches": []
     },
     "2a9ca751e9d7c1e4": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [],
       "state": "missing_commit",
       "matches": [],
@@ -430,7 +810,7 @@
       "removed_matches": []
     },
     "1b2012c4db6a9e95": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "e1406330d70e56dd44fa6fbafc86e77e5c80c122"
       ],
@@ -450,7 +830,7 @@
       "removed_matches": []
     },
     "68747837c3fa5fb3": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "4cfa625b60d55b81bc6620113f213349bcc85a4e"
       ],
@@ -470,7 +850,7 @@
       "removed_matches": []
     },
     "9c922badf3fb2950": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "ed4f05d9f2f42fd866f55108db8123eefcc5fb33"
       ],
@@ -495,7 +875,28 @@
             "matching_fixed": [
               "ed4f05d9f2f42fd866f55108db8123eefcc5fb33"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80943.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80943.json",
+            "severity": {
+              "level": "high",
+              "score": 7.6,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80943.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 7.6,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80943.json"
+                }
+              ],
+              "record_updated_at": "2026-09-13T06:28:18.870Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -516,10 +917,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80943.json"
               }
             ],
-            "record_updated_at": "2026-09-13T06:28:18.870Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-09-13T06:28:18.870Z"
+          }
         }
       ],
       "candidates": [],
@@ -536,7 +935,7 @@
       "removed_matches": []
     },
     "38f900538707c95b": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7"
       ],
@@ -569,7 +968,7 @@
       "removed_matches": []
     },
     "1152f7246aad8924": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "c4da23777d35f4aaae7ff0ea9a503ba2702ef53c"
       ],
@@ -589,7 +988,7 @@
       "removed_matches": []
     },
     "8f0c04939361b88c": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "8a53f9102a0d3eeb8784999f925028acf339c276"
       ],
@@ -614,7 +1013,28 @@
             "matching_fixed": [
               "8a53f9102a0d3eeb8784999f925028acf339c276"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80953.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80953.json",
+            "severity": {
+              "level": "high",
+              "score": 8.4,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80953.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 8.4,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80953.json"
+                }
+              ],
+              "record_updated_at": "2026-09-13T06:28:26.721Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -635,10 +1055,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80953.json"
               }
             ],
-            "record_updated_at": "2026-09-13T06:28:26.721Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-09-13T06:28:26.721Z"
+          }
         }
       ],
       "candidates": [],
@@ -655,7 +1073,7 @@
       "removed_matches": []
     },
     "3fe658e725fec144": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "3e5d1bf4bd687beb2cb4e32a07af695455925588"
       ],
@@ -675,7 +1093,7 @@
       "removed_matches": []
     },
     "46109ae67bf8e0f7": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "f48763beab4eea41fc480c9702ec6eebe8d75e4f"
       ],
@@ -702,7 +1120,7 @@
       "removed_matches": []
     },
     "e2ab5de9d048121a": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "7a20eb54224ab7481c1f5a1619a6a5677be93eed"
       ],
@@ -722,7 +1140,7 @@
       "removed_matches": []
     },
     "602dc5faccb49c33": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "04405aeef4f8d7bcac6dcb1947acafdb4420c2c3"
       ],
@@ -742,17 +1160,20 @@
       "removed_matches": []
     },
     "8aae52492e4bf043": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "baf7e43b7fb5afb777353bf265ddf9d909f72b9f"
       ],
       "state": "unmatched",
       "matches": [],
       "candidates": [],
-      "errors": []
+      "errors": [],
+      "osv_query": {},
+      "osv_affected": [],
+      "removed_matches": []
     },
     "f9056af03581aa8f": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "0b352f04b9be2c83c0240aa6dae7257fefa90464"
       ],
@@ -772,7 +1193,7 @@
       "removed_matches": []
     },
     "10a60bd7f8430cb9": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "f918554fb7246e89b98ef90abe80801f038258b3"
       ],
@@ -792,7 +1213,7 @@
       "removed_matches": []
     },
     "2777ff27ccc31b8d": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720"
       ],
@@ -817,16 +1238,20 @@
             "matching_fixed": [
               "d3e91a95b2b0fc6336dbf3ec90d831a1654d2720"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72063.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72063.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72063.json",
+              "ratings": [],
+              "record_updated_at": "2026-08-23T12:46:39.651Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72063.json",
             "ratings": [],
-            "record_updated_at": "2026-08-23T12:46:39.651Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-23T12:46:39.651Z"
+          }
         }
       ],
       "candidates": [],
@@ -843,7 +1268,7 @@
       "removed_matches": []
     },
     "157e7b44d4271a6e": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "2a665946e0407a05a3f81bd56a08553c446498e0"
       ],
@@ -868,16 +1293,20 @@
             "matching_fixed": [
               "2a665946e0407a05a3f81bd56a08553c446498e0"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68403.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68403.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68403.json",
+              "ratings": [],
+              "record_updated_at": "2026-08-19T16:34:54.805Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68403.json",
             "ratings": [],
-            "record_updated_at": "2026-08-19T16:34:54.805Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-19T16:34:54.805Z"
+          }
         }
       ],
       "candidates": [],
@@ -894,7 +1323,7 @@
       "removed_matches": []
     },
     "659777370b073ee9": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "18f116931f52e3c3303ad4b15ff41eb89b0e4239"
       ],
@@ -921,7 +1350,7 @@
       "removed_matches": []
     },
     "5502fe92a40b961a": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "ce1fed11d18e163baf7f875152a33bf80f625c1a"
       ],
@@ -946,7 +1375,28 @@
             "matching_fixed": [
               "ce1fed11d18e163baf7f875152a33bf80f625c1a"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68179.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68179.json",
+            "severity": {
+              "level": "high",
+              "score": 8.4,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68179.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 8.4,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68179.json"
+                }
+              ],
+              "record_updated_at": "2026-08-17T05:00:20.666Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -967,10 +1417,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/68xxx/CVE-2026-68179.json"
               }
             ],
-            "record_updated_at": "2026-08-17T05:00:20.666Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-17T05:00:20.666Z"
+          }
         }
       ],
       "candidates": [],
@@ -987,7 +1435,7 @@
       "removed_matches": []
     },
     "7e2f0e098b8e04f7": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "536fb3d739d75a03cb318c0c6fe799425cfea501"
       ],
@@ -1012,7 +1460,28 @@
             "matching_fixed": [
               "536fb3d739d75a03cb318c0c6fe799425cfea501"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72005.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72005.json",
+            "severity": {
+              "level": "high",
+              "score": 7.8,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72005.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 7.8,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72005.json"
+                }
+              ],
+              "record_updated_at": "2026-08-17T05:39:22.758Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -1033,10 +1502,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/72xxx/CVE-2026-72005.json"
               }
             ],
-            "record_updated_at": "2026-08-17T05:39:22.758Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-17T05:39:22.758Z"
+          }
         }
       ],
       "candidates": [],
@@ -1053,7 +1520,7 @@
       "removed_matches": []
     },
     "3fabe868f4974737": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "010382937fb69892b3469ac4d30af072262f59e8"
       ],
@@ -1078,16 +1545,20 @@
             "matching_fixed": [
               "010382937fb69892b3469ac4d30af072262f59e8"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64454.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64454.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64454.json",
+              "ratings": [],
+              "record_updated_at": "2026-08-17T04:55:58.408Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64454.json",
             "ratings": [],
-            "record_updated_at": "2026-08-17T04:55:58.408Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-17T04:55:58.408Z"
+          }
         }
       ],
       "candidates": [],
@@ -1104,7 +1575,7 @@
       "removed_matches": []
     },
     "bf432d53d8359aa5": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc"
       ],
@@ -1124,7 +1595,7 @@
       "removed_matches": []
     },
     "e98ca4e3c7f3b17e": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "ee5fb641c4ccac8406c668d3e947eb20ce44f233"
       ],
@@ -1149,16 +1620,20 @@
             "matching_fixed": [
               "ee5fb641c4ccac8406c668d3e947eb20ce44f233"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80659.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80659.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80659.json",
+              "ratings": [],
+              "record_updated_at": "2026-08-28T06:49:04.389Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80659.json",
             "ratings": [],
-            "record_updated_at": "2026-08-28T06:49:04.389Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-28T06:49:04.389Z"
+          }
         }
       ],
       "candidates": [],
@@ -1175,7 +1650,7 @@
       "removed_matches": []
     },
     "2a87f3b6b8bf9831": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "47186409c092cd7dd70350999186c700233e854d"
       ],
@@ -1200,7 +1675,28 @@
             "matching_fixed": [
               "47186409c092cd7dd70350999186c700233e854d"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/74xxx/CVE-2026-74262.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/74xxx/CVE-2026-74262.json",
+            "severity": {
+              "level": "high",
+              "score": 7.8,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/74xxx/CVE-2026-74262.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 7.8,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/74xxx/CVE-2026-74262.json"
+                }
+              ],
+              "record_updated_at": "2026-08-17T05:45:10.909Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -1221,10 +1717,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/74xxx/CVE-2026-74262.json"
               }
             ],
-            "record_updated_at": "2026-08-17T05:45:10.909Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-17T05:45:10.909Z"
+          }
         }
       ],
       "candidates": [],
@@ -1241,7 +1735,7 @@
       "removed_matches": []
     },
     "82bac9bdb989a6a8": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "29bef9934b2521f787bb15dd1985d4c0d12ae02a"
       ],
@@ -1266,16 +1760,20 @@
             "matching_fixed": [
               "29bef9934b2521f787bb15dd1985d4c0d12ae02a"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64425.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64425.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64425.json",
+              "ratings": [],
+              "record_updated_at": "2026-09-08T08:50:39.947Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64425.json",
             "ratings": [],
-            "record_updated_at": "2026-09-08T08:50:39.947Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-09-08T08:50:39.947Z"
+          }
         }
       ],
       "candidates": [],
@@ -1292,7 +1790,7 @@
       "removed_matches": []
     },
     "e8b92080485195e1": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "cd5a6a5096b246e10600da3ac47a1274ce9573c8"
       ],
@@ -1312,7 +1810,7 @@
       "removed_matches": []
     },
     "79c27c91cb60dfd0": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "6e1b9bff1202da55c464e36bd34a2b6863d7fe30"
       ],
@@ -1332,7 +1830,7 @@
       "removed_matches": []
     },
     "6eec996c51cb7de7": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "e31408734332b8cc611342cdaaab6ba492180156"
       ],
@@ -1357,16 +1855,20 @@
             "matching_fixed": [
               "e31408734332b8cc611342cdaaab6ba492180156"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80660.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80660.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80660.json",
+              "ratings": [],
+              "record_updated_at": "2026-08-28T06:49:04.992Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/80xxx/CVE-2026-80660.json",
             "ratings": [],
-            "record_updated_at": "2026-08-28T06:49:04.992Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-28T06:49:04.992Z"
+          }
         }
       ],
       "candidates": [],
@@ -1383,7 +1885,7 @@
       "removed_matches": []
     },
     "dfd6c624d28ff7bb": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b"
       ],
@@ -1408,16 +1910,20 @@
             "matching_fixed": [
               "286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64428.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64428.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64428.json",
+              "ratings": [],
+              "record_updated_at": "2026-08-17T04:55:28.748Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64428.json",
             "ratings": [],
-            "record_updated_at": "2026-08-17T04:55:28.748Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-17T04:55:28.748Z"
+          }
         }
       ],
       "candidates": [],
@@ -1434,7 +1940,7 @@
       "removed_matches": []
     },
     "03f1c13f64c578cf": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "90f0109019e6817eb40a486671b7722d1544ae29"
       ],
@@ -1459,16 +1965,20 @@
             "matching_fixed": [
               "90f0109019e6817eb40a486671b7722d1544ae29"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64429.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64429.json",
+            "severity": {
+              "level": "unknown",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64429.json",
+              "ratings": [],
+              "record_updated_at": "2026-08-17T04:55:29.849Z"
+            }
           },
           "severity": {
             "level": "unknown",
             "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64429.json",
             "ratings": [],
-            "record_updated_at": "2026-08-17T04:55:29.849Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-17T04:55:29.849Z"
+          }
         }
       ],
       "candidates": [],
@@ -1485,7 +1995,7 @@
       "removed_matches": []
     },
     "97a189f8dfc4e260": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "fa09f08ede3db3050ae16ae1ed92c902d0cada23"
       ],
@@ -1505,7 +2015,7 @@
       "removed_matches": []
     },
     "ae0b7cff9a91630f": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "2641a9e0a1dd4af2e21995470a21d55dd35e5203"
       ],
@@ -1530,7 +2040,28 @@
             "matching_fixed": [
               "2641a9e0a1dd4af2e21995470a21d55dd35e5203"
             ],
-            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64206.json"
+            "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64206.json",
+            "severity": {
+              "level": "high",
+              "score": 8.8,
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "role": "CNA",
+              "provider": "Linux",
+              "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64206.json",
+              "ratings": [
+                {
+                  "level": "high",
+                  "score": 8.8,
+                  "version": "3.1",
+                  "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                  "role": "CNA",
+                  "provider": "Linux",
+                  "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64206.json"
+                }
+              ],
+              "record_updated_at": "2026-08-17T04:51:53.043Z"
+            }
           },
           "severity": {
             "level": "high",
@@ -1551,10 +2082,8 @@
                 "source": "https://raw.githubusercontent.com/CVEProject/cvelistV5/main/cves/2026/64xxx/CVE-2026-64206.json"
               }
             ],
-            "record_updated_at": "2026-08-17T04:51:53.043Z",
-            "checked_at": "2026-09-15T08:08:19+00:00"
-          },
-          "severity_error": null
+            "record_updated_at": "2026-08-17T04:51:53.043Z"
+          }
         }
       ],
       "candidates": [],
@@ -1571,7 +2100,7 @@
       "removed_matches": []
     },
     "1b37d011620bd759": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "4fa0619d039f561dd2207055cf21a10abaeebe0e"
       ],
@@ -1591,7 +2120,7 @@
       "removed_matches": []
     },
     "691eb3b75715c37e": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "684a00c291fbde2d42b6692c75855df7ff8894ee"
       ],
@@ -1611,7 +2140,7 @@
       "removed_matches": []
     },
     "e43236f5b0eb9b4b": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "0e901ee5c6f9e1a382099cd7dbee1360c80c441c"
       ],
@@ -1631,7 +2160,7 @@
       "removed_matches": []
     },
     "2667403b883ffaa8": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "f425c55cb60e116a53f2c196100dc09c5a828383"
       ],
@@ -1651,7 +2180,7 @@
       "removed_matches": []
     },
     "a1eca66950e06f2b": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "9cc47acc2f6ec74869e4be3ab59fe662cec887c3"
       ],
@@ -1671,7 +2200,7 @@
       "removed_matches": []
     },
     "4353bb3bc339a390": {
-      "at": "2026-09-15T07:26:19+00:00",
+      "at": "2026-09-22T09:24:57+00:00",
       "commits": [
         "5a9c554ff86d7f3750d95ce72ad0666e02e37b92"
       ],
@@ -1694,10 +2223,9 @@
   "unique_commits": 49,
   "official_source": {
     "repository": "https://git.kernel.org/pub/scm/linux/security/vulns.git",
-    "revision": "06447456a1589f63912de8a468e1313738ac8243",
-    "committed_at": "2026-09-14T14:06:03+02:00",
-    "published_records": 15636,
-    "rejected_records": 312
-  },
-  "severity_checked_at": "2026-09-15T08:08:19+00:00"
+    "revision": "ffaa1b4ec1ea8813a90a5a6f9f577958c848a33c",
+    "committed_at": "2026-09-21T15:30:03+02:00",
+    "published_records": 16511,
+    "rejected_records": 315
+  }
 }

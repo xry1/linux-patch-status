@@ -1,13 +1,13 @@
-# 163 学校 / 企业邮箱、GLM 与飞书提醒
+# 163 学校 / 企业邮箱、AI 与飞书提醒
 
-这套接入使用 IMAP SSL 只读收取相关 patch 邮件，用 GLM 生成中文摘要、待办和英文回复草稿，再向你配置的飞书群机器人发送提醒。不会发送邮件回复，也不会由模型修改 Applied、主线或 CVE 核实结果。
+这套接入使用 IMAP SSL 只读收取相关 patch 邮件，用所选 AI 服务商生成中文摘要、待办和英文回复草稿，再向你配置的飞书群机器人发送提醒。不会发送邮件回复，也不会由模型修改 Applied、主线或 CVE 核实结果。
 
 ## 一次配置
 
 1. 登录学校邮箱，在设置中启用 IMAP / 客户端服务，生成客户端授权码。账号默认为 `runyu.xiao@seu.edu.cn`，网易企业邮箱服务器预填 `imaphz.qiye.163.com:993`；以学校公布的客户端设置为准，可在配置时修改。普通 163 邮箱应使用 `imap.163.com`。如果学校禁用了客户端访问，需要由学校管理员开通。
 2. 在飞书群中进入群设置，添加“自定义机器人”，保存它的 Webhook。建议启用签名校验并保存签名密钥。如果设置了关键词，将关键词设为 `Linux Patch`，或在配置窗口填写你自己的关键词。提醒发往这个群，手机是否弹出推送还取决于飞书群通知和系统设置。
-3. 在你选用的 GLM 服务商处取得 API Key，并确认模型名称。支持自定义 API 地址及 `chat_completions`、`anthropic_messages` 协议。本机使用 [loliapi](https://loliapi.org/)，配置示例见下方；模型可用性及计费以服务商账户为准。
-4. 双击 **配置邮箱提醒.cmd**。按提示输入邮箱地址、服务器、GLM API 地址、协议和模型，以及隐藏输入的授权码、服务商 API Key、飞书 Webhook 和可选签名密钥。不要把密钥粘贴到聊天或公开仓库中。更换服务商域名时，配置程序要求重新输入该服务商的 Key，避免误用原服务商的凭据。
+3. 在你选用的 AI 网关处取得 API Key，并确认模型名称。当前使用 loliapi 网关调用 DeepSeek，支持 `chat_completions`、`anthropic_messages` 协议；模型可用性及计费以网关账户为准。
+4. 双击 **配置邮箱提醒.cmd**。按提示输入邮箱地址、服务器、AI API 地址、协议和模型，以及隐藏输入的授权码、服务商 API Key、飞书 Webhook 和可选签名密钥。不要把密钥粘贴到聊天或公开仓库中。更换服务商域名时，配置程序要求重新输入该服务商的 Key，避免误用原服务商的凭据。
 5. 双击 **启动邮箱监测.cmd**，保持窗口运行。首次成功检查只建立同步起点，之后每 5 分钟检查一次新邮件。电脑睡眠、断网或关闭进程期间不会及时提醒，恢复后会追赶新增 UID。
 
 配置脚本不会进行联网测试或发送测试消息。完成配置后的首次运行会验证邮箱登录，GLM 和飞书在第一批相关新回复到达时使用；没有模拟数据会被当成真实提醒发送。
@@ -29,6 +29,20 @@
 配置时也可以填写 `https://loliapi.org/v1`，程序会补全接口路径。兼容网关默认不发送智谱官方的 `thinking` / `response_format` 扩展字段。若使用 Messages 协议，选择 `anthropic_messages` 并填写相应 `/v1/messages` 地址；当前 loliapi 配置使用已验证的 Chat Completions 接口，无需切换。
 
 旧配置没有 `glm_api_url` 时仍沿用原来的智谱官方地址，不会静默把已有 Key 发给其他服务商。
+
+### loliapi + DeepSeek 配置
+
+在“配置邮箱提醒.cmd”中填写：
+
+```json
+{
+  "glm_api_url": "https://loliapi.org/v1/chat/completions",
+  "glm_protocol": "chat_completions",
+  "glm_model": "deepseek-chat"
+}
+```
+
+模型填写网关实际提供的 DeepSeek 模型名，当前配置使用 `deepseek-flash`。API Key 仍是 loliapi 的 Key，使用环境变量 `PATCH_GLM_API_KEY`；请求只发送到配置中的 loliapi 地址。模型列表以 loliapi 实际返回为准，不能直接套用 DeepSeek 官方模型名。
 
 本地网页原地址为 `http://127.0.0.1:8765/`，点击“邮箱提醒与 AI 摘要”，或访问 `http://127.0.0.1:8765/mail-monitor`。需要同时运行原来的“启动本地网页.cmd”。此地址只在运行程序的电脑上有效，手机查看摘要使用飞书。报告也可离线打开 `local/mail-monitor/report.html`。
 

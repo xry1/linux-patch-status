@@ -145,6 +145,11 @@ def topics(payload):
         applied_dates = [e.get('date', '') for r in rs for e in r.get('events', []) if e.get('kind') == 'applied']
         applied_at = max((mail_time({'date_iso': v}) for v in applied_dates), default=None)
         accepted = bool([r for r in rs if r.get('kind') == 'patch']) and all(r.get('signals', {}).get('applied') for r in rs if r.get('kind') == 'patch')
+        # Applied patch series are historical correspondence, not mailbox
+        # action items. A later un-applied revision forms a separate group and
+        # remains eligible because this condition then evaluates to false.
+        if accepted:
+            continue
         # Only explicit acceptance after the discussion can settle older feedback.
         # Questions following acceptance (including stable backports) remain candidates.
         acceptance_requests = any(mail_time(m) == applied_at and re.search(
@@ -481,14 +486,15 @@ def main():
     payload = monitor.combined_payload(monitor.load_seed(), state, config)
     saved = monitor.read_credentials(directory)
     credentials = {name: os.environ.get(name) or saved.get(name, '') for name in ('PATCH_GLM_API_KEY', 'PATCH_FEISHU_WEBHOOK', 'PATCH_FEISHU_SECRET')}
+    credentials['PATCH_AI_API_KEY'] = monitor.ai_token(config, credentials)
     if args.analyze or args.drain or args.retry_failed:
-        if not credentials['PATCH_GLM_API_KEY']:
-            raise RuntimeError('GLM 凭据不可用。')
+        if not credentials['PATCH_AI_API_KEY']:
+            raise RuntimeError('当前 AI 服务商的 API Key 不可用。')
         completed = {'complete': 0, 'error': 0}
         def progress(status):
             completed[status] += 1
             print(stamp() + f' 连续分析：本次成功 {completed["complete"]} 项，失败请求 {completed["error"]} 次。', flush=True)
-        process(payload, directory, config, credentials['PATCH_GLM_API_KEY'], monitor.post_json, args.limit,
+        process(payload, directory, config, credentials['PATCH_AI_API_KEY'], monitor.post_json, args.limit,
                 continuous=args.drain, progress=progress if args.drain or args.retry_failed else None,
                 retry_failed=args.retry_failed)
     if args.digest:

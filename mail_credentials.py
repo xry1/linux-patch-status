@@ -12,22 +12,47 @@ from urllib.parse import urlsplit, urlunsplit
 
 SECRET_NAMES = ('PATCH_IMAP_PASSWORD', 'PATCH_GLM_API_KEY', 'PATCH_FEISHU_WEBHOOK', 'PATCH_FEISHU_SECRET')
 OFFICIAL_GLM_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
+DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions'
+
+
+def ai_provider(config):
+    """Return a stable provider id used to prevent sending one provider's key to another."""
+    host = urlsplit(config.get('glm_api_url', '')).hostname or ''
+    return 'deepseek' if host.casefold() in {'api.deepseek.com', 'api.deepseek.com.cn'} else 'custom'
+
+
+def ai_token(config, saved):
+    provider = ai_provider(config)
+    env_name = 'PATCH_DEEPSEEK_API_KEY' if provider == 'deepseek' else 'PATCH_GLM_API_KEY'
+    token = os.environ.get(env_name, '')
+    if token:
+        return token
+    # Legacy configurations without a provider marker remain valid for their
+    # existing custom endpoint. A DeepSeek endpoint never receives that old key.
+    marker = config.get('ai_key_provider')
+    if provider == 'deepseek' and marker != 'deepseek':
+        return ''
+    if marker and marker != provider:
+        return ''
+    return saved.get('PATCH_GLM_API_KEY', '')
 
 
 def glm_endpoint(config):
     protocol = config.get('glm_protocol', 'chat_completions')
     if protocol not in ('chat_completions', 'anthropic_messages'):
-        raise ValueError('GLM 协议应为 chat_completions 或 anthropic_messages。')
+        raise ValueError('AI 协议应为 chat_completions 或 anthropic_messages。')
+    # Keep the legacy empty-config behavior; new mail_monitor defaults select
+    # DeepSeek explicitly, while older configs continue to use their endpoint.
     url = config.get('glm_api_url', OFFICIAL_GLM_URL).strip()
     parsed = urlsplit(url)
     if (parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password
             or parsed.query or parsed.fragment or any(c.isspace() for c in url)):
-        raise ValueError('GLM API 地址必须使用 HTTPS，且不能包含账号、查询参数或片段。')
+        raise ValueError('AI API 地址必须使用 HTTPS，且不能包含账号、查询参数或片段。')
     suffix = '/chat/completions' if protocol == 'chat_completions' else '/messages'
     path = parsed.path.rstrip('/') or '/v1'
     if not path.endswith(suffix):
         if path.endswith(('/chat/completions', '/messages')):
-            raise ValueError('GLM 接口路径与所选协议不一致。')
+            raise ValueError('AI 接口路径与所选协议不一致。')
         path += suffix
     return urlunsplit((parsed.scheme, parsed.netloc, path, '', ''))
 
@@ -98,8 +123,8 @@ def interactive_config(directory, config, save, identity):
         raise RuntimeError('配置需要交互终端。请双击“配置邮箱提醒.cmd”，不要通过聊天发送密钥。')
     existing = read_credentials(directory)
     candidate = copy.deepcopy(config)
-    print('163 学校 / 企业邮箱 → GLM → 飞书\n授权码和 API Key 隐藏输入，由 Windows 加密保存在本机。')
-    print('相关 patch 新邮件会提交给 GLM，摘要发到你配置的飞书群；私人邮箱报告不发布到 GitHub。')
+    print('163 学校 / 企业邮箱 → AI 摘要 → 飞书\n授权码和 API Key 隐藏输入，由 Windows 加密保存在本机。')
+    print('相关 patch 新邮件会提交给所选 AI 服务商，摘要发到你配置的飞书群；私人邮箱报告不发布到 GitHub。')
 
     def setting(prompt, default):
         return input(f'{prompt} [{default}]，回车保留：').strip() or default
@@ -108,9 +133,9 @@ def interactive_config(directory, config, save, identity):
     candidate['imap']['host'] = setting('IMAP SSL 服务器（以学校客户端设置为准）', candidate['imap']['host'])
     candidate['imap']['folder'] = setting('兼容单文件夹模式的目录（自动发现模式无需逐项填写）', candidate['imap']['folder'])
     candidate['glm_protocol'] = setting('GLM 协议（chat_completions / anthropic_messages）', candidate.get('glm_protocol', 'chat_completions'))
-    candidate['glm_api_url'] = setting('GLM API 地址（完整接口或 Base URL）', candidate.get('glm_api_url', OFFICIAL_GLM_URL))
+    candidate['glm_api_url'] = setting('AI API 地址（完整接口或 Base URL；DeepSeek 可填 https://api.deepseek.com）', candidate.get('glm_api_url', DEEPSEEK_URL))
     candidate['glm_api_url'] = glm_endpoint(candidate)
-    candidate['glm_model'] = setting('GLM 模型', candidate['glm_model'])
+    candidate['glm_model'] = setting('AI 模型（DeepSeek 推荐 deepseek-chat）', candidate['glm_model'])
     candidate['feishu_keyword'] = setting('飞书机器人关键词', candidate['feishu_keyword'])
     if not re.fullmatch(r'[^\s@]+@[^\s@]+', candidate['imap']['username']) or not re.fullmatch(r'[A-Za-z0-9.-]+', candidate['imap']['host']):
         raise RuntimeError('邮箱地址或服务器格式无效，原配置已保留。')
@@ -118,8 +143,9 @@ def interactive_config(directory, config, save, identity):
         raise RuntimeError('更换邮箱或文件夹前，请先备份并更名 local/mail-monitor 目录，再运行配置；原记录已保留。')
     values = {}
     provider_changed = urlsplit(glm_endpoint(candidate)).netloc != urlsplit(glm_endpoint(config)).netloc
+    candidate['ai_key_provider'] = ai_provider(candidate)
     print('邮件摘要将发送到：' + candidate['glm_api_url'])
-    prompts = ('邮箱客户端授权码（不是网页登录密码）', '所选服务商的 GLM API Key',
+    prompts = ('邮箱客户端授权码（不是网页登录密码）', '所选服务商的 AI API Key',
                '飞书群自定义机器人 Webhook', '飞书签名密钥（未启用签名可留空）')
     for name, prompt in zip(SECRET_NAMES, prompts):
         prior = '' if name == 'PATCH_GLM_API_KEY' and provider_changed else existing.get(name, '')
@@ -131,5 +157,5 @@ def interactive_config(directory, config, save, identity):
         raise RuntimeError('飞书 Webhook 格式无效，原配置已保留。')
     save(directory / 'credentials.json', encode_credentials(values))
     save(directory / 'config.json', candidate)
-    print('配置已加密保存。尚未连接邮箱、调用 GLM 或发送飞书消息。\n接下来运行“启动邮箱监测.cmd”，首次成功检查会建立起点。')
+    print('配置已加密保存。尚未连接邮箱、调用 AI 或发送飞书消息。\n接下来运行“启动邮箱监测.cmd”，首次成功检查会建立起点。')
     return candidate
