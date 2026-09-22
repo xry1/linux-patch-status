@@ -1,7 +1,8 @@
 {
-  "last_checked_at": "2026-09-14T18:02:59+08:00",
+  "last_checked_at": "2026-09-22T17:27:43+08:00",
   "content_updated_at": "2026-09-14T16:52:32+08:00",
-  "check_result": "unchanged",
+  "check_result": "error",
   "source": "results-thread-runyu.xiao-seu.edu.cn.mbox (2).gz",
-  "report_revision": "dfa96b36066d56c1"
+  "report_revision": "dfa96b36066d56c1",
+  "error": "Lore归档下载被反爬验证拦截，未导入新mbox"
 }
