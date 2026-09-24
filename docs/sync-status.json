@@ -1,7 +1,8 @@
 {
-  "last_checked_at": "2026-09-23T11:58:02+08:00",
+  "last_checked_at": "2026-09-24T09:03:39+08:00",
   "content_updated_at": "2026-09-23T11:58:02+08:00",
-  "check_result": "updated",
+  "check_result": "error",
   "source": "results-thread-runyu.xiao-seu.edu.cn.mbox (4).gz",
-  "report_revision": "3456f6d455a16719"
+  "report_revision": "3456f6d455a16719",
+  "error": "Lore full threads 未生成新的 mbox.gz；旧归档未导入。"
 }
