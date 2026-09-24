@@ -1,8 +1,7 @@
 {
-  "last_checked_at": "2026-09-24T09:03:39+08:00",
-  "content_updated_at": "2026-09-23T11:58:02+08:00",
-  "check_result": "error",
-  "source": "results-thread-runyu.xiao-seu.edu.cn.mbox (4).gz",
-  "report_revision": "3456f6d455a16719",
-  "error": "Lore full threads 未生成新的 mbox.gz；旧归档未导入。"
+  "last_checked_at": "2026-09-24T13:25:59+08:00",
+  "content_updated_at": "2026-09-24T13:25:59+08:00",
+  "check_result": "updated",
+  "source": "results-thread-runyu.xiao-seu.edu.cn (1).mbox.gz",
+  "report_revision": "1dfd2361b8794301"
 }
