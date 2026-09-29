@@ -9,7 +9,7 @@ from linux_cna import atomic_json
 ROOT = Path(__file__).resolve().parent
 if ROOT.name == 'outputs':
     ROOT = ROOT.parent / 'github-pages'
-STORE = ROOT / 'maintainer_commits.json'
+STORE = ROOT / 'local' / 'maintainer_commits.json'
 SCOPE = [
     ('Input: hp_sdc: shut down kicker timer on module exit', 'dtor/input', 'for-linus', 'drivers/input/serio/hp_sdc.c'),
     ('mmc: sh_mmcif: initialize IRQ-thread mutex before requesting interrupt', 'ulfh/mmc', 'fixes', 'drivers/mmc/host/sh_mmcif.c'),

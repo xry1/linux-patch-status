@@ -4,4 +4,6 @@ __pycache__/
 *.mbox
 *.gz
 local/
+/applied_cve_checks.json
+/maintainer_commits.json
 runyu-patch-status-cve.html

@@ -11,6 +11,9 @@ def record(identifier='a', applied=True, kind='patch', sha='a'*40):
 
 
 class Checks(unittest.TestCase):
+    def test_full_snapshot_stays_in_ignored_local_directory(self):
+        self.assertEqual(c.STORE, c.ROOT / 'local' / 'applied_cve_checks.json')
+
     def test_only_accepted_children_and_repair_hashes(self):
         self.assertEqual(c.targets([record(), record('b', False), record('cover', kind='cover')]), {'a':['a'*40]})
 

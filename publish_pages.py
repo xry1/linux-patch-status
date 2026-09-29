@@ -16,11 +16,12 @@ FILES = [
     "patch_series.py", "test_series.py",
     "mail_monitor.py", "mail_credentials.py", "api_transport.py", "revision_reminders.py", "test_revision_reminders.py", "test_mail_monitor.py", "test_mail_folders.py", "MAIL_MONITOR.md",
     "backlog_agent.py", "test_backlog_agent.py",
-    "cve_checks.py", "test_cve_checks.py", "applied_cve_checks.json",
-    "linux_cna.py", "test_linux_cna.py", "resolve_maintainer_commits.py", "maintainer_commits.json",
+    "cve_checks.py", "test_cve_checks.py",
+    "linux_cna.py", "test_linux_cna.py", "resolve_maintainer_commits.py",
     "配置邮箱提醒.cmd", "启动邮箱监测.cmd",
     "生成网站.cmd", "发布网站.cmd", "docs/index.html", "docs/update.html", "docs/.nojekyll", "docs/sync-status.json",
 ]
+LOCAL_ONLY_DATA = {"applied_cve_checks.json", "maintainer_commits.json"}
 
 
 def git(*args, check=True):
@@ -57,8 +58,15 @@ def publish(repository=None):
     for setting in ("user.name", "user.email"):
         if not git("config", "--get", setting, check=False).stdout.strip():
             raise RuntimeError(f"Configure your commit identity in this folder: git config {setting} YOUR_VALUE")
-    staged = git("-c", "core.quotepath=false", "diff", "--cached", "--name-only").stdout.splitlines()
-    if set(staged) - set(FILES):
+    staged = git("-c", "core.quotepath=false", "diff", "--cached", "--name-status").stdout.splitlines()
+    unexpected = []
+    for line in staged:
+        fields = line.split("\t")
+        status, paths = fields[0], fields[1:]
+        if status == "D" and len(paths) == 1 and paths[0] in LOCAL_ONLY_DATA:
+            continue
+        unexpected.extend(path for path in paths if path not in FILES)
+    if unexpected:
         raise RuntimeError("Other files are staged. Commit or unstage those files before publishing this dashboard.")
     git("add", "--", *FILES)
     changes = git("diff", "--cached", "--quiet", check=False)

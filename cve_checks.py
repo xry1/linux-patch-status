@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 if ROOT.name == 'outputs':
     ROOT = ROOT.parent / 'github-pages'
-STORE = ROOT / 'applied_cve_checks.json'
+STORE = ROOT / 'local' / 'applied_cve_checks.json'
 
 
 def targets(records):
@@ -162,6 +162,7 @@ def check(records, index=None, crosscheck=None):
 
 
 def save(snapshot):
+    STORE.parent.mkdir(parents=True, exist_ok=True)
     fd, name = tempfile.mkstemp(dir=STORE.parent, prefix='.cve-', suffix='.tmp')
     try:
         with os.fdopen(fd, 'w', encoding='utf-8') as f:
