@@ -735,15 +735,18 @@ def send_feishu_text(text, webhook, secret=None):
 
 
 def process_queue(state, config, save, glm_token, webhook, feishu_secret=None):
-    glm_budget = min(20, max(0, int(config.get('glm_max_calls_per_cycle', 5))))
+    configured_glm_budget = config.get('glm_max_calls_per_cycle', 5)
+    glm_budget = None if configured_glm_budget is None else min(20, max(0, int(configured_glm_budget)))
     send_budget = min(20, max(0, int(config.get('feishu_max_calls_per_cycle', 10))))
     for batch in state['batches'].values():
         if batch['delivery'] == 'sending':
             batch['delivery'] = 'uncertain'
             state['last_error'] = '有飞书请求在进程中断前未获得确认；不会自动重发，避免重复提醒。'
             save()
-        if batch['ai_state'] != 'complete' and batch['ai_attempts'] < 3 and glm_budget and glm_token:
-            glm_budget -= 1
+        if (batch['ai_state'] != 'complete' and batch['ai_attempts'] < 3
+                and (glm_budget is None or glm_budget > 0) and glm_token):
+            if glm_budget is not None:
+                glm_budget -= 1
             batch['model'] = config['glm_model']
             batch['ai_attempts'] += 1
             save()
@@ -754,6 +757,8 @@ def process_queue(state, config, save, glm_token, webhook, feishu_secret=None):
                 batch.update(ai_state='error', ai_error=str(exc))
             save()
         if batch['delivery'] != 'pending' or not send_budget or not webhook:
+            continue
+        if batch['ai_state'] != 'complete' and batch['ai_attempts'] < 3:
             continue
         send_budget -= 1
         batch['delivery_attempts'] += 1

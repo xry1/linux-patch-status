@@ -44,6 +44,8 @@
 
 模型填写网关实际提供的 DeepSeek 模型名，当前配置使用 `deepseek-flash`。API Key 仍是 loliapi 的 Key，使用环境变量 `PATCH_GLM_API_KEY`；请求只发送到配置中的 loliapi 地址。模型列表以 loliapi 实际返回为准，不能直接套用 DeepSeek 官方模型名。
 
+新邮件提醒会先生成摘要，再发送到飞书；本轮摘要调用上限 `glm_max_calls_per_cycle` 设为 `null` 时不限制单轮摘要数量。摘要请求最多重试三次，仍失败时才发送明确标注“摘要暂不可用”的基础提醒，避免静默漏掉邮件提醒。
+
 本地网页原地址为 `http://127.0.0.1:8765/`，点击“邮箱提醒与 AI 摘要”，或访问 `http://127.0.0.1:8765/mail-monitor`。需要同时运行原来的“启动本地网页.cmd”。此地址只在运行程序的电脑上有效，手机查看摘要使用飞书。报告也可离线打开 `local/mail-monitor/report.html`。
 
 ## 收取范围与起点

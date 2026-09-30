@@ -237,21 +237,52 @@ class MailMonitorTests(unittest.TestCase):
         self.assertEqual(batch['title'], 'net: series')
         self.assertEqual(set(batch['message_ids']), {'ra', 'rb'})
 
-    def test_llm_failure_still_notifies_then_retries_summary_without_resending(self):
+    def test_llm_failure_defers_notification_until_summary_is_ready(self):
         batch = self.batch()
-        with patch.object(monitor, 'summarize', side_effect=monitor.ServiceFailure('GLM', 'HTTP 429')), patch.object(monitor, 'send_feishu') as send:
+        with patch.object(monitor, 'summarize', side_effect=monitor.ServiceFailure('GLM', 'HTTP 429')), \
+                patch.object(monitor, 'send_feishu') as send:
             monitor.process_queue(self.state, self.config, lambda: None, 'fake-key', 'fake-webhook')
-            send.assert_called_once()
-        self.assertEqual(batch['delivery'], 'sent')
+            send.assert_not_called()
+        self.assertEqual(batch['delivery'], 'pending')
         self.assertEqual(batch['ai_state'], 'error')
-        with patch.object(monitor, 'summarize', return_value={'summary': '建议补充理由'}) as llm, patch.object(monitor, 'send_feishu') as send:
+        with patch.object(monitor, 'summarize', return_value={'summary': '建议补充理由'}) as llm, \
+                patch.object(monitor, 'send_feishu') as send:
             monitor.process_queue(self.state, self.config, lambda: None, 'fake-key', 'fake-webhook')
             llm.assert_called_once()
-            send.assert_not_called()
+            send.assert_called_once()
+            self.assertEqual(send.call_args.args[0]['ai']['summary'], '建议补充理由')
         self.assertEqual(batch['ai_state'], 'complete')
+        self.assertEqual(batch['delivery'], 'sent')
+
+    def test_llm_failure_sends_explicit_fallback_only_after_three_attempts(self):
+        batch = self.batch()
+        with patch.object(monitor, 'summarize', side_effect=monitor.ServiceFailure('GLM', 'HTTP 503')) as llm, \
+                patch.object(monitor, 'send_feishu') as send:
+            for _ in range(3):
+                monitor.process_queue(self.state, self.config, lambda: None, 'fake-key', 'fake-webhook')
+        self.assertEqual(llm.call_count, 3)
+        send.assert_called_once()
+        self.assertEqual(batch['ai_state'], 'error')
+        self.assertEqual(batch['delivery'], 'sent')
+
+    def test_null_summary_budget_processes_all_batches(self):
+        first = self.batch()
+        second = copy.deepcopy(first)
+        second.update(id='second', ai=None, ai_state='pending', ai_attempts=0,
+                      delivery='pending', delivery_attempts=0)
+        self.state['batches']['second'] = second
+        self.config['glm_max_calls_per_cycle'] = None
+        with patch.object(monitor, 'summarize', side_effect=[{'summary': 'first'}, {'summary': 'second'}]) as llm, \
+                patch.object(monitor, 'send_feishu') as send:
+            monitor.process_queue(self.state, self.config, lambda: None, 'fake-key', 'fake-webhook')
+        self.assertEqual(llm.call_count, 2)
+        self.assertEqual(send.call_count, 2)
+        self.assertEqual(first['delivery'], 'sent')
+        self.assertEqual(second['delivery'], 'sent')
 
     def test_sending_checkpoint_precedes_webhook_and_restart_does_not_resend(self):
         batch = self.batch()
+        batch.update(ai_state='complete', ai={'summary': 'ready', 'action_items': []})
         snapshots = []
         def save():
             snapshots.append(copy.deepcopy(self.state))
@@ -269,6 +300,7 @@ class MailMonitorTests(unittest.TestCase):
 
     def test_definite_feishu_rejections_have_bounded_retries(self):
         batch = self.batch()
+        batch.update(ai_state='complete', ai={'summary': 'ready', 'action_items': []})
         with patch.object(monitor, 'send_feishu', side_effect=monitor.ServiceFailure('飞书', 'rejected')) as sender:
             for _ in range(5):
                 monitor.process_queue(self.state, self.config, lambda: None, '', 'fake-webhook')
