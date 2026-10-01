@@ -1,7 +1,8 @@
 {
-  "last_checked_at": "2026-09-30T16:19:46+08:00",
+  "last_checked_at": "2026-10-01T09:05:00+08:00",
   "content_updated_at": "2026-09-30T16:19:46+08:00",
-  "check_result": "updated",
+  "check_result": "error",
   "source": "results-thread-runyu.xiao-seu.edu.cn (3).mbox.gz",
-  "report_revision": "7e7c7fc89c083443"
+  "report_revision": "7e7c7fc89c083443",
+  "error": "Lore full-threads download was not started because browser control could not safely verify the current tab URL; manual retry is required."
 }
