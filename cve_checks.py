@@ -41,12 +41,15 @@ def read_store():
 
 
 def due(snapshot, now):
-    # Schedule by local calendar date so a 09:00 weekly run is not delayed a day
-    # by the afternoon time of the initial manual query.
+    # Gate each local calendar day, including failed attempts; failures retry tomorrow.
+    now_date = now.astimezone().date()
+    last_attempt = snapshot.get('attempted_at')
+    if last_attempt and now_date <= datetime.fromisoformat(last_attempt).astimezone().date():
+        return False
     last = snapshot.get('completed_at')
     if snapshot.get('source_error') or any(e.get('state') == 'error' for e in snapshot.get('records', {}).values()):
         return True
-    return not last or now.astimezone().date() >= datetime.fromisoformat(last).astimezone().date() + timedelta(days=7)
+    return not last or now_date >= datetime.fromisoformat(last).astimezone().date() + timedelta(days=1)
 
 
 def query_commit(sha):
@@ -258,7 +261,7 @@ def main():
         return refresh_severity()
     old = read_store()
     if args.if_due and not due(old, datetime.now().astimezone()):
-        print('not_due: weekly Applied-only Linux CNA check')
+        print('not_due: daily Applied-only Linux CNA check')
         return 0
     import mail_monitor
     import patch_status_dashboard as dashboard

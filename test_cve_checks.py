@@ -45,12 +45,17 @@ class Checks(unittest.TestCase):
         c.overlay(records, snapshot)
         self.assertEqual(records[0]['cve_state'], 'unqueried')
 
-    def test_weekly_calendar_guard(self):
-        old={'completed_at':'2026-09-15T16:00:00+08:00'}
-        self.assertFalse(c.due(old, datetime.fromisoformat('2026-09-21T09:00:00+08:00')))
-        self.assertTrue(c.due(old, datetime.fromisoformat('2026-09-22T09:00:00+08:00')))
-        old['source_error']='network'
+    def test_daily_calendar_guard(self):
+        old={'attempted_at':'2026-09-15T16:00:00+08:00',
+             'completed_at':'2026-09-15T16:00:00+08:00'}
+        self.assertFalse(c.due(old, datetime.fromisoformat('2026-09-15T23:59:00+08:00')))
         self.assertTrue(c.due(old, datetime.fromisoformat('2026-09-16T09:00:00+08:00')))
+        failed={'attempted_at':'2026-09-15T16:00:00+08:00', 'completed_at':'2026-09-14T09:00:00+08:00',
+                'source_error':'network'}
+        self.assertFalse(c.due(failed, datetime.fromisoformat('2026-09-15T23:59:00+08:00')))
+        self.assertTrue(c.due(failed, datetime.fromisoformat('2026-09-16T09:00:00+08:00')))
+        old['source_error']='network'
+        self.assertFalse(c.due(old, datetime.fromisoformat('2026-09-15T23:59:00+08:00')))
 
     def test_explicit_fix_and_second_source_required(self):
         index={'revision':'test','entries':{'CVE-2026-12345':{'id':'CVE-2026-12345','title':'test',
