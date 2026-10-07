@@ -59,6 +59,44 @@ class AnalysisTests(unittest.TestCase):
         self.assertFalse(result['signals']['reviewed'])
         self.assertTrue(any(e['kind'] == 'attention' for e in result['events']))
 
+    def test_identical_new_version_inherits_applied_and_ignores_stale_apply_failure(self):
+        diff = ('diff --git a/example.c b/example.c\nindex 1111111..2222222 100644\n'
+                '--- a/example.c\n+++ b/example.c\n@@ -1 +1 @@\n-old\n+new\n')
+        self.original['body'] = 'Patch rationale.\n---\n' + diff
+        applied = message('applied-v1', 'Re: [PATCH] net: example',
+                          'This patch was applied to netdev/net.git (main)', 2, parent='v1')
+        v2 = message('v2', '[PATCH v2] net: example',
+                     'Patch rationale.\nTested-by: T <t@example.org>\n---\n' + diff,
+                     3, author=True)
+        failure = message('failure', 'RE: [PATCH v2] net: example',
+                          "The patches couldn't be applied to the current HEAD.\n"
+                          'error: example.c: patch does not apply', 4, parent='v2')
+
+        result = analyze([self.original, applied, v2, failure], dashboard.DEFAULT_EMAIL)
+
+        self.assertEqual(result['status'], 'Applied')
+        self.assertTrue(result['signals']['applied'])
+        self.assertTrue(result['signals']['tested'])
+        self.assertFalse(result['has_attention'])
+        self.assertEqual(result['branch_states'][0]['kind'], 'applied')
+        self.assertEqual(result['branch_states'][0]['version'], 1)
+        self.assertTrue(any(e['kind'] == 'attention' for e in result['events']))
+
+    def test_changed_new_version_does_not_inherit_applied(self):
+        base_diff = ('diff --git a/example.c b/example.c\nindex 1111111..2222222 100644\n'
+                     '--- a/example.c\n+++ b/example.c\n@@ -1 +1 @@\n-old\n+new\n')
+        changed_diff = base_diff + '@@ -10 +10 @@\n-before\n+after\n'
+        self.original['body'] = 'Patch rationale.\n---\n' + base_diff
+        applied = message('applied-v1', 'Re: [PATCH] net: example',
+                          'This patch was applied to netdev/net.git (main)', 2, parent='v1')
+        v2 = message('v2', '[PATCH v2] net: example', 'Patch rationale.\n---\n' + changed_diff,
+                     3, author=True)
+
+        result = analyze([self.original, applied, v2], dashboard.DEFAULT_EMAIL)
+
+        self.assertEqual(result['status'], 'Submitted')
+        self.assertFalse(result['signals']['applied'])
+
     def test_reply_with_changed_subject_inherits_parent_version(self):
         result = self.analyze(message('v2', '[PATCH v2] net: example', 'Updated patch.', 2, author=True),
                               message('a', 'Thanks', 'Applied, thanks.', 3, parent='v2'))

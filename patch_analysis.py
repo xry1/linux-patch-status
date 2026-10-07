@@ -56,6 +56,14 @@ def acceptance_line(line):
     return any(re.search(pattern, text, re.I) for pattern in patterns)
 
 
+def patch_content_signature(message):
+    body = message.get('body', '').replace('\r\n', '\n').replace('\r', '\n')
+    match = re.search(r'(?ms)^diff --git .+?(?=^--[ \t]*$|\Z)', body)
+    if not match:
+        return None
+    return hashlib.sha256(match[0].rstrip().encode('utf-8')).hexdigest()
+
+
 def scope_of(message, text):
     subject = message.get('subject', '')
     context = subject + ('\n' + text[:900] if not submission(message) else '')
@@ -168,12 +176,30 @@ def analyze(messages, author_email):
                 add('applied', line)
     # Duplicate subject/body signals do not create duplicate timeline entries.
     events = list({(e['message_id'], e['kind'], e['scope'], e['evidence']): e for e in events}.values())
+    revision_signatures = defaultdict(list)
+    for message in originals:
+        signature = patch_content_signature(message)
+        if signature:
+            revision_signatures[message.get('patch_version', 1)].append(signature)
+    inherited_application = next((e for e in events
+        if e['kind'] == 'applied' and not e['scope'].startswith('stable:')
+        and e['version'] < latest
+        and revision_signatures.get(e['version'])
+        and revision_signatures.get(latest)
+        and sorted(revision_signatures[e['version']]) == sorted(revision_signatures[latest])), None)
+    inherited_applied = inherited_application is not None
     current = [e for e in events if e['version'] == latest or e['scope'].startswith('stable:')]
     states = {}
     pending = {}
+    if inherited_application:
+        states[inherited_application['scope']] = inherited_application
     for event in current:
         scope = event['scope']
         if event['kind'] == 'attention':
+            if (inherited_applied and event['version'] == latest and event['reason'] == 'rejected'
+                    and scope == 'maintainer:current'
+                    and re.search(r'patch (?:does not|failed to) apply', event['evidence'], re.I)):
+                continue
             pending[scope] = event
             if scope != 'general':
                 states[scope] = event
@@ -188,7 +214,8 @@ def analyze(messages, author_email):
             if scope in pending:
                 pending[scope] = {**event, 'reason': 'backport_pending',
                                   'action': '已有后续回移投递，请确认该分支是否最终收录。'}
-    accepted = any(e['kind'] == 'applied' and not scope.startswith('stable:') for scope, e in states.items())
+    accepted = inherited_applied or any(
+        e['kind'] == 'applied' and not scope.startswith('stable:') for scope, e in states.items())
     reviewed = any(e['kind'] == 'reviewed' and e['version'] == latest for e in events)
     acked = any(e['kind'] == 'acked' and e['version'] == latest for e in events)
     tested = any(e['kind'] == 'tested' and e['version'] == latest for e in events)
