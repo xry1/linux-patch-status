@@ -1,4 +1,5 @@
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -7,6 +8,30 @@ import linux_cna as c
 
 
 class OfficialIndexTests(unittest.TestCase):
+    def test_source_fetch_timeout_uses_configured_mirror(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cache = Path(tmp) / 'cache'
+            (cache / '.git').mkdir(parents=True)
+            calls = []
+
+            def fake_git(*args, **kwargs):
+                calls.append(args)
+                if args == ('remote', 'get-url', 'origin'):
+                    return c.REPOSITORY
+                if args == ('status', '--porcelain'):
+                    return ''
+                if args == ('fetch', 'origin'):
+                    raise subprocess.TimeoutExpired(['git', 'fetch', 'origin'], 300)
+                if args == ('rev-parse', 'HEAD'):
+                    return 'a' * 40
+                return ''
+
+            with patch.object(c, 'CACHE', cache), patch.object(c, 'git', side_effect=fake_git):
+                self.assertEqual(c.update_source(), 'a' * 40)
+
+            self.assertIn(('fetch', 'https://kernel.googlesource.com/pub/scm/linux/security/vulns',
+                           'refs/heads/master'), calls)
+
     def test_severity_thresholds_and_missing(self):
         for score, level in [(0,'none'),(.1,'low'),(3.9,'low'),(4,'medium'),(6.9,'medium'),(7,'high'),(8.9,'high'),(9,'critical'),(10,'critical'),(11,'unknown'),(True,'unknown'),(None,'unknown')]:
             value={'containers':{'cna':{'metrics':[{'cvssV3_1':{'baseScore':score}}]}}}

@@ -55,7 +55,7 @@ def update_source():
         raise ValueError('Linux CNA cache has local edits; preserved')
     try:
         git('fetch', 'origin')
-    except RuntimeError:
+    except (RuntimeError, subprocess.TimeoutExpired):
         git('fetch', 'https://kernel.googlesource.com/pub/scm/linux/security/vulns', 'refs/heads/master')
     git('merge', '--ff-only', 'FETCH_HEAD')
     return git('rev-parse', 'HEAD')
