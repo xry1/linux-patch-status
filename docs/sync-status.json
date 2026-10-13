@@ -1,7 +1,8 @@
 {
-  "last_checked_at": "2026-10-12T09:04:27+08:00",
+  "last_checked_at": "2026-10-13T09:08:12+08:00",
   "content_updated_at": "2026-10-11T09:04:34+08:00",
-  "check_result": "unchanged",
+  "check_result": "error",
   "source": "results-thread-runyu.xiao-seu.edu.cn.mbox (10).gz",
-  "report_revision": "cddaa30f411d0c0f"
+  "report_revision": "cddaa30f411d0c0f",
+  "error": "今日 Lore 归档下载未完成"
 }
