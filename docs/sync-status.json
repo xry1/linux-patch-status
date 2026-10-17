@@ -1,8 +1,7 @@
 {
-  "last_checked_at": "2026-10-16T09:35:00+08:00",
-  "content_updated_at": "2026-10-14T09:04:22+08:00",
-  "check_result": "error",
-  "source": "results-thread-runyu.xiao-seu.edu.cn.mbox.gz",
-  "report_revision": "f136544ae8c34721",
-  "error": "Lore mbox download timed out; archive not imported"
+  "last_checked_at": "2026-10-17T09:49:55+08:00",
+  "content_updated_at": "2026-10-17T09:49:55+08:00",
+  "check_result": "updated",
+  "source": "results-thread-runyu.xiao-seu.edu.cn.mbox (5).gz",
+  "report_revision": "8032b98011c90eda"
 }
