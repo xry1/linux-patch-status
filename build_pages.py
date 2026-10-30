@@ -46,11 +46,17 @@ def build(report=None, archive=None, sync_error=None):
     payload["hosting_repository"] = "xry1/linux-patch-status"
     dashboard.save_report(SITE, payload)
     sync = {k: check_payload.get(k, '') for k in ('last_checked_at', 'content_updated_at', 'check_result', 'source')}
+    status_file = SITE.with_name('sync-status.json')
+    if archive is None and status_file.exists() and not sync_error:
+        # An evidence-only rebuild is not a new successful Lore check.
+        prior_sync = json.loads(status_file.read_text(encoding='utf-8'))
+        if (prior_sync.get('check_result') == 'error'
+                and prior_sync.get('last_checked_at', '') >= sync.get('last_checked_at', '')):
+            sync = prior_sync
     sync['report_revision'] = payload.get('revision', '')
     if sync_error:
         sync.update(check_result='error', error=sync_error,
                     last_checked_at=dashboard.datetime.now().astimezone().isoformat(timespec='seconds'))
-    status_file = SITE.with_name('sync-status.json')
     temporary = status_file.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(sync, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     temporary.replace(status_file)

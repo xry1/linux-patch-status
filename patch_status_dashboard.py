@@ -179,6 +179,7 @@ def upgrade_payload(payload):
     payload['signal_counts'] = {**payload['topic_signal_counts'], 'applied': payload['applied_submissions']['total']}
     payload['signal_count_units'] = {k: 'submission' if k == 'applied' else 'topic' for k in payload['signal_counts']}
     verification = load_verifications()
+    commits = {c['sha']: c for r in payload['records'] for c in r['mainline_commits']}
     payload['applied_audit'] = {
         'verified_at': verification.get('checked_at'),
         'mainline_topics': sum(r['acceptance_basis'] == 'mainline_verified' for r in payload['records']),
@@ -190,7 +191,15 @@ def upgrade_payload(payload):
         'applied_patch_topics': sum(r['signals']['applied'] and r['kind'] == 'patch' for r in payload['records']),
         'applied_cover_topics': sum(r['signals']['applied'] and r['kind'] == 'cover' for r in payload['records']),
         'head_sha': verification.get('head_sha'),
+        'mainline_history_commits': len(commits),
+        'mainline_active_commits': sum(not c.get('reverted') for c in commits.values()),
+        'authored_commits': sum(c['attribution'] == 'author' for c in commits.values()),
+        'signed_off_only_commits': sum(c['attribution'] == 'signed_off' for c in commits.values()),
     }
+    if verification.get('checked_at'):
+        fingerprint = hashlib.sha256(json.dumps(payload['applied_audit'], sort_keys=True).encode()).hexdigest()[:16]
+        base = payload.get('revision', '').split(':cve:')[0].split(':mainline:')[0]
+        payload['revision'] = base + ':mainline:' + fingerprint
     payload['attention_count'] = sum(r['has_attention'] for r in payload['records'])
     payload['stored_messages'] = len({m['message_id'] for r in payload['records'] for m in r['messages']})
     payload['months'] = dict(Counter(r['last_date'][:7] for r in payload['records'] if r['last_date']))

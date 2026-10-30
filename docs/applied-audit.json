@@ -1,27 +1,299 @@
 {
-  "calibrated_at": "2026-09-14T20:23:55+08:00",
-  "before_applied": 56,
-  "after_applied": 55,
-  "added": [],
-  "removed": [
-    "b5234fc0f905590f"
+  "calibrated_at": "2026-10-30T22:12:16+08:00",
+  "before_applied": 71,
+  "after_applied": 83,
+  "added": [
+    "7249e56e50063513",
+    "1ec6da72e5054b0d",
+    "f4eb088cdbbc89c4",
+    "ddadd0d1a4610356",
+    "e83dd50eefa88748",
+    "fbf61e3981b8577c",
+    "b42aca124cb915a3",
+    "66963e54b696a547",
+    "8f2af80ef9db9f23",
+    "68c1d9adf4aae56e",
+    "eedc8d06bb828394",
+    "b0111d324fabbc55"
   ],
+  "removed": [],
   "scope": "All archived topics; cover letters are counted separately from patch topics in applied_audit.",
   "applied_audit": {
-    "verified_at": "2026-09-14T19:50:33.815002+08:00",
-    "mainline_topics": 43,
-    "mainline_history_topics": 44,
+    "verified_at": "2026-10-30T22:11:47.2029883+08:00",
+    "mainline_topics": 79,
+    "mainline_history_topics": 80,
     "reverted_topics": 1,
-    "reverts_verified_at": "2026-09-14T20:17:31.7552507+08:00",
-    "mail_only_topics": 12,
-    "applied_patch_topics": 51,
+    "reverts_verified_at": "2026-10-30T22:11:47.2074935+08:00",
+    "mail_only_topics": 4,
+    "mail_only_patch_topics": 0,
+    "applied_patch_topics": 79,
     "applied_cover_topics": 4,
-    "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf"
+    "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+    "mainline_history_commits": 80,
+    "mainline_active_commits": 79,
+    "authored_commits": 79,
+    "signed_off_only_commits": 1
   },
   "records": [
     {
-      "id": "c295249d24dd748f",
-      "title": "net: neighbour: Serialize proxy timer teardown",
+      "id": "7d060715b1b7fa55",
+      "title": "can: proc: reset pkg_stats atomics individually",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179215005975.1270011.3236350059569858635.b4-ty@b4",
+          "date": "2026-10-16T11:27:39+00:00",
+          "sender": "Marc Kleine-Budde <mkl@pengutronix.de>",
+          "version": 2,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7d060715b1b7fa55"
+    },
+    {
+      "id": "54d679627c21673d",
+      "title": "nvmet: avoid recursive configfs open",
+      "kind": "cover",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=54d679627c21673d"
+    },
+    {
+      "id": "7249e56e50063513",
+      "title": "sh: maple: use the matching IRQ cookie",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "e3ef44e77b40e3cecfb34757ff3c15ecceea0309",
+          "title": "sh: maple: Use the matching IRQ cookie when invoking free_irq()",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-21T17:53:05Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/e3ef44e77b40e3cecfb34757ff3c15ecceea0309",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e3ef44e77b40e3cecfb34757ff3c15ecceea0309...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:08.4157227+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7249e56e50063513"
+    },
+    {
+      "id": "6f0c9b881d2224db",
+      "title": "scsi: qedi: Initialize callback state before registration",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "85de8b3a5eaa23d153aff4c7c83dddbc949064c9",
+          "title": "scsi: qedi: Initialize callback state before registration",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-26T02:09:34Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/85de8b3a5eaa23d153aff4c7c83dddbc949064c9",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/85de8b3a5eaa23d153aff4c7c83dddbc949064c9...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:30.8659502+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179125457802.2089616.2646253319409561790.b4-ty@b4",
+          "date": "2026-10-06T02:43:53+00:00",
+          "sender": "\"Martin K. Petersen (Oracle)\" <mkp@kernel.org>",
+          "version": 1,
+          "scope": "maintainer:7.3/scsi-fixes",
+          "evidence": "Applied to 7.3/scsi-fixes, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6f0c9b881d2224db"
+    },
+    {
+      "id": "f7e3bc10bdffe9c8",
+      "title": "rtc: spear: initialize IRQ state before requesting alarm IRQ",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "055ef5ce9f67a6a3a1363fa663007f8196cc0fb8",
+          "title": "rtc: spear: initialize IRQ state before requesting alarm IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-21T20:46:42Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/055ef5ce9f67a6a3a1363fa663007f8196cc0fb8",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/055ef5ce9f67a6a3a1363fa663007f8196cc0fb8...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:31.7361196+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179002360735.255596.9129646206960462050.b4-ty@b4",
+          "date": "2026-09-21T20:46:54+00:00",
+          "sender": "Alexandre Belloni <alexandre.belloni@bootlin.com>",
+          "version": 1,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f7e3bc10bdffe9c8"
+    },
+    {
+      "id": "1152f7246aad8924",
+      "title": "mtd: rawnand: cadence: Initialize IRQ state before requesting IRQ",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "21f027016b1290d13c30b198ae7a00e6b3d1d5a5",
+          "title": "mtd: rawnand: cadence: Initialize IRQ state before requesting IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-04T18:32:21Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/21f027016b1290d13c30b198ae7a00e6b3d1d5a5",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/21f027016b1290d13c30b198ae7a00e6b3d1d5a5...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:18.1575157+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "178854351280.1467647.11088878922601581121.b4-ty@bootlin.com",
+          "date": "2026-09-04T17:38:32+00:00",
+          "sender": "Miquel Raynal <miquel.raynal@bootlin.com>",
+          "version": 1,
+          "scope": "maintainer:mtd/fixes",
+          "evidence": "Applied to mtd/fixes, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1152f7246aad8924"
+    },
+    {
+      "id": "1ec6da72e5054b0d",
+      "title": "USB: dwc2: shut down wakeup timer before freeing HCD state",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "fd772af9512cdecb83de34a461801533828e77fd",
+          "title": "USB: dwc2: shut down wakeup timer before freeing HCD state",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-10T15:08:19Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/fd772af9512cdecb83de34a461801533828e77fd",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/fd772af9512cdecb83de34a461801533828e77fd...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:43.8984838+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1ec6da72e5054b0d"
+    },
+    {
+      "id": "91b1345ba0a2f3e6",
+      "title": "ALSA: mtpav: shut down output timer before card teardown",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "c73cb5b7c159246dd572277c668851a56e516019",
+          "title": "ALSA: mtpav: shut down output timer before card teardown",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-08-20T13:39:10Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/c73cb5b7c159246dd572277c668851a56e516019",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/c73cb5b7c159246dd572277c668851a56e516019...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:30.6542039+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "87wltklxfv.wl-tiwai@suse.de",
+          "date": "2026-08-20T13:43:16+00:00",
+          "sender": "Takashi Iwai <tiwai@suse.de>",
+          "version": 1,
+          "scope": "maintainer:unspecified",
+          "evidence": "Thanks, applied now.",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=91b1345ba0a2f3e6"
+    },
+    {
+      "id": "11063f312fe5ad74",
+      "title": "net: ibmvnic: defer close from reset allocation failure",
       "kind": "patch",
       "before_applied": false,
       "after_applied": false,
@@ -31,7 +303,687 @@
       "current_status": "Submitted",
       "mail_confirmations": [],
       "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c295249d24dd748f"
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=11063f312fe5ad74"
+    },
+    {
+      "id": "6324e15318d94a2e",
+      "title": "dmaengine: tegra: initialize channel state before requesting IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6324e15318d94a2e"
+    },
+    {
+      "id": "f4c363a0805b2ba0",
+      "title": "crypto: inside-secure: initialize EIP93 state before requesting IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f4c363a0805b2ba0"
+    },
+    {
+      "id": "efa7725f749368d2",
+      "title": "can: hi311x: drop hi3110_lock before free_irq() on open failure",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=efa7725f749368d2"
+    },
+    {
+      "id": "8aae52492e4bf043",
+      "title": "iio: admv1013: initialize callback mutex before registering notifier",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "baf7e43b7fb5afb777353bf265ddf9d909f72b9f",
+          "title": "iio: admv1013: initialize callback mutex before registering notifier",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-08-30T23:52:42Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/baf7e43b7fb5afb777353bf265ddf9d909f72b9f",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/baf7e43b7fb5afb777353bf265ddf9d909f72b9f...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:23.8067308+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "20260823010216.76eaaee2@jic23-huawei",
+          "date": "2026-08-23T00:02:16+00:00",
+          "sender": "Jonathan Cameron <jic23@kernel.org>",
+          "version": 2,
+          "scope": "maintainer:fixes-togreg",
+          "evidence": "The code has changed a bit, so what I applied to the fixes-togreg branch of",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8aae52492e4bf043"
+    },
+    {
+      "id": "78e5b55feef9b9aa",
+      "title": "Bluetooth: btintel_pcie: use managed IRQ teardown",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "25016fe8c1ed0fccae107bd629089139ffbafe08",
+          "title": "Bluetooth: btintel_pcie: use managed IRQ teardown",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-02T15:25:53Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/25016fe8c1ed0fccae107bd629089139ffbafe08",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/25016fe8c1ed0fccae107bd629089139ffbafe08...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:21.0998529+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179095920628.3497173.5666642957609869868.git-patchwork-notify@kernel.org",
+          "date": "2026-10-02T16:40:06+00:00",
+          "sender": "patchwork-bot+bluetooth@kernel.org",
+          "version": 1,
+          "scope": "maintainer:bluetooth/bluetooth-next.git",
+          "evidence": "This patch was applied to bluetooth/bluetooth-next.git (master)",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=78e5b55feef9b9aa"
+    },
+    {
+      "id": "9270a4e674fcaeae",
+      "title": "ASoC: codecs: wcd937x: request watchdog IRQs without devm",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "b3f17433a1eb9f89b79f8459d7661207abce0b9c",
+          "title": "ASoC: codecs: wcd937x: request watchdog IRQs without devm",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-13T19:59:11Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/b3f17433a1eb9f89b79f8459d7661207abce0b9c",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/b3f17433a1eb9f89b79f8459d7661207abce0b9c...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:20.7191613+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179192170017.1606900.865056512044670099.b4-ty@b4",
+          "date": "2026-10-13T20:01:40+00:00",
+          "sender": "Mark Brown <broonie@kernel.org>",
+          "version": 2,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied to",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=9270a4e674fcaeae"
+    },
+    {
+      "id": "e25a38a53ad6b63d",
+      "title": "mailbox: altera: shut down RX polling timer on channel teardown",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "0cf10e65639cba32d05994f85e6a8f08dd0ffe08",
+          "title": "mailbox: altera: shut down RX polling timer on channel teardown",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-12T01:05:37Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/0cf10e65639cba32d05994f85e6a8f08dd0ffe08",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0cf10e65639cba32d05994f85e6a8f08dd0ffe08...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:48.0513126+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "CABb+yY3pLJ5nYnbFkZc0Dum7sQ+dztUKBc8UgDaEtnq07syHbA@mail.gmail.com",
+          "date": "2026-10-12T01:35:18+00:00",
+          "sender": "Jassi Brar <jassisinghbrar@gmail.com>",
+          "version": 1,
+          "scope": "maintainer:mailbox/for-next",
+          "evidence": "Applied to mailbox/for-next",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e25a38a53ad6b63d"
+    },
+    {
+      "id": "71b1a3af09667d3d",
+      "title": "wifi: ath11k: initialize CFR locks before capability checks",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=71b1a3af09667d3d"
+    },
+    {
+      "id": "896c518111bc2148",
+      "title": "usb: gadget: pxa25x: mark the watchdog timer IRQ-safe",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=896c518111bc2148"
+    },
+    {
+      "id": "39d65ec647ff93a5",
+      "title": "net: atlantic: only free the PTP IRQ after a successful request",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=39d65ec647ff93a5"
+    },
+    {
+      "id": "3ecea0a9c7d4913e",
+      "title": "mtd: spi-nor: core: Fix mutex leak in spi_nor_rww_start_exclusive()",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "44b8a0bf5f96e8393312fc34b956766882341f16",
+          "title": "mtd: spi-nor: core: Fix mutex leak in spi_nor_rww_start_exclusive()",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-14T13:37:24Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/44b8a0bf5f96e8393312fc34b956766882341f16",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/44b8a0bf5f96e8393312fc34b956766882341f16...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:20.8722703+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "178913311701.1915651.4791624215787396187.b4-ty@b4",
+          "date": "2026-09-11T13:25:17+00:00",
+          "sender": "Michael Walle <mwalle@kernel.org>",
+          "version": 5,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3ecea0a9c7d4913e"
+    },
+    {
+      "id": "634a9ec7c47188be",
+      "title": "memory: fsl_ifc: guard optional NAND IRQ cleanup",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=634a9ec7c47188be"
+    },
+    {
+      "id": "30dee985af636183",
+      "title": "net/mlx4: shut down catas recovery timer during teardown",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=30dee985af636183"
+    },
+    {
+      "id": "8ffe5b6639c74521",
+      "title": "media: mediatek: vcodec: Initialize context lock before firmware setup",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8ffe5b6639c74521"
+    },
+    {
+      "id": "75b7d8caf40c9445",
+      "title": "wifi: iwlegacy: serialize watchdog updates with device teardown",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=75b7d8caf40c9445"
+    },
+    {
+      "id": "f4c1c4927dd3defb",
+      "title": "net: fm10k: shut down the service timer during removal",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f4c1c4927dd3defb"
+    },
+    {
+      "id": "6fd118b0e494d356",
+      "title": "wifi: iwlegacy: 3945: protect sysfs TX power update with mutex",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6fd118b0e494d356"
+    },
+    {
+      "id": "716fb60f7c9c6fc1",
+      "title": "perf: xgene: initialize lock before requesting IRQ",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "d4b7b0c77142b3bc535192fa65130474a129c487",
+          "title": "perf: xgene: initialize lock before requesting IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-04T21:15:49Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/d4b7b0c77142b3bc535192fa65130474a129c487",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/d4b7b0c77142b3bc535192fa65130474a129c487...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:44.0688423+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179114855064.1630764.1277374161771369343.b4-ty@kernel.org",
+          "date": "2026-10-04T22:09:18+00:00",
+          "sender": "Will Deacon <will@kernel.org>",
+          "version": 1,
+          "scope": "maintainer:arm64",
+          "evidence": "Applied to arm64 (for-next/perf), thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=716fb60f7c9c6fc1"
+    },
+    {
+      "id": "08132caeb924ebd2",
+      "title": "mmc: omap: synchronize clock timer before disabling fclk",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=08132caeb924ebd2"
+    },
+    {
+      "id": "b260d6b0bc739cd4",
+      "title": "media: rc: Fix simulated TX timer lifecycle",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b260d6b0bc739cd4"
+    },
+    {
+      "id": "d7bbebc36b2633fb",
+      "title": "iio: ssp: Serialize watchdog timer state changes",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=d7bbebc36b2633fb"
+    },
+    {
+      "id": "ce24ceacb5a27738",
+      "title": "bnxt: prevent timer rearming during teardown",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ce24ceacb5a27738"
+    },
+    {
+      "id": "256dd100c16b9dd2",
+      "title": "block: amiflop: synchronize flush timer before track flush",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "9690943353cec1690a715e000ba6a74e5139f530",
+          "title": "block: amiflop: synchronize flush timer before track flush",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-01T14:37:58Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/9690943353cec1690a715e000ba6a74e5139f530",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9690943353cec1690a715e000ba6a74e5139f530...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:51.1970022+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179086580223.1687323.6325589264595491998.b4-ty@b4",
+          "date": "2026-10-01T14:43:22+00:00",
+          "sender": "Jens Axboe <axboe@kernel.dk>",
+          "version": 1,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=256dd100c16b9dd2"
+    },
+    {
+      "id": "f4eb088cdbbc89c4",
+      "title": "wifi: wlcore: release runtime PM ref on regdomain config failure",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "8a1f3cf89ddcc700e25afe42cfad333059adcc94",
+          "title": "wifi: wlcore: release runtime PM ref on regdomain config failure",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-04T08:06:32Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/8a1f3cf89ddcc700e25afe42cfad333059adcc94",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/8a1f3cf89ddcc700e25afe42cfad333059adcc94...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:37.3163572+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f4eb088cdbbc89c4"
+    },
+    {
+      "id": "a2206d7689ca6513",
+      "title": "scsi: lpfc: shut down CPU hotplug poll timer during removal",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a2206d7689ca6513"
+    },
+    {
+      "id": "7e3ac24175f6750f",
+      "title": "scsi: ibmvfc: synchronize event timer completion",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7e3ac24175f6750f"
+    },
+    {
+      "id": "1b2012c4db6a9e95",
+      "title": "net: macb: initialize PTP state before registering clock",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "e1406330d70e56dd44fa6fbafc86e77e5c80c122",
+          "title": "net: macb: initialize PTP state before registering clock",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-10T15:46:19Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/e1406330d70e56dd44fa6fbafc86e77e5c80c122",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e1406330d70e56dd44fa6fbafc86e77e5c80c122...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:00.8600518+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "178905540439.1510486.3682579861887737630.git-patchwork-notify@kernel.org",
+          "date": "2026-09-10T15:50:04+00:00",
+          "sender": "patchwork-bot+netdevbpf@kernel.org",
+          "version": 3,
+          "scope": "maintainer:netdev/net.git",
+          "evidence": "This patch was applied to netdev/net.git (main)",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1b2012c4db6a9e95"
+    },
+    {
+      "id": "46109ae67bf8e0f7",
+      "title": "net: au1000: move free_irq out of the close-time spinlocked section",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "f48763beab4eea41fc480c9702ec6eebe8d75e4f",
+          "title": "net: au1000: move free_irq out of the close-time spinlocked section",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-06-24T02:10:29Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/f48763beab4eea41fc480c9702ec6eebe8d75e4f",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f48763beab4eea41fc480c9702ec6eebe8d75e4f...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:28.2372697+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "178226764357.2513445.5024104235449335960.git-patchwork-notify@kernel.org",
+          "date": "2026-06-24T02:20:43+00:00",
+          "sender": "patchwork-bot+netdevbpf@kernel.org",
+          "version": 1,
+          "scope": "maintainer:netdev/net.git",
+          "evidence": "This patch was applied to netdev/net.git (main)",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=46109ae67bf8e0f7"
+    },
+    {
+      "id": "0a63e2e3cbdc3f32",
+      "title": "mmc: sh_mmcif: initialize IRQ-thread mutex before requesting interrupt",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "d5ea0d226e8f0801d78702142a124d78c317d822",
+          "title": "mmc: sh_mmcif: initialize IRQ-thread mutex before requesting interrupt",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-11T15:12:01Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/d5ea0d226e8f0801d78702142a124d78c317d822",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/d5ea0d226e8f0801d78702142a124d78c317d822...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:51.7659384+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "CAPx+jO9y6t7vqWqpVZpt37N_71b3rL1m-=RF2RDgtB4vkvS4Dg@mail.gmail.com",
+          "date": "2026-09-11T15:40:30+00:00",
+          "sender": "Ulf Hansson <ulf.hansson@oss.qualcomm.com>",
+          "version": 1,
+          "scope": "maintainer:fixes",
+          "evidence": "Applied for fixes, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=0a63e2e3cbdc3f32"
     },
     {
       "id": "2b4805549f42b8df",
@@ -39,8 +991,22 @@
       "kind": "patch",
       "before_applied": true,
       "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "50fd0ada8d37587223001600933270b59cb30e19",
+          "title": "gpio: virtuser: skip free_irq when no IRQ is installed",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-14T08:51:01Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/50fd0ada8d37587223001600933270b59cb30e19",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/50fd0ada8d37587223001600933270b59cb30e19...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:32.6192052+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
       "revert_commits": [],
       "current_status": "Applied",
       "mail_confirmations": [
@@ -60,13 +1026,983 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2b4805549f42b8df"
     },
     {
+      "id": "3fe658e725fec144",
+      "title": "cpufreq: initialize policy rwsem before sysfs publication",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "3e5d1bf4bd687beb2cb4e32a07af695455925588",
+          "title": "cpufreq: initialize policy rwsem before sysfs publication",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-04T15:05:19Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/3e5d1bf4bd687beb2cb4e32a07af695455925588",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/3e5d1bf4bd687beb2cb4e32a07af695455925588...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:02.4673952+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "CAJZ5v0jVjW7XAsphJoMX9=RK0NHDtkz+9jLSDVbFwtxfGKNjcA@mail.gmail.com",
+          "date": "2026-09-04T15:06:55+00:00",
+          "sender": "\"Rafael J. Wysocki (Intel)\" <rafael@kernel.org>",
+          "version": 3,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied as 7.3-rc material, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3fe658e725fec144"
+    },
+    {
+      "id": "1b6942c7b4824454",
+      "title": "Input: hp_sdc - shut down kicker timer on module exit",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1b6942c7b4824454"
+    },
+    {
+      "id": "5195406a01bfd712",
+      "title": "IB/hfi1: Shutdown self-rearming timers before freeing",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "9d3259e41ccd5016cd2c6d013232b89df6d73011",
+          "title": "IB/hfi1: Shutdown self-rearming timers before freeing",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-30T13:25:46Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/9d3259e41ccd5016cd2c6d013232b89df6d73011",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9d3259e41ccd5016cd2c6d013232b89df6d73011...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:03.0299703+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179077475549.237055.5128264178867848863.b4-ty@kernel.org",
+          "date": "2026-09-30T13:25:55+00:00",
+          "sender": "Leon Romanovsky <leon@kernel.org>",
+          "version": 1,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=5195406a01bfd712"
+    },
+    {
+      "id": "602dc5faccb49c33",
+      "title": "ASoC: sti: initialize IRQ lock before requesting IRQ",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "04405aeef4f8d7bcac6dcb1947acafdb4420c2c3",
+          "title": "ASoC: sti: initialize IRQ lock before requesting IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-08-31T12:29:13Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/04405aeef4f8d7bcac6dcb1947acafdb4420c2c3",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/04405aeef4f8d7bcac6dcb1947acafdb4420c2c3...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:27.8050895+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "178817936971.141190.12027742009257573747.b4-ty@b4",
+          "date": "2026-08-31T12:29:29+00:00",
+          "sender": "Mark Brown <broonie@kernel.org>",
+          "version": 1,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied to",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=602dc5faccb49c33"
+    },
+    {
+      "id": "bc343bf4820f9e3e",
+      "title": "usb: gadget: tegra-xudc: Request IRQ after initialization",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=bc343bf4820f9e3e"
+    },
+    {
+      "id": "ddadd0d1a4610356",
+      "title": "mei: vsc-tp: initialize IRQ state before requesting interrupt",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "7754a2924604ea442ef03ed8fc12ccc9221a2e98",
+          "title": "mei: vsc-tp: initialize IRQ state before requesting interrupt",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-01T12:05:03Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/7754a2924604ea442ef03ed8fc12ccc9221a2e98",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/7754a2924604ea442ef03ed8fc12ccc9221a2e98...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:23.4374807+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ddadd0d1a4610356"
+    },
+    {
+      "id": "bc1c73e134d2ea1e",
+      "title": "media: usb: as102: Initialize callback locks before DVB registration",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=bc1c73e134d2ea1e"
+    },
+    {
+      "id": "35d225d31fec4162",
+      "title": "m68k: dmasound: Keep the Q40 IRQ handler registered",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "fa2e77ac5bf81a60864e71fc72196227692d7162",
+          "title": "m68k: dmasound: Keep the Q40 IRQ handler registered",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-29T15:08:47Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/fa2e77ac5bf81a60864e71fc72196227692d7162",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/fa2e77ac5bf81a60864e71fc72196227692d7162...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:40.7186157+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "87jyo4ytzz.wl-tiwai@suse.de",
+          "date": "2026-09-29T15:09:20+00:00",
+          "sender": "Takashi Iwai <tiwai@suse.de>",
+          "version": 1,
+          "scope": "maintainer:for-next",
+          "evidence": "Applied to for-next branch.  Thanks.",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=35d225d31fec4162"
+    },
+    {
+      "id": "fcfd5133721acca4",
+      "title": "ASoC: pcm6240: do not free an unrequested IRQ",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "995b96380ba5d98131acc162608da3538e1395d8",
+          "title": "ASoC: pcm6240: do not free an unrequested IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-29T16:53:10Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/995b96380ba5d98131acc162608da3538e1395d8",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/995b96380ba5d98131acc162608da3538e1395d8...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:54.8361200+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "179070079857.463415.5484242725188416666.b4-ty@b4",
+          "date": "2026-09-29T16:53:18+00:00",
+          "sender": "Mark Brown <broonie@kernel.org>",
+          "version": 1,
+          "scope": "maintainer:unspecified",
+          "evidence": "Applied to",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=fcfd5133721acca4"
+    },
+    {
+      "id": "5b86a942fd2e74c3",
+      "title": "ASoC: codecs: wcd937x: use devm_free_irq() for watchdog IRQs",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=5b86a942fd2e74c3"
+    },
+    {
+      "id": "0d713d9f77fe9fde",
+      "title": "ALSA: ymfpci: avoid changing control access under spinlock",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=0d713d9f77fe9fde"
+    },
+    {
+      "id": "879241ea7b08706f",
+      "title": "ALSA: usb-audio: Protect Roland control activation",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "19b42c1fff7f220a6346c614d79ce1bda6d95b40",
+          "title": "ALSA: usb-audio: Protect Roland control activation",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-29T14:26:34Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/19b42c1fff7f220a6346c614d79ce1bda6d95b40",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/19b42c1fff7f220a6346c614d79ce1bda6d95b40...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:13.3543707+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "87y0ckyvy9.wl-tiwai@suse.de",
+          "date": "2026-09-29T14:27:10+00:00",
+          "sender": "Takashi Iwai <tiwai@suse.de>",
+          "version": 2,
+          "scope": "maintainer:for-next",
+          "evidence": "Applied to for-next branch.  Thanks.",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=879241ea7b08706f"
+    },
+    {
+      "id": "74db7f17506fd018",
+      "title": "ALSA: sgio2audio: Only free successfully requested IRQs",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "af3d225b639c6f9fb8fd5e1e27f11672d56724b6",
+          "title": "ALSA: sgio2audio: Only free successfully requested IRQs",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-29T15:07:52Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/af3d225b639c6f9fb8fd5e1e27f11672d56724b6",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/af3d225b639c6f9fb8fd5e1e27f11672d56724b6...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:17.8895192+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "87ld8kyu0a.wl-tiwai@suse.de",
+          "date": "2026-09-29T15:09:09+00:00",
+          "sender": "Takashi Iwai <tiwai@suse.de>",
+          "version": 1,
+          "scope": "maintainer:for-next",
+          "evidence": "Applied to for-next branch.  Thanks.",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=74db7f17506fd018"
+    },
+    {
+      "id": "6bac3e13252e619d",
+      "title": "nvmet: avoid recursive configfs open for passthru",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6bac3e13252e619d"
+    },
+    {
+      "id": "e83dd50eefa88748",
+      "title": "media: sti: delta: use unaligned accessors for MJPEG SOF fields",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "fdc5bf02aeaef04e7d13895db9b6eaf8083953f9",
+          "title": "media: sti: delta: use unaligned accessors for MJPEG SOF fields",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-10-04T15:32:42Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/fdc5bf02aeaef04e7d13895db9b6eaf8083953f9",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/fdc5bf02aeaef04e7d13895db9b6eaf8083953f9...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:47.2028631+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e83dd50eefa88748"
+    },
+    {
+      "id": "3484d39985e25072",
+      "title": "ALSA: via82xx: use helper to activate DXS controls",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "aee7c43126e3184d7eefde6545b3b88628e5591a",
+          "title": "ALSA: via82xx: use helper to activate DXS controls",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-28T12:26:36Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/aee7c43126e3184d7eefde6545b3b88628e5591a",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/aee7c43126e3184d7eefde6545b3b88628e5591a...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:14.0805704+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "87h5j95zp1.wl-tiwai@suse.de",
+          "date": "2026-09-28T12:26:50+00:00",
+          "sender": "Takashi Iwai <tiwai@suse.de>",
+          "version": 1,
+          "scope": "maintainer:for-next",
+          "evidence": "Applied to for-next branch.  Thanks.",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3484d39985e25072"
+    },
+    {
+      "id": "9b259eb3ee78e7e1",
+      "title": "ALSA: oxygen: use helper to activate the SPDIF PCM control",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "5bdc232c3094304a7e17df5ddb66dcdacbead6bf",
+          "title": "ALSA: oxygen: use helper to activate the SPDIF PCM control",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-28T12:24:52Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/5bdc232c3094304a7e17df5ddb66dcdacbead6bf",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/5bdc232c3094304a7e17df5ddb66dcdacbead6bf...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:51.4747992+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "87ik3p5zqf.wl-tiwai@suse.de",
+          "date": "2026-09-28T12:26:00+00:00",
+          "sender": "Takashi Iwai <tiwai@suse.de>",
+          "version": 1,
+          "scope": "maintainer:for-next",
+          "evidence": "Applied to for-next branch.  Thanks.",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=9b259eb3ee78e7e1"
+    },
+    {
+      "id": "9c8dc0c159507c2f",
+      "title": "ALSA: mpu401: shut down timer before freeing MPU",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "9332af5220d42341bb1446a62c545c0518e990ef",
+          "title": "ALSA: mpu401: shut down timer before freeing MPU",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-28T12:24:15Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/9332af5220d42341bb1446a62c545c0518e990ef",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9332af5220d42341bb1446a62c545c0518e990ef...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:48.4921856+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "87jyo55zt0.wl-tiwai@suse.de",
+          "date": "2026-09-28T12:24:27+00:00",
+          "sender": "Takashi Iwai <tiwai@suse.de>",
+          "version": 1,
+          "scope": "maintainer:for-next",
+          "evidence": "Applied to for-next branch.  Thanks.",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=9c8dc0c159507c2f"
+    },
+    {
+      "id": "a13384f83db18b1b",
+      "title": "scsi: target: pin db_root for metadata writes",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a13384f83db18b1b"
+    },
+    {
+      "id": "c76e0867605955f9",
+      "title": "nvmet: avoid recursive configfs open for file-backed namespaces",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c76e0867605955f9"
+    },
+    {
+      "id": "679108f74cd91127",
+      "title": "net: gen_estimator: protect seqcount updates from hardirq readers",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Needs attention",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=679108f74cd91127"
+    },
+    {
+      "id": "c443079e8480d4ac",
+      "title": "fs: configfs: add helpers for opening non-configfs paths",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c443079e8480d4ac"
+    },
+    {
+      "id": "abc212015119cb56",
+      "title": "net: vmxnet3: unwind partial IRQ setup",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=abc212015119cb56"
+    },
+    {
+      "id": "41216d380062f576",
+      "title": "igb: initialize PTP state before registering PHC",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=41216d380062f576"
+    },
+    {
+      "id": "c295249d24dd748f",
+      "title": "net: neighbour: Serialize proxy timer teardown",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c295249d24dd748f"
+    },
+    {
+      "id": "2ccde0f41483f033",
+      "title": "media: microchip: isc: Initialize DMA lock before requesting IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2ccde0f41483f033"
+    },
+    {
+      "id": "4faf8d2fb4bc3194",
+      "title": "iommu/vt-d: release IRQ vector after request failure",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4faf8d2fb4bc3194"
+    },
+    {
+      "id": "7506edee9fdb9bb4",
+      "title": "speakup: handle serial IRQ request failure",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7506edee9fdb9bb4"
+    },
+    {
+      "id": "4586ee17261061e9",
+      "title": "scsi: vmw_pvscsi: only free a requested IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4586ee17261061e9"
+    },
+    {
+      "id": "8ee8a8994b38826b",
+      "title": "scsi: mptfusion: avoid freeing an unregistered IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8ee8a8994b38826b"
+    },
+    {
+      "id": "71a9982d1cfee487",
+      "title": "ptp: ocp: prevent watchdog rearming during detach",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=71a9982d1cfee487"
+    },
+    {
+      "id": "ae203d3718fa083d",
+      "title": "iommu/exynos: quiesce SysMMU before requesting IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ae203d3718fa083d"
+    },
+    {
+      "id": "11488511c8d738f4",
+      "title": "iommu/exynos: Initialize lock before requesting IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=11488511c8d738f4"
+    },
+    {
+      "id": "ff4340d3beceb5b5",
+      "title": "PCI: pciehp: Make poll mode parameter read-only",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "5ab17178fca6026d329cb6ced33c30f3b7d3e50a",
+          "title": "PCI: pciehp: Make 'pciehp_poll_mode' parameter read-only",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-21T17:48:07Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/5ab17178fca6026d329cb6ced33c30f3b7d3e50a",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/5ab17178fca6026d329cb6ced33c30f3b7d3e50a...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:47.6353537+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "20260921175154.GA1332331@bhelgaas",
+          "date": "2026-09-21T17:51:54+00:00",
+          "sender": "Bjorn Helgaas <helgaas@kernel.org>",
+          "version": 1,
+          "scope": "maintainer:pci/hotplug",
+          "evidence": "Applied to pci/hotplug for v7.4, thanks!",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=ff4340d3beceb5b5"
+    },
+    {
+      "id": "66b5a89e7a35d4f9",
+      "title": "media: ov5640: Initialize mutex before probe cleanup",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=66b5a89e7a35d4f9"
+    },
+    {
+      "id": "fbf61e3981b8577c",
+      "title": "peci: npcm: Initialize state before requesting IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "425125e6d408b5969afb99c3e95a391f1f1ad81d",
+          "title": "peci: npcm: Initialize state before requesting IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-25T20:20:38Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/425125e6d408b5969afb99c3e95a391f1f1ad81d",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/425125e6d408b5969afb99c3e95a391f1f1ad81d...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:13.8246865+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=fbf61e3981b8577c"
+    },
+    {
+      "id": "b42aca124cb915a3",
+      "title": "peci: aspeed: Initialize state before requesting IRQ",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "61cf765b654b76a62510269521a65e4e4a488f4c",
+          "title": "peci: aspeed: Initialize state before requesting IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-25T20:20:13Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/61cf765b654b76a62510269521a65e4e4a488f4c",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/61cf765b654b76a62510269521a65e4e4a488f4c...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:05.0529779+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b42aca124cb915a3"
+    },
+    {
+      "id": "e2ab5de9d048121a",
+      "title": "ipv6: use READ_ONCE() for bindv6only default in inet6_create()",
+      "kind": "patch",
+      "before_applied": true,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "7a20eb54224ab7481c1f5a1619a6a5677be93eed",
+          "title": "ipv6: use READ_ONCE() for bindv6only default in inet6_create()",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-06-05T01:30:24Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/7a20eb54224ab7481c1f5a1619a6a5677be93eed",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/7a20eb54224ab7481c1f5a1619a6a5677be93eed...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:26.6342453+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [
+        {
+          "kind": "applied",
+          "message_id": "178062361789.3097022.10379548092017503549.git-patchwork-notify@kernel.org",
+          "date": "2026-06-05T01:40:17+00:00",
+          "sender": "patchwork-bot+netdevbpf@kernel.org",
+          "version": 2,
+          "scope": "maintainer:netdev/net-next.git",
+          "evidence": "This patch was applied to netdev/net-next.git (main)",
+          "reason": "",
+          "action": ""
+        }
+      ],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e2ab5de9d048121a"
+    },
+    {
+      "id": "db9a6baf5ef150f9",
+      "title": "wifi: ath12k: convert scan timeout to wiphy delayed work",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Submitted",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=db9a6baf5ef150f9"
+    },
+    {
+      "id": "66963e54b696a547",
+      "title": "media: adv7180: Initialize mutex before ancillary clients",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "9d46d17a65e86010b1f5604e5cf61ce1e197f77a",
+          "title": "media: adv7180: Initialize mutex before ancillary clients",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-23T12:54:50Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/9d46d17a65e86010b1f5604e5cf61ce1e197f77a",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9d46d17a65e86010b1f5604e5cf61ce1e197f77a...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:06.7288991+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
+      "revert_commits": [],
+      "current_status": "Applied",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=66963e54b696a547"
+    },
+    {
+      "id": "f9ac17f7af5ca15b",
+      "title": "e1000e: roll back registered MSI-X IRQs on failure",
+      "kind": "patch",
+      "before_applied": false,
+      "after_applied": false,
+      "basis": "unconfirmed",
+      "mainline_commits": [],
+      "revert_commits": [],
+      "current_status": "Reviewed",
+      "mail_confirmations": [],
+      "excluded_other_authors": [],
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f9ac17f7af5ca15b"
+    },
+    {
       "id": "5f11b859aba5bb67",
       "title": "Input: hp_sdc: shut down kicker timer on module exit",
       "kind": "patch",
       "before_applied": true,
       "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "309731e95917125bbd13626a7a5600490a5bf44f",
+          "title": "Input: hp_sdc - shut down kicker timer on module exit",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-14T01:23:13Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/309731e95917125bbd13626a7a5600490a5bf44f",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/309731e95917125bbd13626a7a5600490a5bf44f...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:49.6202191+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
       "revert_commits": [],
       "current_status": "Applied",
       "mail_confirmations": [
@@ -99,10 +2035,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-31T12:25:36Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/bda8324270b1ac91bfba1df8928e0570e29759e8",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/bda8324270b1ac91bfba1df8928e0570e29759e8...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:55.741621+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/bda8324270b1ac91bfba1df8928e0570e29759e8...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:27.2000420+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -112,20 +2048,6 @@
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7c44203887fb9e2a"
-    },
-    {
-      "id": "db9a6baf5ef150f9",
-      "title": "wifi: ath12k: convert scan timeout to wiphy delayed work",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=db9a6baf5ef150f9"
     },
     {
       "id": "637076efe88171af",
@@ -141,10 +2063,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-08-10T17:28:23Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/33930840b5f0a79f826e7c69dc6cd78f72a67481",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/33930840b5f0a79f826e7c69dc6cd78f72a67481...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:13.1356951+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/33930840b5f0a79f826e7c69dc6cd78f72a67481...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:55.9126232+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -169,10 +2091,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-08-29T01:36:18Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/3f92a64545165bdbb36dee8fa35626b295463313",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/3f92a64545165bdbb36dee8fa35626b295463313...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:18.8209218+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/3f92a64545165bdbb36dee8fa35626b295463313...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:06.0679751+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -220,10 +2142,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-08-20T21:45:07Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/f8e43fe0f22b7137ce456e6fe3581d3098174f74",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f8e43fe0f22b7137ce456e6fe3581d3098174f74...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:27.4434125+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f8e43fe0f22b7137ce456e6fe3581d3098174f74...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:31.3376462+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -260,10 +2182,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-29T17:45:54Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/612ccf42acd14bb2685fa60c3495ca13e63e8989",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/612ccf42acd14bb2685fa60c3495ca13e63e8989...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:36.2297264+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/612ccf42acd14bb2685fa60c3495ca13e63e8989...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:01.2726518+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -300,10 +2222,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-06T13:39:23Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/4105a4c0678b2808fc8046b60321b4f1cc7dae75",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/4105a4c0678b2808fc8046b60321b4f1cc7dae75...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:21.4221071+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/4105a4c0678b2808fc8046b60321b4f1cc7dae75...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:10.6536493+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -328,10 +2250,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-06T13:39:22Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/e074c12c428c633e079154301207a6079a208583",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e074c12c428c633e079154301207a6079a208583...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:11.6666946+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e074c12c428c633e079154301207a6079a208583...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:54.8483016+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -356,10 +2278,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-08-19T12:59:41Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/6c97817e20598e5473094e0e38d1f51f1cf4dfff",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/6c97817e20598e5473094e0e38d1f51f1cf4dfff...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:40.9166292+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/6c97817e20598e5473094e0e38d1f51f1cf4dfff...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:15.6546492+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -383,46 +2305,6 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7b3b630bc073dcca"
     },
     {
-      "id": "91b1345ba0a2f3e6",
-      "title": "ALSA: mtpav: shut down output timer before card teardown",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mainline_verified",
-      "mainline_commits": [
-        {
-          "sha": "c73cb5b7c159246dd572277c668851a56e516019",
-          "title": "ALSA: mtpav: shut down output timer before card teardown",
-          "author": "Runyu Xiao",
-          "author_email": "runyu.xiao@seu.edu.cn",
-          "committed_at": "2026-08-20T13:39:10Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
-          "source": "https://github.com/torvalds/linux/commit/c73cb5b7c159246dd572277c668851a56e516019",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/c73cb5b7c159246dd572277c668851a56e516019...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:57.9570789+08:00",
-          "attribution": "author",
-          "reverted": false
-        }
-      ],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "87wltklxfv.wl-tiwai@suse.de",
-          "date": "2026-08-20T13:43:16+00:00",
-          "sender": "Takashi Iwai <tiwai@suse.de>",
-          "version": 1,
-          "scope": "maintainer:unspecified",
-          "evidence": "Thanks, applied now.",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=91b1345ba0a2f3e6"
-    },
-    {
       "id": "8851bfdaefd58f7e",
       "title": "ALSA: harmony: initialize locks before requesting IRQ",
       "kind": "patch",
@@ -436,10 +2318,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-08-31T08:07:23Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/33abb7491e89285a41565670945293dda841afc4",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/33abb7491e89285a41565670945293dda841afc4...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:14.8582891+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/33abb7491e89285a41565670945293dda841afc4...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:59.1474410+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -463,79 +2345,27 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8851bfdaefd58f7e"
     },
     {
-      "id": "3ecea0a9c7d4913e",
-      "title": "mtd: spi-nor: core: Fix mutex leak in spi_nor_rww_start_exclusive()",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "178913311701.1915651.4791624215787396187.b4-ty@b4",
-          "date": "2026-09-11T13:25:17+00:00",
-          "sender": "Michael Walle <mwalle@kernel.org>",
-          "version": 5,
-          "scope": "maintainer:unspecified",
-          "evidence": "Applied, thanks!",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3ecea0a9c7d4913e"
-    },
-    {
-      "id": "0a63e2e3cbdc3f32",
-      "title": "mmc: sh_mmcif: initialize IRQ-thread mutex before requesting interrupt",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "CAPx+jO9y6t7vqWqpVZpt37N_71b3rL1m-=RF2RDgtB4vkvS4Dg@mail.gmail.com",
-          "date": "2026-09-11T15:40:30+00:00",
-          "sender": "Ulf Hansson <ulf.hansson@oss.qualcomm.com>",
-          "version": 1,
-          "scope": "maintainer:fixes",
-          "evidence": "Applied for fixes, thanks!",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=0a63e2e3cbdc3f32"
-    },
-    {
-      "id": "66b5a89e7a35d4f9",
-      "title": "media: ov5640: Initialize mutex before probe cleanup",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Reviewed",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=66b5a89e7a35d4f9"
-    },
-    {
       "id": "2a9ca751e9d7c1e4",
       "title": "crypto: ccp: Initialize DBC ioctl mutex before registering device",
       "kind": "patch",
       "before_applied": true,
       "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "e9b1d168f2a70c0764d5748893fdf631c504c171",
+          "title": "crypto: ccp - Initialize DBC ioctl mutex before registering device",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-11T05:03:04Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/e9b1d168f2a70c0764d5748893fdf631c504c171",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e9b1d168f2a70c0764d5748893fdf631c504c171...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:12.3965145+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
       "revert_commits": [],
       "current_status": "Applied",
       "mail_confirmations": [
@@ -555,102 +2385,6 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2a9ca751e9d7c1e4"
     },
     {
-      "id": "6f0c9b881d2224db",
-      "title": "scsi: qedi: Initialize callback state before registration",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6f0c9b881d2224db"
-    },
-    {
-      "id": "6bac3e13252e619d",
-      "title": "nvmet: avoid recursive configfs open for passthru",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Reviewed",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6bac3e13252e619d"
-    },
-    {
-      "id": "c76e0867605955f9",
-      "title": "nvmet: avoid recursive configfs open for file-backed namespaces",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Reviewed",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c76e0867605955f9"
-    },
-    {
-      "id": "54d679627c21673d",
-      "title": "nvmet: avoid recursive configfs open",
-      "kind": "cover",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=54d679627c21673d"
-    },
-    {
-      "id": "1b2012c4db6a9e95",
-      "title": "net: macb: initialize PTP state before registering clock",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mainline_verified",
-      "mainline_commits": [
-        {
-          "sha": "e1406330d70e56dd44fa6fbafc86e77e5c80c122",
-          "title": "net: macb: initialize PTP state before registering clock",
-          "author": "Runyu Xiao",
-          "author_email": "runyu.xiao@seu.edu.cn",
-          "committed_at": "2026-09-10T15:46:19Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
-          "source": "https://github.com/torvalds/linux/commit/e1406330d70e56dd44fa6fbafc86e77e5c80c122",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e1406330d70e56dd44fa6fbafc86e77e5c80c122...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:13.5129858+08:00",
-          "attribution": "author",
-          "reverted": false
-        }
-      ],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "178905540439.1510486.3682579861887737630.git-patchwork-notify@kernel.org",
-          "date": "2026-09-10T15:50:04+00:00",
-          "sender": "patchwork-bot+netdevbpf@kernel.org",
-          "version": 3,
-          "scope": "maintainer:netdev/net.git",
-          "evidence": "This patch was applied to netdev/net.git (main)",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1b2012c4db6a9e95"
-    },
-    {
       "id": "5e1c2009b9142ba0",
       "title": "most: cdev: Initialize channel state before registering cdev",
       "kind": "patch",
@@ -663,20 +2397,6 @@
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=5e1c2009b9142ba0"
-    },
-    {
-      "id": "2ccde0f41483f033",
-      "title": "media: microchip: isc: Initialize DMA lock before requesting IRQ",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=2ccde0f41483f033"
     },
     {
       "id": "f0305e69507d0b4b",
@@ -712,8 +2432,22 @@
       "kind": "patch",
       "before_applied": true,
       "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "a5f8e3471fc20567df888267885dec3eb340eb37",
+          "title": "dmaengine: altera-msgdma: initialize state before requesting IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-09T13:36:52Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/a5f8e3471fc20567df888267885dec3eb340eb37",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/a5f8e3471fc20567df888267885dec3eb340eb37...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:10.6270416+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
       "revert_commits": [],
       "current_status": "Applied",
       "mail_confirmations": [
@@ -731,20 +2465,6 @@
       ],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=68747837c3fa5fb3"
-    },
-    {
-      "id": "71a9982d1cfee487",
-      "title": "ptp: ocp: prevent watchdog rearming during detach",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Reviewed",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=71a9982d1cfee487"
     },
     {
       "id": "6161a812be489b7d",
@@ -765,11 +2485,25 @@
       "title": "hte: tegra194-test: shut down timer before GPIO release",
       "kind": "patch",
       "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "30167fadbf87fa901a2fee49c30a5c5a506a43e8",
+          "title": "hte: tegra194-test: shut down timer before GPIO release",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-09T18:24:13Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/30167fadbf87fa901a2fee49c30a5c5a506a43e8",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/30167fadbf87fa901a2fee49c30a5c5a506a43e8...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:45.4789750+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
       "revert_commits": [],
-      "current_status": "Reviewed",
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8f2af80ef9db9f23"
@@ -789,20 +2523,6 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=fbadf0f192c613ff"
     },
     {
-      "id": "1ec6da72e5054b0d",
-      "title": "USB: dwc2: shut down wakeup timer before freeing HCD state",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Reviewed",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1ec6da72e5054b0d"
-    },
-    {
       "id": "9c922badf3fb2950",
       "title": "wifi: rtlwifi: rtl8192du: check QoS TID before indexing tids",
       "kind": "patch",
@@ -816,10 +2536,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-03T02:42:32Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/ed4f05d9f2f42fd866f55108db8123eefcc5fb33",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ed4f05d9f2f42fd866f55108db8123eefcc5fb33...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:18.5604179+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ed4f05d9f2f42fd866f55108db8123eefcc5fb33...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:16.6621260+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -870,10 +2590,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-08-17T19:47:07Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:23.7870875+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/43b0213529c6ae2fd4cbf8dbb9baff87a34c27d7...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:17.7550684+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -895,46 +2615,6 @@
       ],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=38f900538707c95b"
-    },
-    {
-      "id": "1152f7246aad8924",
-      "title": "mtd: rawnand: cadence: Initialize IRQ state before requesting IRQ",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "178854351280.1467647.11088878922601581121.b4-ty@bootlin.com",
-          "date": "2026-09-04T17:38:32+00:00",
-          "sender": "Miquel Raynal <miquel.raynal@bootlin.com>",
-          "version": 1,
-          "scope": "maintainer:mtd/fixes",
-          "evidence": "Applied to mtd/fixes, thanks!",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=1152f7246aad8924"
-    },
-    {
-      "id": "e25a38a53ad6b63d",
-      "title": "mailbox: altera: shut down RX polling timer on channel teardown",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e25a38a53ad6b63d"
     },
     {
       "id": "e793a6fa2cd306e0",
@@ -964,10 +2644,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-31T07:28:12Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/8a53f9102a0d3eeb8784999f925028acf339c276",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/8a53f9102a0d3eeb8784999f925028acf339c276...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:48.5824479+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/8a53f9102a0d3eeb8784999f925028acf339c276...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:40.7501118+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -989,102 +2669,6 @@
       ],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8f0c04939361b88c"
-    },
-    {
-      "id": "3fe658e725fec144",
-      "title": "cpufreq: initialize policy rwsem before sysfs publication",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mainline_verified",
-      "mainline_commits": [
-        {
-          "sha": "3e5d1bf4bd687beb2cb4e32a07af695455925588",
-          "title": "cpufreq: initialize policy rwsem before sysfs publication",
-          "author": "Runyu Xiao",
-          "author_email": "runyu.xiao@seu.edu.cn",
-          "committed_at": "2026-09-04T15:05:19Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
-          "source": "https://github.com/torvalds/linux/commit/3e5d1bf4bd687beb2cb4e32a07af695455925588",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/3e5d1bf4bd687beb2cb4e32a07af695455925588...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:16.6135013+08:00",
-          "attribution": "author",
-          "reverted": false
-        }
-      ],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "CAJZ5v0jVjW7XAsphJoMX9=RK0NHDtkz+9jLSDVbFwtxfGKNjcA@mail.gmail.com",
-          "date": "2026-09-04T15:06:55+00:00",
-          "sender": "\"Rafael J. Wysocki (Intel)\" <rafael@kernel.org>",
-          "version": 3,
-          "scope": "maintainer:unspecified",
-          "evidence": "Applied as 7.3-rc material, thanks!",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=3fe658e725fec144"
-    },
-    {
-      "id": "f7e3bc10bdffe9c8",
-      "title": "rtc: spear: initialize IRQ state before requesting alarm IRQ",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f7e3bc10bdffe9c8"
-    },
-    {
-      "id": "716fb60f7c9c6fc1",
-      "title": "perf: xgene: initialize lock before requesting IRQ",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=716fb60f7c9c6fc1"
-    },
-    {
-      "id": "fbf61e3981b8577c",
-      "title": "peci: npcm: Initialize state before requesting IRQ",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=fbf61e3981b8577c"
-    },
-    {
-      "id": "b42aca124cb915a3",
-      "title": "peci: aspeed: Initialize state before requesting IRQ",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b42aca124cb915a3"
     },
     {
       "id": "56df94c831e4ad3c",
@@ -1115,72 +2699,32 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=27474def782aeccc"
     },
     {
-      "id": "11488511c8d738f4",
-      "title": "iommu/exynos: Initialize lock before requesting IRQ",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=11488511c8d738f4"
-    },
-    {
       "id": "68c1d9adf4aae56e",
       "title": "hte: tegra194: Initialize slice locks before registering chip",
       "kind": "patch",
       "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Reviewed",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=68c1d9adf4aae56e"
-    },
-    {
-      "id": "46109ae67bf8e0f7",
-      "title": "net: au1000: move free_irq out of the close-time spinlocked section",
-      "kind": "patch",
-      "before_applied": true,
       "after_applied": true,
       "basis": "mainline_verified",
       "mainline_commits": [
         {
-          "sha": "f48763beab4eea41fc480c9702ec6eebe8d75e4f",
-          "title": "net: au1000: move free_irq out of the close-time spinlocked section",
+          "sha": "1329abe1bae416ab2cff89c3312d33f745d341c7",
+          "title": "hte: tegra194: Initialize slice locks before registering chip",
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
-          "committed_at": "2026-06-24T02:10:29Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
-          "source": "https://github.com/torvalds/linux/commit/f48763beab4eea41fc480c9702ec6eebe8d75e4f",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f48763beab4eea41fc480c9702ec6eebe8d75e4f...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:25.3398636+08:00",
+          "committed_at": "2026-09-03T05:45:46Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/1329abe1bae416ab2cff89c3312d33f745d341c7",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/1329abe1bae416ab2cff89c3312d33f745d341c7...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:01.2453352+08:00",
           "attribution": "author",
           "reverted": false
         }
       ],
       "revert_commits": [],
       "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "178226764357.2513445.5024104235449335960.git-patchwork-notify@kernel.org",
-          "date": "2026-06-24T02:20:43+00:00",
-          "sender": "patchwork-bot+netdevbpf@kernel.org",
-          "version": 1,
-          "scope": "maintainer:netdev/net.git",
-          "evidence": "This patch was applied to netdev/net.git (main)",
-          "reason": "",
-          "action": ""
-        }
-      ],
+      "mail_confirmations": [],
       "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=46109ae67bf8e0f7"
+      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=68c1d9adf4aae56e"
     },
     {
       "id": "d2b1f34e01824bea",
@@ -1195,86 +2739,6 @@
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=d2b1f34e01824bea"
-    },
-    {
-      "id": "e2ab5de9d048121a",
-      "title": "ipv6: use READ_ONCE() for bindv6only default in inet6_create()",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mainline_verified",
-      "mainline_commits": [
-        {
-          "sha": "7a20eb54224ab7481c1f5a1619a6a5677be93eed",
-          "title": "ipv6: use READ_ONCE() for bindv6only default in inet6_create()",
-          "author": "Runyu Xiao",
-          "author_email": "runyu.xiao@seu.edu.cn",
-          "committed_at": "2026-06-05T01:30:24Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
-          "source": "https://github.com/torvalds/linux/commit/7a20eb54224ab7481c1f5a1619a6a5677be93eed",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/7a20eb54224ab7481c1f5a1619a6a5677be93eed...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:46.1808014+08:00",
-          "attribution": "author",
-          "reverted": false
-        }
-      ],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "178062361789.3097022.10379548092017503549.git-patchwork-notify@kernel.org",
-          "date": "2026-06-05T01:40:17+00:00",
-          "sender": "patchwork-bot+netdevbpf@kernel.org",
-          "version": 2,
-          "scope": "maintainer:netdev/net-next.git",
-          "evidence": "This patch was applied to netdev/net-next.git (main)",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e2ab5de9d048121a"
-    },
-    {
-      "id": "602dc5faccb49c33",
-      "title": "ASoC: sti: initialize IRQ lock before requesting IRQ",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mainline_verified",
-      "mainline_commits": [
-        {
-          "sha": "04405aeef4f8d7bcac6dcb1947acafdb4420c2c3",
-          "title": "ASoC: sti: initialize IRQ lock before requesting IRQ",
-          "author": "Runyu Xiao",
-          "author_email": "runyu.xiao@seu.edu.cn",
-          "committed_at": "2026-08-31T12:29:13Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
-          "source": "https://github.com/torvalds/linux/commit/04405aeef4f8d7bcac6dcb1947acafdb4420c2c3",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/04405aeef4f8d7bcac6dcb1947acafdb4420c2c3...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:46.0913581+08:00",
-          "attribution": "author",
-          "reverted": false
-        }
-      ],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "178817936971.141190.12027742009257573747.b4-ty@b4",
-          "date": "2026-08-31T12:29:29+00:00",
-          "sender": "Mark Brown <broonie@kernel.org>",
-          "version": 1,
-          "scope": "maintainer:unspecified",
-          "evidence": "Applied to",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=602dc5faccb49c33"
     },
     {
       "id": "842993b057bd028b",
@@ -1295,11 +2759,25 @@
       "title": "media: saa7146: Initialize interrupt lock before requesting IRQ",
       "kind": "patch",
       "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "e07c75a6bc4adf1ed09ede31756261e2c6bdede5",
+          "title": "media: saa7146: Initialize interrupt lock before requesting IRQ",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-09-08T13:10:04Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/e07c75a6bc4adf1ed09ede31756261e2c6bdede5",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e07c75a6bc4adf1ed09ede31756261e2c6bdede5...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:57.5523548+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
       "revert_commits": [],
-      "current_status": "Submitted",
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=eedc8d06bb828394"
@@ -1331,34 +2809,6 @@
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8d114bcc9c10e554"
-    },
-    {
-      "id": "8ffe5b6639c74521",
-      "title": "media: mediatek: vcodec: Initialize context lock before firmware setup",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8ffe5b6639c74521"
-    },
-    {
-      "id": "6324e15318d94a2e",
-      "title": "dmaengine: tegra: initialize channel state before requesting IRQ",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=6324e15318d94a2e"
     },
     {
       "id": "9f611786061e8f4d",
@@ -1403,29 +2853,29 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8e97e37c993d8291"
     },
     {
-      "id": "efa7725f749368d2",
-      "title": "can: hi311x: drop hi3110_lock before free_irq() on open failure",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=efa7725f749368d2"
-    },
-    {
       "id": "b0111d324fabbc55",
       "title": "remoteproc: xlnx: initialize mailbox work before requesting channels",
       "kind": "patch",
       "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
+      "after_applied": true,
+      "basis": "mainline_verified",
+      "mainline_commits": [
+        {
+          "sha": "5ca7dea7cb2e47f42c15ac7206c5e0cba23d292d",
+          "title": "remoteproc: xlnx: Initialize mailbox work before requesting channels",
+          "author": "Runyu Xiao",
+          "author_email": "runyu.xiao@seu.edu.cn",
+          "committed_at": "2026-08-31T17:34:41Z",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
+          "source": "https://github.com/torvalds/linux/commit/5ca7dea7cb2e47f42c15ac7206c5e0cba23d292d",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/5ca7dea7cb2e47f42c15ac7206c5e0cba23d292d...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:55.7148655+08:00",
+          "attribution": "author",
+          "reverted": false
+        }
+      ],
       "revert_commits": [],
-      "current_status": "Submitted",
+      "current_status": "Applied",
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=b0111d324fabbc55"
@@ -1473,46 +2923,6 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=c57855b0caeca700"
     },
     {
-      "id": "a13384f83db18b1b",
-      "title": "scsi: target: pin db_root for metadata writes",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=a13384f83db18b1b"
-    },
-    {
-      "id": "8aae52492e4bf043",
-      "title": "iio: admv1013: initialize callback mutex before registering notifier",
-      "kind": "patch",
-      "before_applied": true,
-      "after_applied": true,
-      "basis": "mail_confirmation",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Applied",
-      "mail_confirmations": [
-        {
-          "kind": "applied",
-          "message_id": "20260823010216.76eaaee2@jic23-huawei",
-          "date": "2026-08-23T00:02:16+00:00",
-          "sender": "Jonathan Cameron <jic23@kernel.org>",
-          "version": 2,
-          "scope": "maintainer:fixes-togreg",
-          "evidence": "The code has changed a bit, so what I applied to the fixes-togreg branch of",
-          "reason": "",
-          "action": ""
-        }
-      ],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=8aae52492e4bf043"
-    },
-    {
       "id": "424be8359cb16a32",
       "title": "scsi: qla2xxx: wait for the EDIF RX timer before freeing entries",
       "kind": "patch",
@@ -1555,20 +2965,6 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=df8eed0bd59213b2"
     },
     {
-      "id": "f4eb088cdbbc89c4",
-      "title": "wifi: wlcore: release runtime PM ref on regdomain config failure",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=f4eb088cdbbc89c4"
-    },
-    {
       "id": "f9056af03581aa8f",
       "title": "octeontx2-vf: clear stale mailbox IRQ state before request_irq()",
       "kind": "patch",
@@ -1582,10 +2978,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-15T19:47:19Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/0b352f04b9be2c83c0240aa6dae7257fefa90464",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0b352f04b9be2c83c0240aa6dae7257fefa90464...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:48.6810174+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0b352f04b9be2c83c0240aa6dae7257fefa90464...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:36.6442191+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -1610,10 +3006,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-15T19:47:19Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/f918554fb7246e89b98ef90abe80801f038258b3",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f918554fb7246e89b98ef90abe80801f038258b3...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:30.2811075+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f918554fb7246e89b98ef90abe80801f038258b3...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:34.4464295+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -1638,10 +3034,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-23T08:44:12Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/d3e91a95b2b0fc6336dbf3ec90d831a1654d2720",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/d3e91a95b2b0fc6336dbf3ec90d831a1654d2720...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:05.4207158+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/d3e91a95b2b0fc6336dbf3ec90d831a1654d2720...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:40.7301438+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -1762,10 +3158,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-07T08:10:40Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/2a665946e0407a05a3f81bd56a08553c446498e0",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/2a665946e0407a05a3f81bd56a08553c446498e0...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:11.9589673+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/2a665946e0407a05a3f81bd56a08553c446498e0...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:41.2874875+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -1930,10 +3326,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-23T14:46:12Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/18f116931f52e3c3303ad4b15ff41eb89b0e4239",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/18f116931f52e3c3303ad4b15ff41eb89b0e4239...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:59.1177003+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/18f116931f52e3c3303ad4b15ff41eb89b0e4239...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:05.2011950+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -1970,10 +3366,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-17T12:51:29Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/ce1fed11d18e163baf7f875152a33bf80f625c1a",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ce1fed11d18e163baf7f875152a33bf80f625c1a...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:02.572168+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ce1fed11d18e163baf7f875152a33bf80f625c1a...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:37.1114539+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -1998,10 +3394,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-06T08:09:29Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/536fb3d739d75a03cb318c0c6fe799425cfea501",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/536fb3d739d75a03cb318c0c6fe799425cfea501...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:31.042692+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/536fb3d739d75a03cb318c0c6fe799425cfea501...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:37.6795458+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2026,10 +3422,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-08T11:35:22Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/010382937fb69892b3469ac4d30af072262f59e8",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/010382937fb69892b3469ac4d30af072262f59e8...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:44.4014538+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/010382937fb69892b3469ac4d30af072262f59e8...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:22.1607907+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2068,10 +3464,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-23T06:11:22Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:56.6885491+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/11d4bc4e26fb66040a5b5d95e9abf37deac2b1fc...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:56.9828379+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2096,10 +3492,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-06T14:20:12Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/ee5fb641c4ccac8406c668d3e947eb20ce44f233",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ee5fb641c4ccac8406c668d3e947eb20ce44f233...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:20.764131+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/ee5fb641c4ccac8406c668d3e947eb20ce44f233...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:20.8993174+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2136,10 +3532,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-14T08:18:14Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/47186409c092cd7dd70350999186c700233e854d",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/47186409c092cd7dd70350999186c700233e854d...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:26.4812093+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/47186409c092cd7dd70350999186c700233e854d...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:24.6831275+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2176,10 +3572,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-05-28T14:06:22Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/29bef9934b2521f787bb15dd1985d4c0d12ae02a",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/29bef9934b2521f787bb15dd1985d4c0d12ae02a...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:09.6850128+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/29bef9934b2521f787bb15dd1985d4c0d12ae02a...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:37.5742943+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2216,10 +3612,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-29T22:24:47Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/cd5a6a5096b246e10600da3ac47a1274ce9573c8",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/cd5a6a5096b246e10600da3ac47a1274ce9573c8...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:00.2057414+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/cd5a6a5096b246e10600da3ac47a1274ce9573c8...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:33.8798075+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2244,10 +3640,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-29T22:24:46Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/6e1b9bff1202da55c464e36bd34a2b6863d7fe30",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/6e1b9bff1202da55c464e36bd34a2b6863d7fe30...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:43.4391166+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/6e1b9bff1202da55c464e36bd34a2b6863d7fe30...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:20.1432296+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2272,10 +3668,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-29T15:40:26Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/e31408734332b8cc611342cdaaab6ba492180156",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e31408734332b8cc611342cdaaab6ba492180156...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:16.2508028+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/e31408734332b8cc611342cdaaab6ba492180156...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:04.5276796+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2312,10 +3708,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-18T08:02:13Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:06.9912814+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/286533cb14a3c8a8bd39ff64ea2fc8e1aa0f638b...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:32.8979336+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2340,10 +3736,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-18T08:02:13Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/90f0109019e6817eb40a486671b7722d1544ae29",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/90f0109019e6817eb40a486671b7722d1544ae29...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:51.1623432+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/90f0109019e6817eb40a486671b7722d1544ae29...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:44.8013801+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2368,10 +3764,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-05-29T09:13:05Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/fa09f08ede3db3050ae16ae1ed92c902d0cada23",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/fa09f08ede3db3050ae16ae1ed92c902d0cada23...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:33.8148035+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/fa09f08ede3db3050ae16ae1ed92c902d0cada23...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:38.2545856+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2412,10 +3808,10 @@
           "author": "Danilo Krummrich",
           "author_email": "dakr@kernel.org",
           "committed_at": "2026-05-30T20:25:32Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/d541aa1897f67f4f14c805785bff894bcc61dca1",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/d541aa1897f67f4f14c805785bff894bcc61dca1...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:08.4384446+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/d541aa1897f67f4f14c805785bff894bcc61dca1...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:10:47.9469867+08:00",
           "attribution": "other_author"
         }
       ],
@@ -2439,10 +3835,10 @@
           "author": "Danilo Krummrich",
           "author_email": "dakr@kernel.org",
           "committed_at": "2026-05-30T20:25:23Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/1947229f5f2a8d4ecf8c971aca68a1242bb7b37c",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/1947229f5f2a8d4ecf8c971aca68a1242bb7b37c...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:01.841936+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/1947229f5f2a8d4ecf8c971aca68a1242bb7b37c...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:09.9713145+08:00",
           "attribution": "other_author"
         }
       ],
@@ -2462,10 +3858,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-06T14:46:57Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/2641a9e0a1dd4af2e21995470a21d55dd35e5203",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/2641a9e0a1dd4af2e21995470a21d55dd35e5203...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:04.3814622+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/2641a9e0a1dd4af2e21995470a21d55dd35e5203...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:07:25.3191348+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2576,7 +3972,7 @@
       "id": "b5234fc0f905590f",
       "title": "gtp: annotate PDP lookups under RTNL",
       "kind": "patch",
-      "before_applied": true,
+      "before_applied": false,
       "after_applied": false,
       "basis": "reverted_verified",
       "mainline_commits": [
@@ -2586,10 +3982,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-08T08:14:29Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:51.026463+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:41.9560750+08:00",
           "attribution": "author",
           "reverted": true
         }
@@ -2600,10 +3996,10 @@
           "title": "Revert \"gtp: annotate PDP lookups under RTNL\"",
           "author": "Simon Horman",
           "committed_at": "2026-07-21T15:15:09Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/860b693bca593c10e8294b79648799d96f6953d1",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/860b693bca593c10e8294b79648799d96f6953d1...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T20:17:31.7360288+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/860b693bca593c10e8294b79648799d96f6953d1...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:34.6877484+08:00",
           "reverts_commit": "0be5c3f0fbef3679f50f345b9237b8f9ea5de4e9",
           "effective": true
         }
@@ -2639,10 +4035,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-08T08:34:21Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/4fa0619d039f561dd2207055cf21a10abaeebe0e",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/4fa0619d039f561dd2207055cf21a10abaeebe0e...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:28.6811368+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/4fa0619d039f561dd2207055cf21a10abaeebe0e...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:29.0297223+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -2846,20 +4242,6 @@
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=77b77088a060d8f4"
     },
     {
-      "id": "e83dd50eefa88748",
-      "title": "media: sti: delta: use unaligned accessors for MJPEG SOF fields",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Submitted",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=e83dd50eefa88748"
-    },
-    {
       "id": "387bae3bd9b0eb36",
       "title": "net/ncsi: tighten RCU-list lifetime handling",
       "kind": "cover",
@@ -2971,10 +4353,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-07-01T02:29:46Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/684a00c291fbde2d42b6692c75855df7ff8894ee",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/684a00c291fbde2d42b6692c75855df7ff8894ee...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:38.5476053+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/684a00c291fbde2d42b6692c75855df7ff8894ee...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:09.9860894+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -3025,10 +4407,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-25T15:38:00Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/0e901ee5c6f9e1a382099cd7dbee1360c80c441c",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0e901ee5c6f9e1a382099cd7dbee1360c80c441c...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:48:53.7809512+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/0e901ee5c6f9e1a382099cd7dbee1360c80c441c...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:06:52.7606087+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -3423,10 +4805,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-05T01:31:18Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/f425c55cb60e116a53f2c196100dc09c5a828383",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f425c55cb60e116a53f2c196100dc09c5a828383...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:50:23.0318601+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/f425c55cb60e116a53f2c196100dc09c5a828383...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:11:25.1140949+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -3477,10 +4859,10 @@
           "author": "Maarten Lankhorst",
           "author_email": "dev@lankhorst.se",
           "committed_at": "2026-06-02T12:32:18Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/9cc47acc2f6ec74869e4be3ab59fe662cec887c3",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9cc47acc2f6ec74869e4be3ab59fe662cec887c3...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:53.805945+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/9cc47acc2f6ec74869e4be3ab59fe662cec887c3...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:09:59.6497820+08:00",
           "attribution": "signed_off",
           "reverted": false
         }
@@ -3617,10 +4999,10 @@
           "author": "Runyu Xiao",
           "author_email": "runyu.xiao@seu.edu.cn",
           "committed_at": "2026-06-03T12:11:56Z",
-          "head_sha": "704340f1cd0dcef829eb62f5b48ae95a2ce17bdf",
+          "head_sha": "d89e1d186ec9271bf78e62771779e9fc03bf0fc3",
           "source": "https://github.com/torvalds/linux/commit/5a9c554ff86d7f3750d95ce72ad0666e02e37b92",
-          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/5a9c554ff86d7f3750d95ce72ad0666e02e37b92...704340f1cd0dcef829eb62f5b48ae95a2ce17bdf?per_page=1",
-          "checked_at": "2026-09-14T19:49:33.5134707+08:00",
+          "comparison_url": "https://api.github.com/repos/torvalds/linux/compare/5a9c554ff86d7f3750d95ce72ad0666e02e37b92...d89e1d186ec9271bf78e62771779e9fc03bf0fc3?per_page=1",
+          "checked_at": "2026-10-30T22:08:43.1542973+08:00",
           "attribution": "author",
           "reverted": false
         }
@@ -3630,20 +5012,6 @@
       "mail_confirmations": [],
       "excluded_other_authors": [],
       "thread_url": "https://xry1.github.io/linux-patch-status/#patch=4353bb3bc339a390"
-    },
-    {
-      "id": "7d060715b1b7fa55",
-      "title": "can: proc: reset pkg_stats atomics individually",
-      "kind": "patch",
-      "before_applied": false,
-      "after_applied": false,
-      "basis": "unconfirmed",
-      "mainline_commits": [],
-      "revert_commits": [],
-      "current_status": "Reviewed",
-      "mail_confirmations": [],
-      "excluded_other_authors": [],
-      "thread_url": "https://xry1.github.io/linux-patch-status/#patch=7d060715b1b7fa55"
     }
   ]
 }

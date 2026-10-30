@@ -1,9 +1,11 @@
 """Apply saved, independently verified mainline facts without making network calls."""
 import json
 import re
+import subprocess
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
-from patch_analysis import clean_title
+from patch_analysis import clean_title, submission
 
 EVIDENCE_FILE = Path(__file__).with_name('applied_verifications.json')
 
@@ -22,6 +24,27 @@ def valid_proof(proof, snapshot):
     return bool(re.fullmatch('[0-9a-f]{40}', sha) and proof.get('mainline_ancestor') is True
                 and proof.get('merge_base') == sha and proof.get('behind_by') == 0
                 and proof.get('head_sha') == snapshot.get('head_sha'))
+
+
+def linked_message_ids(proof):
+    """Only explicit commit Link trailers establish a renamed mail association."""
+    result = set()
+    for link in re.findall(r'^Link:\s*(https://\S+)', proof.get('message', ''), re.I | re.M):
+        parsed = urlparse(link.rstrip('>'))
+        if parsed.hostname not in {'lore.kernel.org', 'patch.msgid.link'}:
+            continue
+        parts = parsed.path.strip('/').split('/')
+        mid = unquote(parts[-1])
+        if '@' in mid:
+            result.add(mid)
+    return result
+
+
+def stable_patch_id(body):
+    result = subprocess.run(['git', 'patch-id', '--stable'], input=body,
+                            capture_output=True, text=True, encoding='utf-8')
+    fields = result.stdout.split()
+    return fields[0] if result.returncode == 0 and fields else None
 
 
 def reversal_history(originals, snapshot):
@@ -53,13 +76,36 @@ def reversal_history(originals, snapshot):
 def apply_verifications(records, snapshot, author_email):
     if snapshot.get('author_email', '').casefold() != author_email.casefold():
         snapshot = {}
-    by_title = {}
+    by_title, by_record, originals = {}, {}, {}
+    for record in records:
+        if record['kind'] != 'patch':
+            continue
+        for mail in record['messages']:
+            if submission(mail) and author_email.casefold() in mail.get('sender', '').casefold():
+                originals.setdefault(mail['message_id'], []).append((record, mail))
     for proof in snapshot.get('commits', []):
         if not valid_proof(proof, snapshot):
             continue
-        by_title.setdefault(clean_title(proof['title']).casefold(), []).append(proof)
+        linked = {id(record): record for mid in linked_message_ids(proof)
+                  for record, mail in originals.get(mid, [])}
+        for match in snapshot.get('verified_mail_matches', []):
+            if match.get('sha') != proof['sha'] or match.get('method') != 'git-patch-id-stable':
+                continue
+            patch_id = match.get('patch_id', '')
+            if not re.fullmatch('[0-9a-f]{40}', patch_id):
+                continue
+            for record, mail in originals.get(match.get('message_id'), []):
+                if stable_patch_id(mail.get('body', '')) == patch_id:
+                    linked[id(record)] = record
+        if len(linked) > 1:
+            raise ValueError('Ambiguous original mail association; previous report must be preserved')
+        if linked:
+            by_record.setdefault(next(iter(linked)), []).append(proof)
+        else:
+            by_title.setdefault(clean_title(proof['title']).casefold(), []).append(proof)
     for record in records:
-        candidates = by_title.get(clean_title(record['title']).casefold(), []) if record['kind'] == 'patch' else []
+        candidates = (by_record.get(id(record), []) + by_title.get(clean_title(record['title']).casefold(), [])
+                      if record['kind'] == 'patch' else [])
         own, other = [], []
         for proof in candidates:
             item = {key: proof.get(key) for key in ('sha', 'title', 'author', 'author_email', 'committed_at',

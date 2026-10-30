@@ -172,6 +172,35 @@ class AnalysisTests(unittest.TestCase):
         self.assertTrue(row['signals']['mainline'])
         self.assertEqual(row['attention_items'][0]['scope'], 'stable:6.1')
 
+    def test_commit_link_matches_renamed_original_not_backport_title(self):
+        for host in ('lore.kernel.org/all/', 'patch.msgid.link/'):
+            with self.subTest(host=host):
+                mail = {**self.original, 'message_id': 'v1@example.org'}
+                original = {**record([mail]), **analyze([mail], dashboard.DEFAULT_EMAIL)}
+                stable = message('stable', '[PATCH 6.1] net: renamed', 'Backport', 2)
+                backport = {**record([stable]), **analyze([stable], dashboard.DEFAULT_EMAIL), 'title': 'net: renamed'}
+                snapshot = self.proof(title='net: renamed', message='Link: https://' + host + 'v1@example.org')
+                apply_verifications([original, backport], snapshot, dashboard.DEFAULT_EMAIL)
+                self.assertTrue(original['signals']['mainline'])
+                self.assertFalse(backport['signals']['mainline'])
+
+    def test_untrusted_or_non_trailer_link_does_not_match_renamed_patch(self):
+        for link in ('Link: https://example.org/v1', 'See https://lore.kernel.org/all/v1'):
+            self.assertFalse(self.verified_record(self.proof(title='net: renamed', message=link))['signals']['applied'])
+
+    def test_verified_patch_id_matches_rename_but_rejects_changed_diff(self):
+        body = ('diff --git a/file b/file\n--- a/file\n+++ b/file\n'
+                '@@ -1 +1 @@\n-old\n+new\n')
+        from applied_evidence import stable_patch_id
+        snapshot = self.proof(title='net: renamed')
+        snapshot['verified_mail_matches'] = [{'sha': 'b' * 40, 'message_id': 'v1',
+            'method': 'git-patch-id-stable', 'patch_id': stable_patch_id(body)}]
+        for changed in (False, True):
+            mail = {**self.original, 'body': body.replace('+new', '+different') if changed else body}
+            row = {**record([mail]), **analyze([mail], dashboard.DEFAULT_EMAIL)}
+            apply_verifications([row], snapshot, dashboard.DEFAULT_EMAIL)
+            self.assertEqual(row['signals']['mainline'], not changed)
+
     def reversal(self, sha='d' * 40, target='b' * 40, **changes):
         proof = self.proof(sha=sha, merge_base=sha, title='Revert "net: example"',
             authored_by_user=False, signed_off_by_user=False, author_email='reviewer@example.org',
@@ -310,6 +339,21 @@ class AnalysisTests(unittest.TestCase):
                 build_pages.build(sync_error='Human verification required')
                 self.assertEqual(before, site.read_bytes())
                 self.assertEqual(json.loads(site.with_name('sync-status.json').read_text(encoding='utf-8'))['check_result'], 'error')
+
+    def test_evidence_rebuild_preserves_latest_lore_failure(self):
+        with tempfile.TemporaryDirectory() as root:
+            site = Path(root) / 'index.html'
+            payload = dashboard.build_payload('one', [record([self.original])], 1)
+            dashboard.save_report(site, payload)
+            failure = {'last_checked_at': '2099-01-01T09:00:00+08:00',
+                       'check_result': 'error', 'error': 'Lore unavailable'}
+            site.with_name('sync-status.json').write_text(json.dumps(failure), encoding='utf-8')
+            with patch.object(build_pages, 'SITE', site):
+                build_pages.build(report=site)
+            sync = json.loads(site.with_name('sync-status.json').read_text(encoding='utf-8'))
+            self.assertEqual(sync['last_checked_at'], failure['last_checked_at'])
+            self.assertEqual(sync['error'], failure['error'])
+            self.assertEqual(sync['check_result'], 'error')
 
 
 if __name__ == '__main__':

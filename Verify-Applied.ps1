@@ -5,12 +5,24 @@ param(
     [string]$Output = (Join-Path $PSScriptRoot 'applied_verifications.json'),
     [string[]]$AdditionalCommit = @(),
     [string[]]$RevertCommit = @(),
-    [switch]$RevertsOnly
+    [switch]$RevertsOnly,
+    [switch]$UseGitCredential
 )
 $ErrorActionPreference = 'Stop'
+$githubHeaders = @{'User-Agent'='linux-patch-status-calibration'}
+if ($UseGitCredential) {
+    # Let the configured helper supply authentication without displaying secrets.
+    $credentialLines = "protocol=https`nhost=github.com`n`n" | git -c credential.interactive=false credential fill
+    if ($LASTEXITCODE -ne 0) { throw 'GitHub credential helper unavailable' }
+    $passwordLine = @($credentialLines | Where-Object { $_.StartsWith('password=') })
+    if ($passwordLine.Count -ne 1) { throw 'GitHub credential helper returned no usable credential' }
+    $githubHeaders.Authorization = 'Bearer ' + $passwordLine[0].Substring(9)
+    $credentialLines = $null
+    $passwordLine = $null
+}
 
 function Read-GitHubJson([string]$Url) {
-    $request = @{ Uri = $Url; Headers = @{'User-Agent'='linux-patch-status-calibration'}; TimeoutSec = 40; ErrorAction = 'Stop' }
+    $request = @{ Uri = $Url; Headers = $githubHeaders; TimeoutSec = 40; ErrorAction = 'Stop' }
     if ($Proxy) { $request.Proxy = $Proxy }
     Invoke-RestMethod @request
 }
@@ -95,6 +107,7 @@ $snapshot = [ordered]@{
     search_url = $queryUrl
     search_total = $search.total_count
     search_complete = $true
+    verified_mail_matches = @($previous.verified_mail_matches | Where-Object { $_ })
     commits = $verified
     reverts = @($verified | Where-Object { $_.reverts_commit })
     reverts_checked_at = [DateTimeOffset]::Now.ToString('o')
