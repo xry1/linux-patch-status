@@ -1,8 +1,7 @@
 {
-  "last_checked_at": "2026-10-30T09:07:42+08:00",
-  "content_updated_at": "2026-10-27T09:06:07+08:00",
-  "check_result": "error",
-  "source": "results-thread-runyu.xiao-seu.edu.cn.mbox (12).gz",
-  "report_revision": "08844802123f9096:mainline:5e71590a5a6cb67e",
-  "error": "Lore full-threads browser navigation timed out; no new archive downloaded"
+  "last_checked_at": "2026-10-31T09:09:43+08:00",
+  "content_updated_at": "2026-10-31T09:09:43+08:00",
+  "check_result": "updated",
+  "source": "7f26598f-ef00-49ad-8917-233e4ecf8511.tmp",
+  "report_revision": "2f4f4461c3f23398:mainline:531175ed429dfadf"
 }
