@@ -1,8 +1,8 @@
 {
-  "last_checked_at": "2026-11-02T09:10:40+08:00",
+  "last_checked_at": "2026-11-03T09:23:50+08:00",
   "content_updated_at": "2026-10-31T09:09:43+08:00",
   "check_result": "error",
   "source": "7f26598f-ef00-49ad-8917-233e4ecf8511.tmp",
   "report_revision": "2f4f4461c3f23398:mainline:531175ed429dfadf",
-  "error": "Lore download not completed: browser unavailable in Work"
+  "error": "Lore download unavailable in Work; Applied CVE source fetch did not complete"
 }
