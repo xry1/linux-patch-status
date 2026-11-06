@@ -1,8 +1,8 @@
 {
-  "last_checked_at": "2026-11-05T09:10:54+08:00",
+  "last_checked_at": "2026-11-06T09:09:06+08:00",
   "content_updated_at": "2026-10-31T09:09:43+08:00",
   "check_result": "error",
   "source": "7f26598f-ef00-49ad-8917-233e4ecf8511.tmp",
   "report_revision": "2f4f4461c3f23398:mainline:531175ed429dfadf",
-  "error": "Lore browser unavailable; Applied CVE source fetch stalled"
+  "error": "Lore download unavailable; Applied CVE check completed"
 }
