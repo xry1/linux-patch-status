@@ -1,8 +1,7 @@
 {
-  "last_checked_at": "2026-11-10T09:29:15+08:00",
-  "content_updated_at": "2026-10-31T09:09:43+08:00",
-  "check_result": "error",
-  "source": "7f26598f-ef00-49ad-8917-233e4ecf8511.tmp",
-  "report_revision": "2f4f4461c3f23398:mainline:531175ed429dfadf",
-  "error": "Lore full-threads download blocked by Chrome"
+  "last_checked_at": "2026-11-25T08:59:19+08:00",
+  "content_updated_at": "2026-11-25T08:59:19+08:00",
+  "check_result": "updated",
+  "source": "results-thread-runyu.xiao-seu.edu.cn (4).mbox.gz",
+  "report_revision": "740d3a6a0067eacb:mainline:c9ad3ad7583954ac"
 }
