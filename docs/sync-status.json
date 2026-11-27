@@ -1,8 +1,7 @@
 {
-  "last_checked_at": "2026-11-27T09:02:16+08:00",
-  "content_updated_at": "2026-11-25T08:59:19+08:00",
-  "check_result": "error",
-  "source": "results-thread-runyu.xiao-seu.edu.cn (4).mbox.gz",
-  "report_revision": "740d3a6a0067eacb:mainline:c9ad3ad7583954ac",
-  "error": "Lore full-threads browser access remains blocked by URL verification"
+  "last_checked_at": "2026-11-27T11:01:55+08:00",
+  "content_updated_at": "2026-11-27T11:01:55+08:00",
+  "check_result": "updated",
+  "source": "results-thread-runyu.xiao-seu.edu.cn.mbox.gz",
+  "report_revision": "aa67053a55e1f889:mainline:c9ad3ad7583954ac"
 }
